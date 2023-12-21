@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Capture Example</title>
+    <style>
+        /* Style adjustments for layout */
+        #container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        #video {
+            max-width: 45%;
+        }
+
+        #snapshot {
+            max-width: 45%;
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Webcam Snapshot</h1>
+    <div id="container">
+        <video id="video" autoplay></video>
+        <div>
+            <button id="capture">Capture Image</button>
+            <img id="snapshot" src="" alt="Captured Image">
+        </div>
+    </div>
+    <script>
+        let videoStream;
+
+        async function setupCamera() {
+            try {
+                const constraints = {
+                    video: { facingMode: "environment" }
+                };
+
+                videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+                const videoElement = document.getElementById('video');
+                videoElement.srcObject = videoStream;
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
+        }
+
+        async function takePicture() {
+            const video = document.getElementById('video');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL('image/png');
+        }
+
+        document.getElementById('capture').addEventListener('click', async () => {
+            const imageUrl = await takePicture();
+            if (imageUrl) {
+                document.getElementById('snapshot').src = imageUrl;
+            }
+        });
+
+        window.onload = setupCamera;
+    </script>
+</body>
+</html>
