@@ -1,0 +1,290 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden
+}
+
+.choiceButtonCont input, .choiceButtonCont button {
+  border-radius: 5px;
+  border-style: groove;
+  height: 40px;
+  border: 0;
+  margin-right: 9px;
+  font-size: 20px;
+}
+
+.top_button_bar {
+  position: absolute;
+  /* background-color: rgb(245, 227, 212);
+  border-bottom: solid;
+  border-width: 5px;
+  border-color: rgb(187, 137, 95); */
+
+  width: 100%;
+  height: 70px;
+  top: 55px;
+  left: 0;
+  z-index: 1;
+  padding-left: 10px;
+}
+
+.top_button_bar button {
+  color: black;
+
+  border-radius: 5px;
+  border-style: groove;
+  height: 40px;
+  border: 0;
+  margin-right: 9px;
+  font-size: 20px;
+
+  background-color: rgba(212, 230, 245);
+  box-shadow: -5px 5px rgb(61, 168, 255);
+  transition: all 0.15s;
+}
+
+.top_button_bar button:hover {
+  box-shadow: -3px 3px rgb(61, 168, 255);
+}
+
+.modifiersTextArea {
+  width: 100%;
+}
+
+input {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+input::placeholder {
+  color: rgba(255, 127, 80, 0.452);
+}
+
+input {
+  padding-left: 20px;
+}
+
+.info {
+  height: 40px;
+  width: 40px;
+  background-color: transparent;
+  color: rgb(174, 63, 23);
+  background-color: rgb(252, 220, 208);
+}
+
+.choiceButton {
+  height: 40px;
+  width: 40px;
+  margin: 0;
+  padding: 5px;
+  border-radius: 5px;
+  margin-left: 5px;
+  transition: all 0.1s ease-out;
+}
+
+.choiceButton:hover {
+  cursor: pointer;
+  margin-top: -3px;
+  transition: all 0.1s ease-out;
+}
+
+.choiceButtonCont {
+  width: 400px;
+}
+
+.choiceButtonCont div {
+  display: flex;
+  justify-content: space-around;
+  margin: auto;
+  padding: 0;
+  width: 150px;
+}
+
+.canvas {
+  background-color: #ffffff;
+  background-size: 15px 15px;
+  background-image: radial-gradient(rgb(200, 200, 200) 10%, transparent 0%);
+}
+
+/* room tab */
+.roomtabSelected {
+  border-bottom: 0.4em solid #c9c9c9;
+  background-color: #e4e4e4;
+}
+
+.roomtabpanel {
+  background-color: #3da8ff;
+  position: absolute;
+  padding-top: 5px;
+  top: 0;
+  width: 100%;
+  height: 45px;
+}
+
+.roomtab {
+  background-color: #ffffff;
+  border-radius: 10px;
+  width: auto;
+  padding: 0 10px 0 15px;
+  height: 90%;
+  line-height: 35px;
+  font-size: 15px;
+  float: left;
+  text-align: center;
+  margin-left: 5px;
+}
+
+.roomtabClose {
+  float: right;
+  margin-left: 10px;
+  line-height: 35px;
+  font-size: 15px;
+  height: auto;
+  width: 20px;
+}
+
+.roomtab:hover {
+  cursor: pointer;
+  background-color: #e4e4e4;
+}
+
+.newRoomTab {
+  width: auto;
+  border-radius: 10px;
+  color: white;
+  height: 100%;
+  float: left;
+  line-height: 35px;
+  font-size: 25px;
+  margin-left: 10px;
+  text-align: center;
+}
+
+.newRoomTab:hover {
+  cursor: pointer;
+  background-color: #e4e4e4;
+}
+
+/* sidebar */
+
+.sidebar.open {
+  right: 0;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  right: -300px;
+  height: 100%;
+  width: 300px;
+  transition: right 0.3s ease-in-out;
+  background-color: lightgray;
+  background-color: rgb(231, 244, 254);
+  border: 2px solid rgb(61, 168, 255);
+  border-right-width: 0;
+  border-top-width: 0;
+  padding: 10px;
+  padding-top: 30px;
+}
+
+.sidebar h4 {
+  margin-top: 30px;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 55px;
+  left: -30px;
+  height: 45px;
+  width: 30px;
+  background-color: rgba(212, 230, 245);
+  border: 2px solid rgb(61, 168, 255);
+  border-right-width: 0;
+  z-index: 1;
+}
+
+.coords {
+  position: absolute;
+  white-space: nowrap;
+  top: 0;
+  right: 300px;
+  background-color: rgb(255, 255, 255);
+  z-index: 1;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.coords:hover {
+  cursor: pointer;
+}
+
+.shareLink input {
+  font-size: 15px;
+}
+
+.history {
+  background-color: white;
+  height: 300px;
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.histLine {
+  white-space: nowrap;
+}
+
+.histLine:hover {
+  cursor: pointer;
+  color: grey;
+}
+
+/* checkboxes */
+.checkboxes label {
+  display: inline-block;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+.checkboxes input {
+  vertical-align: middle;
+}
+.checkboxes label span {
+  vertical-align: middle;
+}
+
+/* colors */
+
+.blue {
+  background-color: rgba(212, 230, 245);
+}
+
+.blue:hover {
+  background-color: rgb(102, 184, 250);
+}
+
+.yellow {
+  /* background-color: rgb(245, 245, 212); */
+  background-color: rgba(212, 230, 245);
+}
+
+.yellow:hover {
+  background-color: rgb(250, 245, 102);
+}
+
+.green {
+  /* background-color: rgb(212, 245, 216); */
+  background-color: rgba(212, 230, 245);
+}
+
+.green:hover {
+  background-color: rgb(102, 250, 119);
+}
+
+.red {
+  /* background-color: rgb(245, 212, 240); */
+  background-color: rgba(212, 230, 245);
+}
+
+.red:hover {
+  background-color: rgb(250, 102, 233);
+}

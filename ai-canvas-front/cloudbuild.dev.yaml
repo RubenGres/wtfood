@@ -1,0 +1,18 @@
+steps:
+  - name: gcr.io/cloud-builders/npm
+    args: [ install ]
+    dir: 'front/ai-canvas-front'
+
+  - name: gcr.io/cloud-builders/npm
+    args: [ run, build, --prod ]
+    env:
+      - 'REACT_APP_BACK_URL=https://kollai-back-dev.ew.r.appspot.com'
+    dir: 'front/ai-canvas-front'
+
+
+  - name: gcr.io/cloud-builders/gcloud
+    args: [ app, deploy, --project=kollai-front-dev ]
+    dir: 'front/ai-canvas-front'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

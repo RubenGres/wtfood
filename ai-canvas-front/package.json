@@ -1,0 +1,67 @@
+{
+  "name": "ai-canvas-front",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@aws-amplify/api": "^4.0.54",
+    "@babel/runtime": "^7.19.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/lab": "^5.0.0-alpha.105",
+    "@mui/material": "^5.10.11",
+    "@react-oauth/google": "^0.2.8",
+    "@reactour/tour": "^3.1.6",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "aws-amplify": "^4.3.37",
+    "env-cmd": "^10.1.0",
+    "firebase": "^9.12.1",
+    "konva": "^8.3.11",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.5.0",
+    "react-dom": "^18.2.0",
+    "react-firebase-hooks": "^5.0.3",
+    "react-konva": "^18.2.1",
+    "react-konva-utils": "^0.3.0",
+    "react-router-dom": "^6.4.0",
+    "react-social-login-buttons": "^3.6.1",
+    "react-toastify": "^9.0.8",
+    "spinners-react": "^1.0.7",
+    "styled-components": "^5.3.6",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start-local": "env-cmd -f .env.loc react-scripts start",
+    "start-cloud-dev": "env-cmd -f .env.cloud.dev react-scripts start",
+    "start-cloud-dev-gpu": "env-cmd -f .env.cloud.gpu.dev react-scripts start",
+    "start-cloud-prod": "env-cmd -f .env.cloud.prod react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy-dev": "env-cmd -f .env.cloud.dev react-scripts build && gcloud app deploy --project kollai-front-dev",
+    "deploy-prod": "env-cmd -f .env.cloud.prod react-scripts build && gcloud app deploy --project kollai-front-prod"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
