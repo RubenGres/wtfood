@@ -64,22 +64,32 @@ async function generateImage(id_image) {
     div.innerHTML = ``
 }
 
-function mousePressed(e) {
+function getPointerPosition(e) {
+    if (e.touches) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    } else {
+        return { x: e.clientX, y: e.clientY };
+    }
+}
+
+function pointerPressed(e) {
     moving = true;
-    delta_cam_x = e.clientX + cam_x;
-    delta_cam_y = e.clientY + cam_y;
+    let pos = getPointerPosition(e);
+    delta_cam_x = pos.x + cam_x;
+    delta_cam_y = pos.y + cam_y;
     container.style.cursor = 'grabbing';
 }
 
-function mouseDragged(e) {
+function pointerMoved(e) {
     if (moving) {
-        cam_x = delta_cam_x - e.clientX;
-        cam_y = delta_cam_y - e.clientY;
+        let pos = getPointerPosition(e);
+        cam_x = delta_cam_x - pos.x;
+        cam_y = delta_cam_y - pos.y;
         updateDivPositions();
     }
 }
 
-function mouseReleased(e) {
+function pointerReleased(e) {
     moving = false;
     container.style.cursor = 'grab';
 }
@@ -98,11 +108,16 @@ function updateDivPositions() {
     }
 }
 
-// Event listeners
-container.addEventListener('mousedown', mousePressed);
-container.addEventListener('mousemove', mouseDragged);
-container.addEventListener('mouseup', mouseReleased);
-container.addEventListener('mouseleave', mouseReleased);
+// Mouse event listeners
+container.addEventListener('mousedown', pointerPressed);
+container.addEventListener('mousemove', pointerMoved);
+container.addEventListener('mouseup', pointerReleased);
+container.addEventListener('mouseleave', pointerReleased);
+
+// Touch event listeners
+container.addEventListener('touchstart', pointerPressed);
+container.addEventListener('touchmove', pointerMoved);
+container.addEventListener('touchend', pointerReleased);
 
 setup();
 updateDivPositions(); // Initial position update
