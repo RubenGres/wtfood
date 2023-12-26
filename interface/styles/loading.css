@@ -1,0 +1,60 @@
+.imgWrap {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+  
+.circle {
+	position: absolute;
+	border-radius: 50%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+  
+.circle1 {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	clip-path: circle(50% at center);
+	animation: rotate-clockwise 10s linear infinite;
+	background-blend-mode: hue;
+/*	animation: rotate-clockwise 4s ease-in-out infinite; */
+}
+  
+.circle2 {
+	top: 10%;
+	left: 10%;
+	width: 80%;
+	height: 80%;
+	background-size: 125% 125%;
+	clip-path: circle(40% at center);
+/*	animation: rotate-counterclockwise 8s ease-in-out infinite; */
+}
+  
+.circle3 {
+	top: 20%;
+	left: 20%;
+	width: 60%;
+	height: 60%;
+	background-size: 165% 165%;
+	clip-path: circle(30% at center);
+/*  animation: rotate-slow 12s ease-in-out infinite; */
+}
+  
+@keyframes rotate-clockwise {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+  
+@keyframes rotate-counterclockwise {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(-360deg); }
+}
+  
+@keyframes rotate-slow {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
