@@ -1,9 +1,12 @@
 let state = {
-    isMoving: false
+    isMoving: false,
+    isTakingPicture: false,
 };
+
 
 function updateState(newState) {
     state = { ...state, ...newState };
 }
 
-updateState({ isMoving: true });
+
+updateState({ isMoving: false });
