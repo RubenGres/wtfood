@@ -15,7 +15,6 @@ async function setupCamera() {
 
 
 function openCamera(div) {
-    //TODO is there a cleaner way to do this ?
     div.innerHTML = ""
 
     let videoElement = document.createElement('video');
@@ -42,7 +41,7 @@ async function takePictureToCell(div) {
     const imageUrl = await takePicture();
 
     if (imageUrl) {
-        div.innerHTML = ""  //TODO cleaner way ?
+        div.innerHTML = ""
 
         let snapshot = document.createElement('img');
         snapshot.src = imageUrl;

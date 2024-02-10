@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <title>Food Dysmorphia</title>
         <link rel="stylesheet" href="styles/style.css">
         <link rel="stylesheet" href="styles/loading.css">
@@ -10,15 +11,31 @@
     <body>
         <div id="container"></div>
 
-        <!-- main script-->
         <script>
-            let SD_API_URL = "http://localhost:5000/transform"
-        </script>
+            const SD_API_URL = "http://localhost:5000/transform";
+            const grid_height = 5;
+            const grid_width = 5;
+            
+            let cell_w = 256;
+            let cell_h = 256;
+
+            const cell_margin = 10;
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if(isMobile) {
+                const shorterSide = Math.min(window.innerWidth, window.innerHeight);
+                const mobileSize = Math.round(shorterSide * 0.90);
+                console.log(mobileSize);
+                cell_w = mobileSize;
+                cell_h = mobileSize;
+            }
+
+            </script>
 
         <script src="scripts/state_manager.js"></script>
         <script src="scripts/camera.js"></script>
         <script src="scripts/generate.js"></script>
         <script src="scripts/movement.js"></script>
+        <script src="scripts/cell.js"></script>
         <script src="scripts/setup.js"></script>
         
     </body>
