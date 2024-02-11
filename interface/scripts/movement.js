@@ -60,16 +60,58 @@ function updateDivPositions() {
 }
 
 
-// Mouse event listeners
-container.addEventListener('mousedown', pointerPressed);
-container.addEventListener('mousemove', pointerMoved);
-container.addEventListener('mouseup', pointerReleased);
-container.addEventListener('mouseleave', pointerReleased);
+function swipe_left() {
 
-// Pad / Scroll wheel
-container.addEventListener('wheel', padScroll);
+}
 
-// Touch event listeners
-container.addEventListener('touchstart', pointerPressed);
-container.addEventListener('touchmove', pointerMoved);
-container.addEventListener('touchend', pointerReleased);
+function swipe_right() {
+
+}
+
+if(isMobile) {
+    const swipeDetect = (el) => {
+        let surface = el;      
+        let startX = 0;      
+        let startY = 0;      
+        let distX = 0;      
+        let distY = 0;
+            
+        surface.addEventListener("touchstart", function (e) {
+          startX = e.changedTouches[0].pageX;
+          startY = e.changedTouches[0].pageY;
+        });
+      
+        surface.addEventListener("touchmove", function (e) {
+          e.preventDefault();
+        });
+      
+        surface.addEventListener("touchend", function (e) {
+          distX = e.changedTouches[0].pageX - startX;
+          distY = e.changedTouches[0].pageY - startY;
+      
+          if (Math.abs(distX) > Math.abs(distY)) {
+            if (distX > 0) {
+              console.log("swipe right");
+            } else {
+              console.log("swipe left");
+            }
+          }
+        });
+    };
+
+    swipeDetect(container);
+} else {
+    // Mouse event listeners
+    container.addEventListener('mousedown', pointerPressed);
+    container.addEventListener('mousemove', pointerMoved);
+    container.addEventListener('mouseup', pointerReleased);
+    container.addEventListener('mouseleave', pointerReleased);
+
+    // Pad / Scroll wheel
+    container.addEventListener('wheel', padScroll);
+
+    // Touch event listeners
+    container.addEventListener('touchstart', pointerPressed);
+    container.addEventListener('touchmove', pointerMoved);
+    container.addEventListener('touchend', pointerReleased);
+}
