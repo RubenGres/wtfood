@@ -15,7 +15,6 @@
 .img-div {
     position: absolute;
     background-size: cover;
-    margin: 10px;
     border: solid 1px hsl(0, 0%, 73%);
 }
 
