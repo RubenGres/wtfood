@@ -61,11 +61,23 @@ function updateDivPositions() {
 
 
 function swipe_left() {
-
+    cam_x += cell_w + cell_margin;
+    updateDivPositions();
 }
 
 function swipe_right() {
+    cam_x -= cell_w + cell_margin;
+    updateDivPositions();
+}
 
+function swipe_down() {
+    cam_y += cell_h + cell_margin;
+    updateDivPositions();
+}
+
+function swipe_up() {
+    cam_y -= cell_h + cell_margin;
+    updateDivPositions();
 }
 
 if(isMobile) {
@@ -75,6 +87,8 @@ if(isMobile) {
         let startY = 0;      
         let distX = 0;      
         let distY = 0;
+
+        const min_swipe_dist = 70;
             
         surface.addEventListener("touchstart", function (e) {
           startX = e.changedTouches[0].pageX;
@@ -86,18 +100,33 @@ if(isMobile) {
         });
       
         surface.addEventListener("touchend", function (e) {
-          distX = e.changedTouches[0].pageX - startX;
-          distY = e.changedTouches[0].pageY - startY;
-      
-          if (Math.abs(distX) > Math.abs(distY)) {
-            if (distX > 0) {
-              console.log("swipe right");
+            distX = e.changedTouches[0].pageX - startX;
+            distY = e.changedTouches[0].pageY - startY;
+
+            //alert(distX + ";" + distY);
+
+            if (Math.abs(distX) > Math.abs(distY)) {
+                if (Math.abs(distX) > min_swipe_dist) {
+                    if (distX > 0) {
+                        swipe_right();
+                    } else {
+                        swipe_left();
+                    }
+                }
             } else {
-              console.log("swipe left");
+                if (Math.abs(distY) > min_swipe_dist) {
+                    if (distY > 0) {
+                        swipe_up();
+                    } else {
+                        swipe_down();
+                    }
+                }
             }
-          }
         });
     };
+
+    cam_x -= (window.visualViewport.width- (cell_w + cell_margin))/2;
+    cam_y -= (window.visualViewport.height - (cell_h + cell_margin))/2;
 
     swipeDetect(container);
 } else {
