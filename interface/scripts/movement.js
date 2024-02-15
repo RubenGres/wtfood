@@ -17,11 +17,21 @@ function getPointerPosition(e) {
 
 
 function pointerPressed(e) {
-    updateState({ isMoving: true });
-    let pos = getPointerPosition(e);
-    delta_cam_x = pos.x + cam_x;
-    delta_cam_y = pos.y + cam_y;
-    container.style.cursor = 'grabbing';
+    if (e && (e.which == 2 || e.button == 4 )) { //if middle click
+        updateState({ isMoving: true });
+        let pos = getPointerPosition(e);
+        delta_cam_x = pos.x + cam_x;
+        delta_cam_y = pos.y + cam_y;
+        container.style.cursor = 'grabbing';
+    }
+}
+
+
+function pointerReleased(e) {
+    if (e && (e.which == 2 || e.button == 4 )) { //if middle click
+        updateState({ isMoving: false });
+        container.style.cursor = 'grab';
+    }
 }
 
 
@@ -34,11 +44,6 @@ function pointerMoved(e) {
     }
 }
 
-
-function pointerReleased(e) {
-    updateState({ isMoving: false });
-    container.style.cursor = 'grab';
-}
 
 function padScroll(e) {
     updateState({ isMoving: true });
@@ -125,7 +130,8 @@ if(isMobile) {
         });
     };
 
-    cam_x -= (window.visualViewport.width- (cell_w + cell_margin))/2;
+    // small correction to center the cell
+    cam_x -= (window.visualViewport.width - (cell_w + cell_margin))/2;
     cam_y -= (window.visualViewport.height - (cell_h + cell_margin))/2;
 
     swipeDetect(container);
