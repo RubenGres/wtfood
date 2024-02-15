@@ -1,7 +1,12 @@
 function create_cell(i) {
     let div = document.createElement('div');
 
-    div.className = 'img-div';
+    div.className = 'gridcell';
+
+    if(isMobile) {
+        div.classList.add('cell-animation');
+    }
+
     div.setAttribute("state", "empty");
     
     let cell_color = (200*i) % 360;
