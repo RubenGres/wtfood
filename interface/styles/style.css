@@ -9,18 +9,20 @@
     height: 100vh;
     overflow: hidden;
     position: relative;
-    cursor: grab;
 }
 
-.img-div {
+.gridcell {
     position: absolute;
     background-size: cover;
     border: solid 1px hsl(0, 0%, 73%);
 }
 
-.img-div:hover {
-    cursor: pointer;
-    background-color: rgb(200,200,200);
+.gridcell:hover {
+    cursor: pointer;    
+}
+
+.cell-animation {
+    transition: left 0.2s ease, top 0.2s ease; /* Adjust time and easing function as needed */
 }
 
 img {
