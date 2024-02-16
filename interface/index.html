@@ -2,30 +2,23 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <title>Food Dysmorphia</title>
         <link rel="stylesheet" href="styles/style.css">
-        <link rel="stylesheet" href="styles/glitch.css">
+        <link rel="stylesheet" href="styles/loading.css">
     </head>
+    
     <body>
-        <!-- svg filters to separate channels -->
-        <svg class="filter">
-            <filter id="alphaRed">
-              <feColorMatrix mode="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="joint" />
-            </filter>
-            <filter id="alphaGreen">
-              <feColorMatrix mode="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="joint" />
-            </filter>
-            <filter id="alphaBlue">
-              <feColorMatrix mode="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="joint" />
-            </filter>
-            <filter id="alpha">
-              <feColorMatrix type="saturate" values="0"/>
-            </filter>
-        </svg>
-
         <div id="container"></div>
 
-        <!-- main script-->
-        <script src="food_cunicode.js"></script>
+        <script src="scripts/global_params.js"></script>
+
+        <script src="scripts/state_manager.js"></script>
+        <script src="scripts/camera.js"></script>
+        <script src="scripts/generate.js"></script>
+        <script src="scripts/movement.js"></script>
+        <script src="scripts/cell.js"></script>
+        <script src="scripts/setup.js"></script>
+        
     </body>
 </html>
