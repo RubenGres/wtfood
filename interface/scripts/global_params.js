@@ -1,6 +1,6 @@
 const SD_API_URL = "http://localhost:5000/transform";
-const grid_height = 5;
-const grid_width = 5;
+const grid_height = 10;
+const grid_width = 10;
 
 let cell_w = 256;
 let cell_h = 256;

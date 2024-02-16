@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Capture</title>
+</head>
+<body>
+
+    <div id="camera_canvas" style="width: 200px; height: 200px; background-color: red;">
+        
+    </div>
+
+    <script src="scripts/camera.js"></script>
+
+    <script>
+        let div = document.getElementById("camera_canvas");
+
+        async function initializeCamera() {
+            await setupCamera();
+            openCamera(div);
+        }
+
+        initializeCamera();
+
+        div.onclick = () => {
+            takePictureToCell(div);
+        }
+    </script>
+
+</body>
+</html>

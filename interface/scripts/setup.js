@@ -1,3 +1,5 @@
+let imgs = [];
+
 function setup() {
     for (let i = 0; i < grid_height*grid_width; i++) {
         let div = create_cell(i);
