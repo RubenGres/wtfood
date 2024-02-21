@@ -18,7 +18,7 @@ device = "cuda:0"
 
 # load image from b64
 def load_b64(image_b64):
-    image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1])))
+    image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1]))).convert("RGB")
     return image
 
 
