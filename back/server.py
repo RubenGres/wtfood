@@ -1,12 +1,14 @@
-from transformers import AutoProcessor, CLIPSegForImageSegmentation, CLIPProcessor, CLIPModel, CLIPTokenizer
+from transformers import AutoProcessor, CLIPSegForImageSegmentation
+from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 from diffusers import StableDiffusionInpaintPipeline
 import numpy as np
 from PIL import Image
-
+import requests
 from flask import Flask, request
 import base64
 from io import BytesIO
-import os 
+import os
+
 
 # fill here with more fruits
 labels = ["fruit", "vegetable", "carrot", "tomato", "sweet potato", "radish", "banana", "coconut", "kiwi", "lemon"]
@@ -16,31 +18,31 @@ device = "cuda:0"
 
 # load image from b64
 def load_b64(image_b64):
-    image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1])))
+    image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1]))).convert("RGB")
     return image
 
 
 def get_clip(model_ID):
-	model = CLIPModel.from_pretrained(model_ID).to(device)
-	processor = CLIPProcessor.from_pretrained(model_ID)
-	tokenizer = CLIPTokenizer.from_pretrained(model_ID)
-	return model, processor, tokenizer
+    model = CLIPModel.from_pretrained(model_ID).to(device)
+    processor = CLIPProcessor.from_pretrained(model_ID)
+    tokenizer = CLIPTokenizer.from_pretrained(model_ID)
+    return model, processor, tokenizer
 
 
 def get_single_image_embedding(clip_model, my_image):
-  image = clip_processor(
-      text = None,
-      images = my_image,
-      return_tensors="pt"
-  )["pixel_values"].to(device)
-  embedding = clip_model.get_image_features(image)
-  return embedding
+    image = clip_processor(
+        text=None,
+        images=my_image,
+        return_tensors="pt"
+    )["pixel_values"].to(device)
+    embedding = clip_model.get_image_features(image)
+    return embedding
 
 
 def get_single_text_embedding(clip_model, clip_tokenizer, text):
-  inputs = clip_tokenizer(text, return_tensors = "pt").to(device)
-  text_embeddings = clip_model.get_text_features(**inputs)
-  return text_embeddings
+    inputs = clip_tokenizer(text, return_tensors="pt").to(device)
+    text_embeddings = clip_model.get_text_features(**inputs)
+    return text_embeddings
 
 
 def get_labels_embeddings(clip_model, clip_tokenizer):    
@@ -70,7 +72,9 @@ def image_class_cosim(image, labels_embeddings, clip_model):
         
     return probas
 
+
 app = Flask(__name__)
+
 
 if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
     print("LOADING MODELS")
@@ -120,9 +124,45 @@ def apply_workflow(image, prompt):
     return mask_image, gen_image
 
 
-@app.route('/ping')
-def ping():
-    return "pong"
+@app.route("/")
+def home():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Flask App API Endpoints</title>
+    </head>
+    <body>
+        <h1>API Endpoints</h1>
+        <p>This Flask app provides the following endpoints:</p>
+        
+        <h2>/transform</h2>
+        <p><strong>Method:</strong> POST</p>
+        <p><strong>Description:</strong> Applies a transformation to an image based on a provided prompt.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li>image: Base64 encoded image.</li>
+            <li>prompt: Text prompt for guiding the transformation.</li>
+        </ul>
+        
+        <h2>/classify</h2>
+        <p><strong>Method:</strong> POST</p>
+        <p><strong>Description:</strong> Classifies the given image into predetermined categories.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li>image: Base64 encoded image.</li>
+        </ul>
+        
+        <h2>/locate_ip</h2>
+        <p><strong>Method:</strong> POST</p>
+        <p><strong>Description:</strong> Locates the geographical location or other details associated with the provided IP address.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li>ip: IP address to locate.</li>
+        </ul>
+    </body>
+    </html>
+    """
 
 
 @app.route('/transform', methods=['POST'])
@@ -149,15 +189,27 @@ def classify():
 
     image = load_b64(image_b64)
     
-    cosims =  image_class_cosim(image, labels_embeddings, clip_model)
+    cosims = image_class_cosim(image, labels_embeddings, clip_model)
 
-    print(cosims)
-    
     # check if this is a fruit or a vegetable
     if cosims["fruit"] < 0.22 or cosims["vegetable"] < 0.22:
         return "not a fruit or vegetable"
 
     return max(cosims, key=cosims.get)
+
+
+@app.route('/locate_ip', methods=['POST'])
+def locate_ip():
+    data = request.json
+    ip = data['ip']
+
+    url = f'http://ip-api.com/json/{ip}'
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an error for bad responses
+        return response.json()  # Converts the JSON response to a Python dictionary
+    except requests.RequestException as e:
+        return {'error': str(e)}
 
 
 if __name__ == '__main__':
