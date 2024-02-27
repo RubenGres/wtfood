@@ -2,7 +2,7 @@ from transformers import AutoProcessor, CLIPSegForImageSegmentation, CLIPProcess
 from diffusers import StableDiffusionInpaintPipeline
 import numpy as np
 from PIL import Image
-
+import requests
 from flask import Flask, request
 import base64
 from io import BytesIO
@@ -14,7 +14,7 @@ labels = ["fruit", "vegetable", "carrot", "tomato", "sweet potato", "radish", "b
 device = "cuda:0"
 
 
-# load image from b64
+# helpers
 def load_b64(image_b64):
     image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1])))
     return image
@@ -70,28 +70,27 @@ def image_class_cosim(image, labels_embeddings, clip_model):
         
     return probas
 
-app = Flask(__name__)
 
-if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-    print("LOADING MODELS")
+# called by routes
 
-    clipseg_processor = AutoProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
-    clipseg_model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
+def classify(image):
+    cosims =  image_class_cosim(image, labels_embeddings, clip_model)
 
-    pipe = StableDiffusionInpaintPipeline.from_pretrained(
-        "runwayml/stable-diffusion-inpainting"
-    )
+    # check if this is a fruit or a vegetable
+    if cosims["fruit"] < 0.22 or cosims["vegetable"] < 0.22:
+        return None
 
-    pipe.to(device)
+    return max(cosims, key=cosims.get)
 
-    pipe.enable_xformers_memory_efficient_attention()
 
-    clip_model, clip_processor, clip_tokenizer = get_clip("openai/clip-vit-base-patch32")
-    labels_embeddings = get_labels_embeddings(clip_model, clip_tokenizer)
-    
-    pipe.safety_checker  = None
-
-    print("MODELS LOADED")
+def locate_ip(ip):
+    url = f'http://ip-api.com/json/{ip}'
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an error for bad responses
+        return response.json()  # Converts the JSON response to a Python dictionary
+    except requests.RequestException as e:
+        return {'error': str(e)}
 
 
 def gen_mask(image, target_text, threshold=0.5):
@@ -120,9 +119,28 @@ def apply_workflow(image, prompt):
     return mask_image, gen_image
 
 
-@app.route('/ping')
-def ping():
-    return "pong"
+app = Flask(__name__)
+
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    print("LOADING MODELS")
+
+    clipseg_processor = AutoProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
+    clipseg_model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
+
+    pipe = StableDiffusionInpaintPipeline.from_pretrained(
+        "runwayml/stable-diffusion-inpainting"
+    )
+
+    pipe.to(device)
+
+    pipe.enable_xformers_memory_efficient_attention()
+
+    clip_model, clip_processor, clip_tokenizer = get_clip("openai/clip-vit-base-patch32")
+    labels_embeddings = get_labels_embeddings(clip_model, clip_tokenizer)
+    
+    pipe.safety_checker  = None
+
+    print("MODELS LOADED")
 
 
 @app.route('/transform', methods=['POST'])
@@ -141,24 +159,30 @@ def transform():
     
     return "data:image/jpeg;base64," + base64_image
 
-
-@app.route('/classify', methods=['POST'])
-def classify():
+@app.route('/info', methods=['POST'])
+def info():
     data = request.json
     image_b64 = data['image']  # Base64 encoded image
-
     image = load_b64(image_b64)
+
+    caller_ip = request.remote_addr
     
-    cosims =  image_class_cosim(image, labels_embeddings, clip_model)
+    ip_info = locate_ip(caller_ip)
 
-    print(cosims)
-    
-    # check if this is a fruit or a vegetable
-    if cosims["fruit"] < 0.22 or cosims["vegetable"] < 0.22:
-        return "not a fruit or vegetable"
+    classes = classify(image)
 
-    return max(cosims, key=cosims.get)
-
+    if not classes:
+        return {
+            "is_valid": False,
+            "fruit": None,
+            "country": ip_info["country"]
+        }
+    else:
+        return {
+            "is_valid": True,
+            "fruit": max(classes, key=classes.get),
+            "country": ip_info["country"]
+        }
 
 if __name__ == '__main__':
     app.run(debug=True)

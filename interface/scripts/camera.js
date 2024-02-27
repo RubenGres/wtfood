@@ -1,67 +1,63 @@
 let videoStream;
 
-async function setupCamera() {
-    try {
-        const constraints = {
-            video: {
-                facingMode: "environment",
-                aspectRatio: { exact: 1 }
-            }
+// helper functions
+
+function loadImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                resolve(img);
+            };
+            img.onerror = reject;
+            img.src = event.target.result;
         };
-
-        videoStream = await navigator.mediaDevices.getUserMedia(constraints);
-    } catch (error) {
-        console.error('Error accessing camera:', error);
-    }
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
 }
 
 
-function openCamera(div) {
-    div.innerHTML = "";
+function crop_image(image, side_length) {
+    // If side_length is not provided, use the smaller dimension of the image to make it a square
+    side_length = side_length || Math.min(image.width, image.height);
 
-    let videoElement = document.createElement('video');
-    videoElement.autoplay = true;
-    videoElement.id = "video";
-    videoElement.srcObject = videoStream;
-
-    // Wait for the video to be loaded to get its dimensions
-    videoElement.onloadedmetadata = () => {
-        let shorterSize = window.getComputedStyle(div).width; // if cell is a square width = height
-
-        // Set the video element size to ensure a square aspect ratio
-        videoElement.style.width = shorterSize;
-        videoElement.style.height = shorterSize;
-        videoElement.style.objectFit = 'cover'; // Ensure the video covers the square area and crops excess
-    };
-
-    div.appendChild(videoElement);
-}
-
-
-async function takePicture() {
-    const video = document.getElementById('video');
     const canvas = document.createElement('canvas');
-
-    // Determine the side length based on the smaller dimension of the video
-    let side_length = Math.min(video.videoWidth, video.videoHeight);
-
-    // Set canvas size to the determined square side length
     canvas.width = side_length;
     canvas.height = side_length;
 
     // Calculate source x and y to center the crop area
-    let sx = (video.videoWidth - side_length) / 2;
-    let sy = (video.videoHeight - side_length) / 2;
+    let sx = (image.width - side_length) / 2;
+    let sy = (image.height - side_length) / 2;
 
     const context = canvas.getContext('2d');
-    // Crop the video and draw the cropped area onto the canvas
-    // Note: We're using the nine-argument version of drawImage here
-    context.drawImage(video, sx, sy, side_length, side_length, 0, 0, canvas.width, canvas.height);
+    context.drawImage(image, sx, sy, side_length, side_length, 0, 0, canvas.width, canvas.height);
 
     return canvas.toDataURL('image/png');
 }
 
+async function takePicture() {
+    camerainput.focus();
+    camerainput.click();
 
+    // wait for camera input to change
+    await new Promise((resolve, reject) => {
+        camerainput.onchange = () => {
+            if (camerainput.files && camerainput.files.length > 0) {
+                resolve();
+            } else {
+                reject(new Error('No file selected.'));
+            }
+        };
+    });
+
+    const file = camerainput.files[0];
+    const image = await loadImage(file);
+
+    //TODO add a loading icon
+    return crop_image(image);
+}
 
 async function takePictureToCell(div) {
     const imageUrl = await takePicture();
