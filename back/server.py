@@ -16,7 +16,7 @@ labels = ["fruit", "vegetable", "carrot", "tomato", "sweet potato", "radish", "b
 device = "cuda:0"
 
 
-# load image from b64
+# helpers
 def load_b64(image_b64):
     image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1]))).convert("RGB")
     return image
@@ -73,29 +73,26 @@ def image_class_cosim(image, labels_embeddings, clip_model):
     return probas
 
 
-app = Flask(__name__)
+# called by routes
+
+def classify(image):
+    cosims =  image_class_cosim(image, labels_embeddings, clip_model)
+
+    # check if this is a fruit or a vegetable
+    if cosims["fruit"] < 0.22 or cosims["vegetable"] < 0.22:
+        return None
+
+    return max(cosims, key=cosims.get)
 
 
-if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-    print("LOADING MODELS")
-
-    clipseg_processor = AutoProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
-    clipseg_model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
-
-    pipe = StableDiffusionInpaintPipeline.from_pretrained(
-        "runwayml/stable-diffusion-inpainting"
-    )
-
-    pipe.to(device)
-
-    pipe.enable_xformers_memory_efficient_attention()
-
-    clip_model, clip_processor, clip_tokenizer = get_clip("openai/clip-vit-base-patch32")
-    labels_embeddings = get_labels_embeddings(clip_model, clip_tokenizer)
-    
-    pipe.safety_checker  = None
-
-    print("MODELS LOADED")
+def locate_ip(ip):
+    url = f'http://ip-api.com/json/{ip}'
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an error for bad responses
+        return response.json()  # Converts the JSON response to a Python dictionary
+    except requests.RequestException as e:
+        return {'error': str(e)}
 
 
 def gen_mask(image, target_text, threshold=0.5):
@@ -124,45 +121,28 @@ def apply_workflow(image, prompt):
     return mask_image, gen_image
 
 
-@app.route("/")
-def home():
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Flask App API Endpoints</title>
-    </head>
-    <body>
-        <h1>API Endpoints</h1>
-        <p>This Flask app provides the following endpoints:</p>
-        
-        <h2>/transform</h2>
-        <p><strong>Method:</strong> POST</p>
-        <p><strong>Description:</strong> Applies a transformation to an image based on a provided prompt.</p>
-        <p><strong>Parameters:</strong></p>
-        <ul>
-            <li>image: Base64 encoded image.</li>
-            <li>prompt: Text prompt for guiding the transformation.</li>
-        </ul>
-        
-        <h2>/classify</h2>
-        <p><strong>Method:</strong> POST</p>
-        <p><strong>Description:</strong> Classifies the given image into predetermined categories.</p>
-        <p><strong>Parameters:</strong></p>
-        <ul>
-            <li>image: Base64 encoded image.</li>
-        </ul>
-        
-        <h2>/locate_ip</h2>
-        <p><strong>Method:</strong> POST</p>
-        <p><strong>Description:</strong> Locates the geographical location or other details associated with the provided IP address.</p>
-        <p><strong>Parameters:</strong></p>
-        <ul>
-            <li>ip: IP address to locate.</li>
-        </ul>
-    </body>
-    </html>
-    """
+app = Flask(__name__)
+
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    print("LOADING MODELS")
+
+    clipseg_processor = AutoProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
+    clipseg_model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
+
+    pipe = StableDiffusionInpaintPipeline.from_pretrained(
+        "runwayml/stable-diffusion-inpainting"
+    )
+
+    pipe.to(device)
+
+    pipe.enable_xformers_memory_efficient_attention()
+
+    clip_model, clip_processor, clip_tokenizer = get_clip("openai/clip-vit-base-patch32")
+    labels_embeddings = get_labels_embeddings(clip_model, clip_tokenizer)
+    
+    pipe.safety_checker  = None
+
+    print("MODELS LOADED")
 
 
 @app.route('/transform', methods=['POST'])
@@ -181,22 +161,30 @@ def transform():
     
     return "data:image/jpeg;base64," + base64_image
 
-
-@app.route('/classify', methods=['POST'])
-def classify():
+@app.route('/info', methods=['POST'])
+def info():
     data = request.json
     image_b64 = data['image']  # Base64 encoded image
-
     image = load_b64(image_b64)
+
+    caller_ip = request.remote_addr
     
-    cosims = image_class_cosim(image, labels_embeddings, clip_model)
+    ip_info = locate_ip(caller_ip)
 
-    # check if this is a fruit or a vegetable
-    if cosims["fruit"] < 0.22 or cosims["vegetable"] < 0.22:
-        return "not a fruit or vegetable"
+    classes = classify(image)
 
-    return max(cosims, key=cosims.get)
-
+    if not classes:
+        return {
+            "is_valid": False,
+            "fruit": None,
+            "country": ip_info["country"]
+        }
+    else:
+        return {
+            "is_valid": True,
+            "fruit": max(classes, key=classes.get),
+            "country": ip_info["country"]
+        }
 
 @app.route('/locate_ip', methods=['POST'])
 def locate_ip():

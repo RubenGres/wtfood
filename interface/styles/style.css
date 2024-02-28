@@ -4,17 +4,29 @@
     padding: 0;
 }
 
-#container {
+#foodmap {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
     position: relative;
 }
 
+#camerainput {
+    visibility: hidden;
+    height: 0px;
+}
+
 .gridcell {
     position: absolute;
-    background-size: cover;
     border: solid 1px hsl(0, 0%, 73%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.gridcell .camera_icon {
+    height: 25%;
 }
 
 .gridcell:hover {
