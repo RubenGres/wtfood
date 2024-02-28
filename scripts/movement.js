@@ -1,8 +1,9 @@
 var moving = false;
 var delta_cam_x = 0;
 var delta_cam_y = 0;
-var cam_x = 0;
-var cam_y = 0;
+
+cam_x = (grid_width * (cell_w + cell_margin))/2
+cam_y = (grid_height * (cell_h + cell_margin))/2
 
 
 function getPointerPosition(e) {
@@ -134,6 +135,9 @@ if(isMobile) {
 
     swipeDetect(container);
 } else {
+    cam_x -= window.visualViewport.width/2
+    cam_y -= window.visualViewport.height/2
+
     // Mouse event listeners
     container.addEventListener('mousedown', pointerPressed);
     container.addEventListener('mousemove', pointerMoved);
