@@ -8,12 +8,18 @@ from flask import Flask, request
 import base64
 from io import BytesIO
 import os
+import websocket
+import uuid
+import comfyapicall
 
 
 # fill here with more fruits
 labels = ["fruit", "vegetable", "carrot", "tomato", "sweet potato", "radish", "banana", "coconut", "kiwi", "lemon"]
 
 device = "cuda:0"
+
+server_address = "127.0.0.1:8188"
+client_id = str(uuid.uuid4())
 
 
 # helpers
@@ -111,7 +117,7 @@ def gen_mask(image, target_text, threshold=0.5):
     # Convert to an 8-bit grayscale image
     numpy_image_8bit = numpy_image.astype(np.uint8)
     mask = Image.fromarray(numpy_image_8bit, mode='L')
-    
+
     return mask
 
 
@@ -119,6 +125,14 @@ def apply_workflow(image, prompt):
     mask_image = gen_mask(image, "fruit", threshold=0.5)
     gen_image = pipe(prompt=prompt, image=image, mask_image=mask_image, num_inference_steps=10).images[0]
     return mask_image, gen_image
+
+
+def generate(workflow, params):
+    prompt = comfyapicall.load_workflow(workflow)
+    img_b64 = comfyapicall.get_images(ws, prompt)
+    return img_b64
+
+
 
 
 app = Flask(__name__)
@@ -139,8 +153,11 @@ if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
 
     clip_model, clip_processor, clip_tokenizer = get_clip("openai/clip-vit-base-patch32")
     labels_embeddings = get_labels_embeddings(clip_model, clip_tokenizer)
-    
+
     pipe.safety_checker  = None
+
+    ws = websocket.WebSocket()
+    ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
 
     print("MODELS LOADED")
 
@@ -161,6 +178,7 @@ def transform():
     
     return "data:image/jpeg;base64," + base64_image
 
+
 @app.route('/info', methods=['POST'])
 def info():
     data = request.json
@@ -168,7 +186,7 @@ def info():
     image = load_b64(image_b64)
 
     caller_ip = request.remote_addr
-    
+
     ip_info = locate_ip(caller_ip)
 
     classes = classify(image)
@@ -185,19 +203,6 @@ def info():
             "fruit": max(classes, key=classes.get),
             "country": ip_info["country"]
         }
-
-@app.route('/locate_ip', methods=['POST'])
-def locate_ip():
-    data = request.json
-    ip = data['ip']
-
-    url = f'http://ip-api.com/json/{ip}'
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an error for bad responses
-        return response.json()  # Converts the JSON response to a Python dictionary
-    except requests.RequestException as e:
-        return {'error': str(e)}
 
 
 if __name__ == '__main__':
