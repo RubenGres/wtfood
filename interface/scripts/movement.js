@@ -1,5 +1,3 @@
-var container = document.getElementById('container');
-
 var moving = false;
 var delta_cam_x = 0;
 var delta_cam_y = 0;

@@ -20,23 +20,21 @@ function create_cell(i) {
 
     div.style.height = `${cell_h}px`;
     div.style.width = `${cell_w}px`;
+
+    div.innerHTML = "<img src='image/camera.png' class='camera_icon'/>"
     
     //cell state
     div.onclick = () => {
         if(!state.isMoving) {
             switch(div.getAttribute("state")){
                 case "empty":
-                    if(!state.isTakingPicture) {
-                        openCamera(div);                    
-                        div.setAttribute("state", "camera_open");
-                        state.isTakingPicture = true;
+                    try {
+                        takePictureToCell(div);
+                        div.setAttribute("state", "picture_ready");
+                        state.isTakingPicture = false;
+                    } catch (error) {
+                        console.error("Error taking picture:", error);
                     }
-                    break;
-
-                case "camera_open":
-                    takePictureToCell(div);
-                    div.setAttribute("state", "picture_ready");
-                    state.isTakingPicture = false;
                     break;
 
                 case "picture_ready":
