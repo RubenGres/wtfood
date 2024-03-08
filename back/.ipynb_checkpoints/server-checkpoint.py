@@ -52,12 +52,17 @@ def home():
 @app.route('/transform', methods=['POST'])
 def transform():
     data = request.json
+    
     image_b64 = data['image']  # Base64 encoded image
+    image = load_b64(image_b64)
+    
     workflow = data['workflow']
     params = data['params']
     client_id = data['client_id']
 
-    image = load_b64(image_b64)
+    image_class = classify(image)
+    if image_class:
+        params["prompt"] = f"person with a {image_class} face"
 
     # generation is happening here
     images = generate(workflow, params, client_id, "127.0.0.1:8188")
@@ -69,7 +74,7 @@ def transform():
     base64_image = base64.b64encode(buffered.getvalue()).decode("utf-8")
     base64_string = "data:image/jpeg;base64," + base64_image
 
-    info_text = "This is a call to action"
+    info_text = params["prompt"]
 
     response_data = {
         "image_b64": base64_string,
@@ -106,4 +111,4 @@ def info():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)

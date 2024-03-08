@@ -28,8 +28,11 @@ def home():
 @app.route('/transform', methods=['POST'])
 def transform():
     data = request.json
+    
     image_b64 = data['image']  # Base64 encoded image
     workflow = data['workflow']
+    params = data['params']
+    client_id = data['client_id']
 
     image = load_b64(image_b64)
 
@@ -61,4 +64,4 @@ def info():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
