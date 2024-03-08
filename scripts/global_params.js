@@ -1,4 +1,4 @@
-const SD_API_URL = "http://localhost:5000/transform";
+const SD_API_URL = "http://localhost:5000/";
 const grid_height = 10;
 const grid_width = 10;
 

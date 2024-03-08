@@ -1,14 +1,13 @@
-async function generateImage(id_image) {
-    div = imgs[id_image]
+async function generateImage(camera_picture) {
+    const base64ImageData = camera_picture.src.split(',')[1];
 
-    let cell_src = div.firstElementChild.src;
 
     const data = {
-        image_url: '/home/ruben/food-dysmorphia/no_canvas/image/food_class_'+(id_image+1)+'_sq.jpg',
-        prompt: "candies, sugar, sweets"
+        image: base64ImageData,
+        workflow: "default"
     };
 
-    const response = await fetch(SD_API_URL, {
+    const response = await fetch(SD_API_URL + "transform", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -16,12 +15,35 @@ async function generateImage(id_image) {
         body: JSON.stringify(data)
     });
 
+
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const outputPath = await response.text();
+    
+    const responseData = await response.json();
+    const image_b64 = responseData.image_b64;
+    const info_text = responseData.info_text;
 
-    div.style.backgroundImage = `url(${outputPath})`;
-    div.innerHTML = ``
+
+    // Create image element
+    const generated_card = document.createElement('div');
+
+    const img = document.createElement('img');
+    img.src = responseData.image_b64;
+    img.setAttribute('class', 'generated-image');
+    card.appendChild(img);
+
+    // Create text element
+    const infotext = document.createElement('div');
+    infotext.textContent = responseData.info_text;
+    info_text.setAttribute('class', 'infotext');
+    card.appendChild(info_text);
+
+    // Add click event listener to the image
+    img.addEventListener('click', function() {
+        text.style.display = text.style.display === 'none' ? 'block' : 'none';
+    });
+
+    return img;
 }
