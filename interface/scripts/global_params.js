@@ -1,9 +1,9 @@
-const SD_API_URL = "http://localhost:5000/";
+const SD_API_URL = "https://0e8ap1mqic7ud8-5000.proxy.runpod.net/";
 const grid_height = 10;
 const grid_width = 10;
 
-let cell_w = 256;
-let cell_h = 256;
+let cell_w = 256 + 128;
+let cell_h = 256 + 128;
 const cell_margin = 10;
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);

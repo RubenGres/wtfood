@@ -21,7 +21,6 @@ def load_b64(image_b64):
     return image
 
 def locate_ip(ip):
-    ip = "37.66.212.67"
     url = f'http://ip-api.com/json/{ip}'
     try:
         response = requests.get(url)

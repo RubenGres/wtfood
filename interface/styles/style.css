@@ -88,10 +88,29 @@ img {
     width: 100%;
     height: 100%;
     cursor: pointer;
+    position: relative; /* Ensure absolute positioning is relative to this container */
 }
 
-.generated_card .infotext {
+.infotext {
     width: 100%;
     height: 100%;
-    display: none;
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center horizontally */
+    position: absolute;
+    top: 0; /* Position the infotext at the top left corner of the generated_card */
+    left: 0;
+    z-index: 2; /* Ensure the infotext is above the image */
+    color: #FFFFFF; /* Example text color, adjust as needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Optional: Add background to improve readability */
+    text-align: center; /* Ensure the text itself is centered, useful for multi-line text */
+    padding: 10px; /* Optional: Add some padding inside the infotext box */
+}
+
+.generated-image {
+    width: 100%;
+    height: 100%;
+    position: absolute; /* Position the image absolutely to allow the text overlay */
+    top: 0;
+    left: 0;
+    z-index: 1; /* Ensure the image is below the infotext */
 }
