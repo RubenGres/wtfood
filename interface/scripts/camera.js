@@ -55,19 +55,12 @@ async function takePicture() {
     const file = camerainput.files[0];
     const image = await loadImage(file);
 
-    //TODO add a loading icon
-    return crop_image(image);
+    imageUrl = await crop_image(image);
+
+    let snapshot = document.createElement('img');
+    snapshot.src = imageUrl;
+    snapshot.className = "snapshot"
+
+    return snapshot;
 }
 
-async function takePictureToCell(div) {
-    const imageUrl = await takePicture();
-
-    if (imageUrl) {
-        div.innerHTML = ""
-
-        let snapshot = document.createElement('img');
-        snapshot.src = imageUrl;
-        snapshot.className = "snapshot"
-        div.appendChild(snapshot);
-    }
-}

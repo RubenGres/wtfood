@@ -29,6 +29,31 @@
     height: 25%;
 }
 
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
+.loading_gizmo {
+    height: 25%;
+    width: 25%;
+    border: 4px solid #eeeeee;
+    border-top: 4px solid hsl(120, 100%, 30%);
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    z-index: 99999;
+    visibility: collapse;
+}
+
+.loading_gizmo.display {
+  visibility: visible;
+}
+
 .gridcell:hover {
     cursor: pointer;    
 }
@@ -57,4 +82,16 @@ img {
 .snapshot {
     width: 100%;
     height: 100%;
+}
+
+.generated_card {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.generated_card .infotext {
+    width: 100%;
+    height: 100%;
+    display: none;
 }
