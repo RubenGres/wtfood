@@ -11,8 +11,10 @@ import os
 import websocket
 import uuid
 
-from comfyapicall import generate
+from comfycaller import generate
 from clipclassifier import classify
+import positioning
+import database
 
 
 # helpers
@@ -42,6 +44,7 @@ def home():
 
     Routes:
     <ul>
+        <li> /get_position </li>
         <li> /transform </li>
         <li> /info </li>
     </ul>
@@ -80,6 +83,11 @@ def transform():
         "info_text": info_text
     }
 
+    coord = positioning.new_coordinates()
+    positioning.remove_coord(coord);
+
+    database.add_cell(gen_image, info_text, coord)
+
     return jsonify(response_data)
 
 
@@ -107,6 +115,11 @@ def info():
             "fruit": image_class,
             "country": ip_info["country"]
         }
+
+
+@app.route('/get_position', methods=['GET'])
+def get_position():
+    return positioning.new_coordinates()
 
 
 if __name__ == '__main__':

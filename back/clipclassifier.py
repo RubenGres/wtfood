@@ -9,7 +9,7 @@ from io import BytesIO
 import os
 import websocket
 import uuid
-import comfyapicall
+import back.comfycaller as comfycaller
 
 
 def _get_clip(model_ID):
