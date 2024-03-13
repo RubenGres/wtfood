@@ -22,8 +22,8 @@ probability_grid = probabilities.flatten()
 def new_coordinates():
     selected_indices = np.random.choice(grid_size * grid_size, p=probability_grid)
     coordinates = np.unravel_index(selected_indices, (grid_size, grid_size))
-    return (coordinates[0], coordinates[1])
+    return coordinates
 
 
 def remove_coord(coordinates):
-    probability_grid[coordinates[0], coordinates[1]] = 0
+    probability_grid[coordinates[0] * grid_size + coordinates[1]] = 0

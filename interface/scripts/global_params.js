@@ -1,4 +1,4 @@
-const SD_API_URL = "https://0e8ap1mqic7ud8-5000.proxy.runpod.net/";
+const SD_API_URL = "https://organic-space-halibut-xrr6674w6gr3vr99-5000.app.github.dev/";
 const grid_height = 10;
 const grid_width = 10;
 

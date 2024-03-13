@@ -1,8 +1,13 @@
 from PIL import Image
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 import base64
 from io import BytesIO
 import time
+
+import positioning
+import database
 
 
 # helpers
@@ -13,6 +18,8 @@ def load_b64(image_b64):
 
 app = Flask(__name__)
 
+CORS(app)
+
 @app.route('/')
 def home():
     return """
@@ -20,6 +27,7 @@ def home():
 
     Routes:
     <ul>
+        <li> /get_position </li>
         <li> /transform </li>
         <li> /info </li>
     </ul>
@@ -51,6 +59,12 @@ def transform():
         "info_text": info_text
     }
 
+    coord = positioning.new_coordinates()
+    print(coord)
+    positioning.remove_coord(coord);
+
+    database.add_cell(gen_image, info_text, coord)
+
     return jsonify(response_data)
 
 
@@ -61,6 +75,11 @@ def info():
         "fruit": "coconut",
         "country": "France"
     }
+
+
+@app.route('/get_position', methods=['GET'])
+def get_position():
+    return positioning.new_coordinates()
 
 
 if __name__ == '__main__':

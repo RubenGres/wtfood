@@ -1,18 +1,38 @@
 import sqlite3
+import time
+import os
 
 DB_PATH = 'example.db'
+CREATE_QUERY = '''CREATE TABLE IF NOT EXISTS cells
+               (id INTEGER PRIMARY KEY, username TEXT, x FLOAT, y FLOAT, media_path TEXT, text TEXT, links TEXT, datetime DATETIME)'''
 
-conn = sqlite3.connect(DB_PATH)
-cursor = conn.cursor()
+# Use a function to get a fresh connection
+# This is more about ensuring that each use gets a clean state if you plan to extend this script for multi-threading or more complex operations
+def get_db_connection(db_path):
+    return sqlite3.connect(db_path)
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS cells
-               (id INTEGER PRIMARY KEY, username TEXT, media_path TEXT, text TEXT, links TEXT, datetime DATETIME)''')
 
-cursor.execute("INSERT INTO cells (username, x, y, media_path, text, links, datetime) VALUES ('user_text', 0, 0, './local.jpg', 'call to action', 'gogle.fr', datetime('now'))")
+def initialize_database():
+    with get_db_connection(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute(CREATE_QUERY)
+        conn.commit()
 
-conn.commit()
 
-cursor.execute("SELECT * FROM cells")
-print(cursor.fetchall())
+def reset():
+    if os.path.exists(DB_PATH):
+        os.remove(DB_PATH)
+    initialize_database()
 
-conn.close()
+
+def add_cell(gen_image, info_text, coord):
+    image_path = f"{time.time()}.jpg"
+    gen_image.save(image_path)
+    with get_db_connection(DB_PATH) as conn:
+        cursor = conn.cursor()
+        # Using parameterized queries to avoid SQL injection
+        cursor.execute("INSERT INTO cells (username, x, y, media_path, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                       ('useruuid', coord[0], coord[1], image_path, info_text, 'google.fr', time.time()))
+        conn.commit()
+
+initialize_database()
