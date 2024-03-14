@@ -19,23 +19,24 @@ function loadImage(file) {
 }
 
 
-function crop_image(image, side_length) {
-    // If side_length is not provided, use the smaller dimension of the image to make it a square
-    side_length = side_length || Math.min(image.width, image.height);
+function crop_image(image) {
+    side_length = Math.min(image.width, image.height);
 
     const canvas = document.createElement('canvas');
-    canvas.width = side_length;
-    canvas.height = side_length;
+
+    canvas.width = camera_output_size;
+    canvas.height = camera_output_size;
 
     // Calculate source x and y to center the crop area
     let sx = (image.width - side_length) / 2;
     let sy = (image.height - side_length) / 2;
 
     const context = canvas.getContext('2d');
-    context.drawImage(image, sx, sy, side_length, side_length, 0, 0, canvas.width, canvas.height);
+    context.drawImage(image, sx, sy, side_length, side_length, 0, 0, camera_output_size, camera_output_size);
 
     return canvas.toDataURL('image/png');
 }
+
 
 async function takePicture() {
     camerainput.focus();
@@ -55,12 +56,11 @@ async function takePicture() {
     const file = camerainput.files[0];
     const image = await loadImage(file);
 
-    imageUrl = await crop_image(image);
+    data_url = await crop_image(image);
 
     let snapshot = document.createElement('img');
-    snapshot.src = imageUrl;
+    snapshot.src = data_url;
     snapshot.className = "snapshot"
 
     return snapshot;
 }
-

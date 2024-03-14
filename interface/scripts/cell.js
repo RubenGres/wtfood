@@ -22,7 +22,7 @@ function create_cell(coords) {
     let div = basic_cell();
 
     // Calculate the cell color based on its index
-    let cell_color = (200*(coords[0]+coords[1])) % 360;
+    let cell_color = (200*(coords[0]*10+coords[1])) % 360;
     let base_hue = `hsl(${cell_color}, 76%, 90%)`;
     let highlight_hue = `hsl(${cell_color}, 56%, 85%)`;
     div.style.backgroundColor = base_hue;
