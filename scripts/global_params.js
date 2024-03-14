@@ -1,9 +1,7 @@
 const SD_API_URL = "https://organic-space-halibut-xrr6674w6gr3vr99-5000.app.github.dev/";
-const grid_height = 10;
-const grid_width = 10;
 
-let cell_w = 256 + 128;
-let cell_h = 256 + 128;
+let cell_w = 128;
+let cell_h = 128;
 const cell_margin = 10;
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
