@@ -1,16 +1,28 @@
+const uuidv4 = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 async function generateImage(camera_picture, coords) {
     const base64ImageData = camera_picture.src.split(',')[1];
-
-    const uuidv4 = () => {
-        // Generate a random UUID. This function needs to be implemented or a library that supports UUID generation should be used.
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
+    
+    // resize to desired size
+    const img = new Image();
+    img.src = 'data:image/jpeg;base64,' + base64ImageData;
+    await new Promise((resolve) => {
+        img.onload = resolve;
+    });
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = camera_output_size;
+    canvas.height = camera_output_size;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const resizedImageData = canvas.toDataURL('image/jpeg').split(',')[1];
 
     const data = {
-        image: base64ImageData,
+        image: resizedImageData,
         workflow: "default",
         client_id: uuidv4(), // Generate a new UUID for each request
         params: {
