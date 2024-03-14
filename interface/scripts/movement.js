@@ -71,20 +71,24 @@ function swipe_left() {
     updateDivPositions();
 }
 
+
 function swipe_right() {
     cam_x -= cell_w + cell_margin;
     updateDivPositions();
 }
+
 
 function swipe_down() {
     cam_y += cell_h + cell_margin;
     updateDivPositions();
 }
 
+
 function swipe_up() {
     cam_y -= cell_h + cell_margin;
     updateDivPositions();
 }
+
 
 async function focus_random_empty() {
     const response = await fetch(SD_API_URL + "position/pick", {method: 'GET'});
