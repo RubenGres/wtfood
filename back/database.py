@@ -25,14 +25,24 @@ def reset():
     initialize_database()
 
 
-def add_cell(gen_image, info_text, coord):
+def add_cell(gen_image, info_text, coord, image_folder="./"):
     image_path = f"{time.time()}.jpg"
-    gen_image.save(image_path)
+    gen_image.save(f"{image_folder}{image_path}")
+    
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
         # Using parameterized queries to avoid SQL injection
         cursor.execute("INSERT INTO cells (username, x, y, media_path, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)",
                        ('useruuid', coord[0], coord[1], image_path, info_text, 'google.fr', time.time()))
         conn.commit()
+
+
+def get_all_cells_as_dict():
+    with get_db_connection(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM cells")
+        rows = cursor.fetchall()
+        return [dict(row) for row in rows]
 
 initialize_database()

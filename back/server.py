@@ -119,8 +119,12 @@ def info():
 
 @app.route('/get_position', methods=['GET'])
 def get_position():
-    return positioning.new_coordinates()
-
+    coords = positioning.new_coordinates()
+    coord_dict = {
+        "x": coords[0],
+        "y": coords[1]
+    }
+    return coord_dict
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

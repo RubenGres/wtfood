@@ -1,13 +1,15 @@
+import time
+import base64
+import os
+from io import BytesIO
 from PIL import Image
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
 
-import base64
-from io import BytesIO
-import time
 
 import positioning
 import database
+
 
 
 # helpers
@@ -27,7 +29,9 @@ def home():
 
     Routes:
     <ul>
-        <li> /get_position </li>
+        <li> /next_position </li>
+        <li> /video </li>
+        <li> /cards </li>
         <li> /transform </li>
         <li> /info </li>
     </ul>
@@ -60,7 +64,6 @@ def transform():
     }
 
     coord = positioning.new_coordinates()
-    print(coord)
     positioning.remove_coord(coord);
 
     database.add_cell(gen_image, info_text, coord)
@@ -77,9 +80,37 @@ def info():
     }
 
 
-@app.route('/get_position', methods=['GET'])
+@app.route('/position', methods=['GET'])
 def get_position():
-    return positioning.new_coordinates()
+    coords = positioning.new_coordinates()
+    
+    coord_dict = {
+        "x": coords[0],
+        "y": coords[1]
+    }
+
+    return coord_dict
+
+
+@app.route('/cards', methods=['GET'])
+def get_cards():
+    rows = database.get_all_cells_as_dict()
+    return rows
+
+
+@app.route('/video/<video_id>', methods=['GET'])
+def get_video(video_id):
+    image_folder = "./"
+
+    # Build the file path for the requested video
+    video_path = os.path.join(image_folder, f"{video_id}.jpg")
+    
+    # Check if the file exists
+    if not os.path.isfile(video_path):
+        abort(404, description="Video not found")
+
+    # Return the video file
+    return send_from_directory(directory=image_folder, path=video_path)
 
 
 if __name__ == '__main__':
