@@ -29,8 +29,8 @@ def home():
 
     Routes:
     <ul>
-        <li> /next_position </li>
-        <li> /video </li>
+        <li> /position </li>
+        <li> /media </li>
         <li> /cards </li>
         <li> /transform </li>
         <li> /info </li>
@@ -45,6 +45,7 @@ def transform():
     workflow = data['workflow']
     params = data['params']
     client_id = data['client_id']
+    coord = data['coords']
 
     image = load_b64(image_b64)
 
@@ -63,7 +64,6 @@ def transform():
         "info_text": info_text
     }
 
-    coord = positioning.new_coordinates()
     positioning.remove_coord(coord);
 
     database.add_cell(gen_image, info_text, coord)
@@ -80,9 +80,9 @@ def info():
     }
 
 
-@app.route('/position', methods=['GET'])
-def get_position():
-    coords = positioning.new_coordinates()
+@app.route('/position/pick', methods=['GET'])
+def pick_position():
+    coords = positioning.pick_position()
     
     coord_dict = {
         "x": coords[0],
@@ -92,18 +92,33 @@ def get_position():
     return coord_dict
 
 
+@app.route('/position/free', methods=['GET'])
+def free_position():
+    free_pos = positioning.get_possible_positions()
+    
+    positions = []
+    for pos in free_pos:
+        positions.append({
+            "x": pos[0],
+            "y": pos[1]
+        })
+    
+    return positions
+
+
+
 @app.route('/cards', methods=['GET'])
 def get_cards():
     rows = database.get_all_cells_as_dict()
     return rows
 
 
-@app.route('/video/<video_id>', methods=['GET'])
-def get_video(video_id):
+@app.route('/media/<id>', methods=['GET'])
+def load_media(id):
     image_folder = "./"
 
     # Build the file path for the requested video
-    video_path = os.path.join(image_folder, f"{video_id}.jpg")
+    video_path = os.path.join(image_folder, f"{id}.jpg")
     
     # Check if the file exists
     if not os.path.isfile(video_path):

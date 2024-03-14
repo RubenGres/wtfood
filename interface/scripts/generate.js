@@ -1,4 +1,4 @@
-async function generateImage(camera_picture) {
+async function generateImage(camera_picture, coords) {
     const base64ImageData = camera_picture.src.split(',')[1];
 
     const uuidv4 = () => {
@@ -16,7 +16,8 @@ async function generateImage(camera_picture) {
         params: {
             prompt: "Person crossing their arms photograph, 2024 4k picture",
             seed: 0
-        }
+        },
+        coords: coords
     };
 
     const response = await fetch(SD_API_URL + "transform", {
@@ -32,32 +33,7 @@ async function generateImage(camera_picture) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    
     const responseData = await response.json();
-    const image_b64 = responseData.image_b64;
-    const info_text = responseData.info_text;
 
-
-    // Create image element
-    const generated_card = document.createElement('div');
-    generated_card.setAttribute('class', 'generated_card')
-
-    const img = document.createElement('img');
-    img.src = responseData.image_b64;
-    img.setAttribute('class', 'generated-image');
-    generated_card.appendChild(img);
-
-    // Create text element
-    const infotext = document.createElement('div');
-    infotext.textContent = responseData.info_text;
-    infotext.setAttribute('class', 'infotext');
-    infotext.style.display = 'none';
-    generated_card.appendChild(infotext);
-
-    // Add click event listener to the image
-    generated_card.addEventListener('click', function() {
-        infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
-    });
-
-    return generated_card;
+    return create_card(responseData.image_b64, responseData.info_text)
 }

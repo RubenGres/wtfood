@@ -1,32 +1,50 @@
+import random
 import numpy as np
+import database
 
 grid_size = 11
 center_x = 0
 center_y = 0
 
+def _init_from_db():
+    global possible_positions
 
-distances = np.zeros((grid_size, grid_size))
+    cells = database.get_all_cells_as_dict()
 
-
-for x in range(grid_size):
-    for y in range(grid_size):
-        distances[x, y] = (x - center_x)**2 + (y - center_y)**2
-
-# Normalize distances to get probabilities (inverse to make closer points have higher probability)
-probabilities = 1 - distances / np.max(distances)
-probabilities /= probabilities.sum()  # Normalize probabilities
-
-# Flatten probabilities and use them to select points
-probability_grid = probabilities.flatten()
+    if len(cells) == 0:
+        possible_positions.add((0.,0.))
+    else:
+        for cell in cells:
+            remove_coord((cell['x'], cell['y']))
 
 
-def new_coordinates():
-    selected_indices = np.random.choice(grid_size * grid_size, p=probability_grid)
-    coordinates = np.unravel_index(selected_indices, (grid_size, grid_size))
-    return [float(c) for c in coordinates]
+def pick_position():
+    coordinates =  random.sample(possible_positions, k=1)
+    return coordinates[0]
+
+
+def get_possible_positions():
+    return possible_positions
 
 
 def remove_coord(coordinates):
-    global probability_grid
-    probability_grid[int(coordinates[0]) * grid_size + int(coordinates[1])] = 0
-    probability_grid /= probability_grid.sum()  # Normalize probabilities
+    global filled_positions
+    global possible_positions
+
+    coordinates = (float(coordinates[0]), float(coordinates[1]))
+    
+    if coordinates in possible_positions:
+        possible_positions.remove(coordinates)
+
+    filled_positions.add(coordinates)
+
+    # add surrounding cells to possible positions
+    for i in np.arange(coordinates[0] - 1, coordinates[0] + 2):
+        for j in np.arange(coordinates[1] - 1, coordinates[1] + 2):
+            if (i,j) not in filled_positions:
+                possible_positions.add((i,j))
+
+
+possible_positions = set()
+filled_positions = set()
+_init_from_db()

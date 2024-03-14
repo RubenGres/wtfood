@@ -2,8 +2,11 @@ var moving = false;
 var delta_cam_x = 0;
 var delta_cam_y = 0;
 
-cam_x = (grid_width * (cell_w + cell_margin))/2
-cam_y = (grid_height * (cell_h + cell_margin))/2
+//cam_x = (grid_width * (cell_w + cell_margin))/2
+//cam_y = (grid_height * (cell_h + cell_margin))/2
+
+cam_x = -(window.visualViewport.width - (cell_w + cell_margin))/2;
+cam_y = -(window.visualViewport.height - (cell_h + cell_margin))/2;
 
 
 function getPointerPosition(e) {
@@ -54,12 +57,11 @@ function padScroll(e) {
 
 
 function updateDivPositions() {
-    for (let x = 0; x < grid_width; x++) { 
-        for (let y = 0; y < grid_height; y++) { 
-            let div = imgs[x + y*grid_height];
-            div.style.left = (x * (cell_w + cell_margin) - cam_x) + 'px';
-            div.style.top = (y * (cell_h + cell_margin) - cam_y) + 'px';
-        }
+    for (let i = 0; i < cells.length; i++) {
+        let cell = cells[i]
+        cell_elem = cell["elem"]
+        cell_elem.style.left = (cell["x"] * (cell_w + cell_margin) - cam_x) + 'px';
+        cell_elem.style.top = (cell["y"] * (cell_h + cell_margin) - cam_y) + 'px';
     }
 }
 
@@ -84,7 +86,22 @@ function swipe_up() {
     updateDivPositions();
 }
 
+async function focus_random_empty() {
+    const response = await fetch(SD_API_URL + "position/pick", {method: 'GET'});
+    
+    if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+    const random_position = await response.json();
+
+    cam_x += random_position['x'] * (cell_w + cell_margin)
+    cam_y += random_position['y'] * (cell_h + cell_margin)
+} 
+
+
 if(isMobile) {
+    focus_random_empty();
+
     const swipeDetect = (el) => {
         let surface = el;      
         let startX = 0;      
@@ -95,19 +112,17 @@ if(isMobile) {
         const min_swipe_dist = 70;
             
         surface.addEventListener("touchstart", function (e) {
-          startX = e.changedTouches[0].pageX;
-          startY = e.changedTouches[0].pageY;
+            startX = e.changedTouches[0].pageX;
+            startY = e.changedTouches[0].pageY;
         });
-      
+        
         surface.addEventListener("touchmove", function (e) {
-          e.preventDefault();
+            e.preventDefault();
         });
-      
+        
         surface.addEventListener("touchend", function (e) {
             distX = e.changedTouches[0].pageX - startX;
             distY = e.changedTouches[0].pageY - startY;
-
-            //alert(distX + ";" + distY);
 
             if (Math.abs(distX) > Math.abs(distY)) {
                 if (Math.abs(distX) > min_swipe_dist) {
@@ -129,15 +144,8 @@ if(isMobile) {
         });
     };
 
-    // small correction to center the cell
-    cam_x -= (window.visualViewport.width - (cell_w + cell_margin))/2;
-    cam_y -= (window.visualViewport.height - (cell_h + cell_margin))/2;
-
     swipeDetect(container);
 } else {
-    cam_x -= window.visualViewport.width/2
-    cam_y -= window.visualViewport.height/2
-
     // Mouse event listeners
     container.addEventListener('mousedown', pointerPressed);
     container.addEventListener('mousemove', pointerMoved);

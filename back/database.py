@@ -26,14 +26,15 @@ def reset():
 
 
 def add_cell(gen_image, info_text, coord, image_folder="./"):
-    image_path = f"{time.time()}.jpg"
-    gen_image.save(f"{image_folder}{image_path}")
+    epoch_ms = round(time.time() * 1000)
+    
+    gen_image.save(f"{image_folder}{epoch_ms}.jpg")
     
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
         # Using parameterized queries to avoid SQL injection
         cursor.execute("INSERT INTO cells (username, x, y, media_path, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                       ('useruuid', coord[0], coord[1], image_path, info_text, 'google.fr', time.time()))
+                       ('useruuid', coord[0], coord[1], epoch_ms, info_text, 'google.fr', time.time()))
         conn.commit()
 
 
