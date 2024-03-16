@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
+import os
 
-load_dotenv()  # take environment variables from .env.
+load_dotenv()
 
 media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
 
@@ -70,7 +71,7 @@ def transform():
         "info_text": info_text
     }
 
-    positioning.remove_coord(coord);
+    positioning.remove_coord(coord)
 
     database.add_cell(gen_image, info_text, coord, image_folder=media_folder)
 
@@ -121,17 +122,12 @@ def get_cards():
 
 @app.route('/media/<id>', methods=['GET'])
 def load_media(id):
-    image_folder = "./"
+    video_path = os.path.join(media_folder, f"{id}.jpg")
 
-    # Build the file path for the requested video
-    video_path = os.path.join(image_folder, f"{id}.jpg")
-    
-    # Check if the file exists
     if not os.path.isfile(video_path):
         abort(404, description="Video not found")
-
-    # Return the video file
-    return send_from_directory(directory=image_folder, path=video_path)
+    
+    return send_from_directory(directory=media_folder, path=f"{id}.jpg")
 
 
 if __name__ == '__main__':
