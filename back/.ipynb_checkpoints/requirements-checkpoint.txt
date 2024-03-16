@@ -1,8 +1,0 @@
-torch
-diffusers
-transformers
-numpy
-pillow
-flask
-accelerate
-xformers

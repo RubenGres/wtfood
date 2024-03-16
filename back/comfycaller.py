@@ -1,14 +1,13 @@
 from PIL import Image
 import io
-
+import os
 import websocket
 import uuid
 import json
 import urllib.request
 import urllib.parse
 
-server_address = "127.0.0.1:8188"
-
+server_address = os.environ.get("COMFY_API_URL", "127.0.0.1:8188")
 
 def _deep_merge(dict_a, dict_b):
     """

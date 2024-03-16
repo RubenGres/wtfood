@@ -1,3 +1,9 @@
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
+
 import time
 import base64
 import os
@@ -50,7 +56,7 @@ def transform():
     image = load_b64(image_b64)
 
     time.sleep(1)
-    gen_image = image.rotate(90)
+    gen_image = image.convert('1')
 
     buffered = BytesIO()
     gen_image.save(buffered, format="JPEG")
@@ -66,7 +72,7 @@ def transform():
 
     positioning.remove_coord(coord);
 
-    database.add_cell(gen_image, info_text, coord)
+    database.add_cell(gen_image, info_text, coord, image_folder=media_folder)
 
     return jsonify(response_data)
 

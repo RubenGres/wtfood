@@ -2,7 +2,9 @@ import sqlite3
 import time
 import os
 
-DB_PATH = 'example.db'
+# get database from configuration
+DB_PATH = os.environ.get("FD_DATABASE", "example.db")
+
 CREATE_QUERY = '''CREATE TABLE IF NOT EXISTS cells
                (id INTEGER PRIMARY KEY, username TEXT, x FLOAT, y FLOAT, media_path TEXT, text TEXT, links TEXT, datetime DATETIME)'''
 

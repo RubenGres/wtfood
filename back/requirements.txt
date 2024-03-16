@@ -6,3 +6,4 @@ pillow
 flask
 accelerate
 xformers
+python-dotenv

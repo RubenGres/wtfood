@@ -1,10 +1,18 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
+media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
+
 from transformers import AutoProcessor, CLIPSegForImageSegmentation
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 from diffusers import StableDiffusionInpaintPipeline
 import numpy as np
 from PIL import Image
 import requests
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, abort
+from flask_cors import CORS
+
 import base64
 from io import BytesIO
 import os
@@ -37,6 +45,8 @@ def locate_ip(ip):
 
 app = Flask(__name__)
 
+CORS(app)
+
 @app.route('/')
 def home():
     return """
@@ -44,7 +54,10 @@ def home():
 
     Routes:
     <ul>
-        <li> /get_position </li>
+        <li> /position/pick </li>
+        <li> /position/free </li>
+        <li> /cards </li>
+        <li> /media/<id> </li>
         <li> /transform </li>
         <li> /info </li>
     </ul>
@@ -86,7 +99,7 @@ def transform():
     coord = positioning.new_coordinates()
     positioning.remove_coord(coord);
 
-    database.add_cell(gen_image, info_text, coord)
+    database.add_cell(gen_image, info_text, coord, image_folder=media_folder)
 
     return jsonify(response_data)
 
@@ -117,14 +130,53 @@ def info():
         }
 
 
-@app.route('/get_position', methods=['GET'])
-def get_position():
-    coords = positioning.new_coordinates()
+@app.route('/position/pick', methods=['GET'])
+def pick_position():
+    coords = positioning.pick_position()
+    
     coord_dict = {
         "x": coords[0],
         "y": coords[1]
     }
+
     return coord_dict
+
+
+@app.route('/position/free', methods=['GET'])
+def free_position():
+    free_pos = positioning.get_possible_positions()
+    
+    positions = []
+    for pos in free_pos:
+        positions.append({
+            "x": pos[0],
+            "y": pos[1]
+        })
+    
+    return positions
+
+
+@app.route('/cards', methods=['GET'])
+def get_cards():
+    rows = database.get_all_cells_as_dict()
+    return rows
+
+
+@app.route('/media/<id>', methods=['GET'])
+def load_media(id):
+    image_folder = "./"
+
+    # Build the file path for the requested video
+    video_path = os.path.join(image_folder, f"{id}.jpg")
+    
+    # Check if the file exists
+    if not os.path.isfile(video_path):
+        abort(404, description="Video not found")
+
+    # Return the video file
+    return send_from_directory(directory=image_folder, path=video_path)
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

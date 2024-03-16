@@ -1,4 +1,3 @@
 # Food-dysmorphia backend
 
-db using sqlite
-backend with comfyui
+The image generation backend is based on ComfyUI
