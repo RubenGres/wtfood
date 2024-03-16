@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -74,13 +75,14 @@ def transform():
     workflow = data['workflow']
     params = data['params']
     client_id = data['client_id']
+    coord = data['coords']
 
     image_class = classify(image)
     if image_class:
         params["prompt"] = f"person with a {image_class} face"
 
     # generation is happening here
-    images = generate(workflow, params, client_id, "127.0.0.1:8188")
+    images = generate(workflow, params, client_id)
     image_data = list(images.values())[0][0]
     gen_image = Image.open(BytesIO(image_data))
         
@@ -96,8 +98,7 @@ def transform():
         "info_text": info_text
     }
 
-    coord = positioning.new_coordinates()
-    positioning.remove_coord(coord);
+    positioning.remove_coord(coord)
 
     database.add_cell(gen_image, info_text, coord, image_folder=media_folder)
 

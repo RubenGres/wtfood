@@ -4,6 +4,8 @@ transformers
 numpy
 pillow
 flask
+flask-cors
 accelerate
 xformers
 python-dotenv
+requests_toolbelt
