@@ -68,24 +68,27 @@ def home():
 @app.route('/transform', methods=['POST'])
 def transform():
     data = request.json
-    
-    image_b64 = data['image']  # Base64 encoded image
-    image = load_b64(image_b64)
-    
+
+    input_images = data['input_images']
     workflow = data['workflow']
     params = data['params']
     client_id = data['client_id']
     coord = data['coords']
 
+    k = list(input_images.keys())[0]
+    image = load_b64(input_images[k])
     image_class = classify(image)
     if image_class:
         params["prompt"] = f"person with a {image_class} face"
 
+    input_images[k] = base64.b64decode(input_images[k])
+
     # generation is happening here
-    images = generate(workflow, params, client_id)
+    images = generate(workflow, params, input_images, client_id)
+
     image_data = list(images.values())[0][0]
     gen_image = Image.open(BytesIO(image_data))
-        
+
     buffered = BytesIO()
     gen_image.save(buffered, format="JPEG")
     base64_image = base64.b64encode(buffered.getvalue()).decode("utf-8")

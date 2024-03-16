@@ -142,11 +142,7 @@ def generate(workflow, params, input_images, client_id):
     ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
 
     for k in input_images:
-        image = input_images[k]
-        buffered = io.BytesIO()
-        image.save(buffered, format="JPEG")
-        b64img = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
+        b64img = input_images[k]
         upload_image(b64img, k, server_address, image_type="input", overwrite=True)
 
     prompt = load_workflow(workflow, params)

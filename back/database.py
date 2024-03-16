@@ -29,9 +29,9 @@ def reset():
 
 def add_cell(gen_image, info_text, coord, image_folder="./"):
     epoch_ms = round(time.time() * 1000)
-    
+
     gen_image.save(f"{image_folder}{epoch_ms}.jpg")
-    
+
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
         # Using parameterized queries to avoid SQL injection

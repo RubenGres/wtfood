@@ -1,0 +1,4 @@
+{
+    "input_image": ["10", "inputs", "image"],
+    "prompt": ["6", "inputs", "text"]
+}
