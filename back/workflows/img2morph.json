@@ -1,0 +1,620 @@
+{
+  "255": {
+    "inputs": {
+      "seed": 720768692956547,
+      "steps": 20,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 0.65,
+      "model": [
+        "264",
+        0
+      ],
+      "positive": [
+        "260",
+        0
+      ],
+      "negative": [
+        "265",
+        0
+      ],
+      "latent_image": [
+        "381",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "256": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "258": {
+    "inputs": {
+      "samples": [
+        "255",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "260": {
+    "inputs": {
+      "strength": 0.8,
+      "conditioning": [
+        "411",
+        0
+      ],
+      "control_net": [
+        "262",
+        0
+      ],
+      "image": [
+        "368",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "262": {
+    "inputs": {
+      "control_net_name": "control_v11f1e_sd15_tile_fp16.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "264": {
+    "inputs": {
+      "ckpt_name": "juggernaut-reborn.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "265": {
+    "inputs": {
+      "text": "low quality photo, ",
+      "clip": [
+        "264",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "cliptextneg"
+    }
+  },
+  "267": {
+    "inputs": {
+      "images": [
+        "348",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "268": {
+    "inputs": {
+      "seed": 467050617257039,
+      "steps": 20,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 0.7000000000000001,
+      "model": [
+        "264",
+        0
+      ],
+      "positive": [
+        "271",
+        0
+      ],
+      "negative": [
+        "265",
+        0
+      ],
+      "latent_image": [
+        "382",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "269": {
+    "inputs": {
+      "samples": [
+        "268",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "271": {
+    "inputs": {
+      "strength": 0.65,
+      "conditioning": [
+        "411",
+        0
+      ],
+      "control_net": [
+        "262",
+        0
+      ],
+      "image": [
+        "258",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "273": {
+    "inputs": {
+      "seed": 73523398495655,
+      "steps": 20,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 0.75,
+      "model": [
+        "264",
+        0
+      ],
+      "positive": [
+        "276",
+        0
+      ],
+      "negative": [
+        "265",
+        0
+      ],
+      "latent_image": [
+        "383",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "274": {
+    "inputs": {
+      "samples": [
+        "273",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "276": {
+    "inputs": {
+      "strength": 0.5,
+      "conditioning": [
+        "411",
+        0
+      ],
+      "control_net": [
+        "262",
+        0
+      ],
+      "image": [
+        "269",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "278": {
+    "inputs": {
+      "seed": 1049331175999543,
+      "steps": 20,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 0.8,
+      "model": [
+        "264",
+        0
+      ],
+      "positive": [
+        "281",
+        0
+      ],
+      "negative": [
+        "265",
+        0
+      ],
+      "latent_image": [
+        "384",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "279": {
+    "inputs": {
+      "samples": [
+        "278",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "281": {
+    "inputs": {
+      "strength": 0.5,
+      "conditioning": [
+        "411",
+        0
+      ],
+      "control_net": [
+        "262",
+        0
+      ],
+      "image": [
+        "274",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "290": {
+    "inputs": {
+      "ckpt_name": "film_net_fp32.pt",
+      "clear_cache_after_n_frames": 24,
+      "multiplier": 24,
+      "frames": [
+        "348",
+        0
+      ]
+    },
+    "class_type": "FILM VFI",
+    "_meta": {
+      "title": "FILM VFI"
+    }
+  },
+  "291": {
+    "inputs": {
+      "frame_rate": 10,
+      "loop_count": 0,
+      "filename_prefix": "fd_",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "380",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "348": {
+    "inputs": {
+      "image1": [
+        "368",
+        0
+      ],
+      "image2": [
+        "258",
+        0
+      ],
+      "image3": [
+        "269",
+        0
+      ],
+      "image4": [
+        "274",
+        0
+      ],
+      "image5": [
+        "279",
+        0
+      ]
+    },
+    "class_type": "ImpactMakeImageBatch",
+    "_meta": {
+      "title": "Make Image Batch"
+    }
+  },
+  "350": {
+    "inputs": {
+      "images": [
+        "290",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "366": {
+    "inputs": {
+      "image": "input_img.jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "368": {
+    "inputs": {
+      "repeats": 1,
+      "output": "single",
+      "node_mode": "reuse",
+      "source": [
+        "366",
+        0
+      ]
+    },
+    "class_type": "Repeater|pysssss",
+    "_meta": {
+      "title": "Repeater 🐍"
+    }
+  },
+  "380": {
+    "inputs": {
+      "image1": [
+        "368",
+        0
+      ],
+      "image2": [
+        "290",
+        0
+      ],
+      "image3": [
+        "279",
+        0
+      ]
+    },
+    "class_type": "ImpactMakeImageBatch",
+    "_meta": {
+      "title": "Make Image Batch"
+    }
+  },
+  "381": {
+    "inputs": {
+      "pixels": [
+        "368",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "382": {
+    "inputs": {
+      "pixels": [
+        "258",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "383": {
+    "inputs": {
+      "pixels": [
+        "269",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "384": {
+    "inputs": {
+      "pixels": [
+        "274",
+        0
+      ],
+      "vae": [
+        "264",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "400": {
+    "inputs": {
+      "images": [
+        "258",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "401": {
+    "inputs": {
+      "images": [
+        "269",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "402": {
+    "inputs": {
+      "images": [
+        "274",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "403": {
+    "inputs": {
+      "images": [
+        "279",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "404": {
+    "inputs": {
+      "images": [
+        "368",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "405": {
+    "inputs": {
+      "images": [
+        "368",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "406": {
+    "inputs": {
+      "pyrUp_iters": 3,
+      "resolution": 512,
+      "image": [
+        "368",
+        0
+      ]
+    },
+    "class_type": "TilePreprocessor",
+    "_meta": {
+      "title": "Tile"
+    }
+  },
+  "407": {
+    "inputs": {
+      "images": [
+        "406",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "411": {
+    "inputs": {
+      "text": "Solar punk city, moebius style",
+      "clip": [
+        "264",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  }
+}

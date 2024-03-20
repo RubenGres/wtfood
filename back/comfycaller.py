@@ -77,7 +77,7 @@ def queue_prompt(prompt, client_id):
     return json.loads(urllib.request.urlopen(req).read())
 
 
-def get_image(filename, subfolder, folder_type):
+def get_media(filename, subfolder, folder_type):
     data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
     url_values = urllib.parse.urlencode(data)
     with urllib.request.urlopen("http://{}/view?{}".format(server_address, url_values)) as response:
@@ -110,11 +110,34 @@ def get_images(ws, prompt, client_id):
             if 'images' in node_output:
                 images_output = []
                 for image in node_output['images']:
-                    image_data = get_image(image['filename'], image['subfolder'], image['type'])
+                    image_data = get_media(image['filename'], image['subfolder'], image['type'])
                     images_output.append(image_data)
             output_images[node_id] = images_output
 
     return output_images
+
+
+def get_outputs(ws, prompt, client_id):
+    prompt_id = queue_prompt(prompt, client_id)['prompt_id']
+    node_outputs = {}
+    while True:
+        out = ws.recv()
+        if isinstance(out, str):
+            message = json.loads(out)
+            if message['type'] == 'executing':
+                data = message['data']
+                if data['node'] is None and data['prompt_id'] == prompt_id:
+                    break  #Execution is done
+        else:
+            continue  #previews are binary data
+
+    history = get_history(prompt_id)[prompt_id]
+
+    for o in history['outputs']:
+        for node_id in history['outputs']:
+            node_outputs[node_id] = history['outputs'][node_id]
+
+    return node_outputs
 
 
 def upload_image(b64img, name, server_address, image_type="input", overwrite=False):
@@ -146,4 +169,4 @@ def generate(workflow, params, input_images, client_id):
         upload_image(b64img, k, server_address, image_type="input", overwrite=True)
 
     prompt = load_workflow(workflow, params)
-    return get_images(ws, prompt, client_id)
+    return get_outputs(ws, prompt, client_id)
