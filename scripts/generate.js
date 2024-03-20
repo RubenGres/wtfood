@@ -21,23 +21,26 @@ async function generateImage(camera_picture, coords) {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     const resizedImageData = canvas.toDataURL('image/jpeg').split(',')[1];
 
-    const data = {
+    const payload = {
+        input_images: {
+            "input_img.jpg": resizedImageData
+        },
         image: resizedImageData,
-        workflow: "default",
+        workflow: "img2img",
         client_id: uuidv4(), // Generate a new UUID for each request
         params: {
-            prompt: "Person crossing their arms photograph, 2024 4k picture",
-            seed: 0
+            input_image: "input_img.jpg",
+            seed: Date.now()
         },
         coords: coords
-    };
+    }
 
     const response = await fetch(SD_API_URL + "transform", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(payload)
     });
 
 
