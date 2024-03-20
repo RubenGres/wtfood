@@ -33,6 +33,7 @@ def load_b64(image_b64):
 
 def locate_ip(ip):
     url = f'http://ip-api.com/json/{ip}'
+
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raises an error for bad responses
@@ -41,7 +42,7 @@ def locate_ip(ip):
         
         return response.json()  # Converts the JSON response to a Python dictionary
     except requests.RequestException as e:
-        return {'error': str(e)}
+        return {'country': "Uknown"}
 
 
 app = Flask(__name__)
@@ -78,8 +79,11 @@ def transform():
     k = list(input_images.keys())[0]
     image = load_b64(input_images[k])
     image_class = classify(image)
-    if image_class:
-        params["prompt"] = f"person with a {image_class} face"
+
+    if not image_class:
+        return "This is an error" #TODO
+    
+    params["prompt"] = f"person with a {image_class} face. Portrait, Unreal 5 render, 4k, ultra realistic, 80mm"
 
     input_images[k] = base64.b64decode(input_images[k])
 
@@ -117,6 +121,8 @@ def info():
     caller_ip = request.remote_addr
 
     ip_info = locate_ip(caller_ip)
+
+    print(ip_info)
 
     image_class = classify(image)
 
@@ -168,17 +174,15 @@ def get_cards():
 
 @app.route('/media/<id>', methods=['GET'])
 def load_media(id):
-    image_folder = "./"
-
     # Build the file path for the requested video
-    video_path = os.path.join(image_folder, f"{id}.jpg")
+    video_path = os.path.join(media_folder, f"{id}.jpg")
     
     # Check if the file exists
     if not os.path.isfile(video_path):
         abort(404, description="Video not found")
 
     # Return the video file
-    return send_from_directory(directory=image_folder, path=video_path)
+    return send_from_directory(directory=media_folder, path=f"{id}.jpg")
 
 
 

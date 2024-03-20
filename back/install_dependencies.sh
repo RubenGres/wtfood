@@ -8,10 +8,6 @@ cd ComfyUI
 # pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
 
 # NVIDIA
-# pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
 
 pip3 install -r requirements.txt
-
-pip3 install --no-cache-dir xformers==0.0.21
-
-
