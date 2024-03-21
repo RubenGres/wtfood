@@ -45,4 +45,4 @@ To install all custom nodes and models used in food-dysmorphia in one go you can
 
 # Usage
 
-Once everything is installed you can start the API with `python server.py`
+Once everything is installed you can start the API with `python main.py`

@@ -1,8 +1,6 @@
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 import numpy as np
 import json
-import comfycaller as comfycaller
-
 
 def _get_clip(model_ID):
     model = CLIPModel.from_pretrained(model_ID).to(device)

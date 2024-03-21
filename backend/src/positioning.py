@@ -1,6 +1,6 @@
 import random
 import numpy as np
-import database
+from . import database
 
 grid_size = 11
 center_x = 0

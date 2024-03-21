@@ -17,10 +17,10 @@ import os
 import websocket
 import uuid
 
-from comfycaller import generate, get_media
-from clipclassifier import classify
-import positioning
-import database
+from src.comfycaller import generate, get_media
+from src.clipclassifier import classify
+import src.positioning as positioning
+import src.database as database
 
 
 # helpers
@@ -86,16 +86,22 @@ def transform():
     outputs = generate(workflow, params, input_images, client_id)
     
     # get generated media info for the video
-    media_info = None
+    videos = []
+    images = []
     for k in outputs:
         node_output = outputs[k]
         if 'gifs' in node_output.keys():
-            media_info = outputs[k]['gifs'][0]
+            videos.extend(outputs[k]['gifs'])
+        else:
+            images.extend(outputs[k]['images'])
 
-    #TODO error ?
-    if not media_info:
-        pass
+    media_info = None
+    if not len(videos) == 0:
+        media_info = videos[-1]
+    else:
+        media_info = images[-1]
     
+        
     #TODO info text 
     info_text = params["prompt"]
     
