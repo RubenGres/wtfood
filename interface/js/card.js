@@ -1,12 +1,28 @@
-function card_content(image_src, cardtext) {
+function card_content(media_src, cardtext) {
     // Create image element
     const generated_card = document.createElement('div');
     generated_card.setAttribute('class', 'generated_card')
 
-    const img = document.createElement('img');
-    img.src = image_src;
-    img.setAttribute('class', 'generated-image');
-    generated_card.appendChild(img);
+    // Check if media_src is an image (ends with .jpg, .png, etc.)
+    if (/\.(jpg|jpeg|png|gif)$/i.test(media_src)) {
+        const img = document.createElement('img');
+        img.src = media_src;
+        img.setAttribute('class', 'generated-media');
+        generated_card.appendChild(img);
+    }
+    // Otherwise, if media_src is a video (ends with .mp4)
+    else if (/\.mp4$/i.test(media_src)) {
+        const video = document.createElement('video');
+        video.setAttribute('class', 'generated-media');
+        video.setAttribute('loop', '');
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', ''); // Muted attribute to allow autoplay in most browsers
+        const source = document.createElement('source');
+        source.src = media_src;
+        source.type = 'video/mp4';
+        video.appendChild(source);
+        generated_card.appendChild(video);
+    }
 
     // Create text element
     const infotext = document.createElement('div');
