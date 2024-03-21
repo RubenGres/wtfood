@@ -1,14 +1,6 @@
-from transformers import AutoProcessor, CLIPSegForImageSegmentation
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 import numpy as np
-from PIL import Image
-import requests
-from flask import Flask, request
-import base64
-from io import BytesIO
-import os
-import websocket
-import uuid
+import json
 import comfycaller as comfycaller
 
 
@@ -81,4 +73,3 @@ device = "cuda:0"
 
 clip_model, clip_processor, clip_tokenizer = _get_clip("openai/clip-vit-base-patch32")
 labels_embeddings = _get_labels_embeddings(clip_model, clip_tokenizer, labels)
-
