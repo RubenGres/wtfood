@@ -1,10 +1,7 @@
 from dotenv import load_dotenv
-import os
-
 load_dotenv()
 
-media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
-
+import os
 from transformers import AutoProcessor, CLIPSegForImageSegmentation
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 from diffusers import StableDiffusionInpaintPipeline
@@ -80,35 +77,43 @@ def transform():
     image = load_b64(input_images[k])
     image_class = classify(image)
 
-    if not image_class:
-        return "This is an error" #TODO
+    #TODO
+    #if not image_class:
+    #    return "This is an error" 
     
-    params["prompt"] = f"person with a {image_class} face. Portrait, Unreal 5 render, 4k, ultra realistic, 80mm"
+    params["prompt"] = f"Futuristic solar punk city, greenery, vines, {image_class}"
 
     input_images[k] = base64.b64decode(input_images[k])
 
     # generation is happening here
-    images = generate(workflow, params, input_images, client_id)
+    outputs = generate(workflow, params, input_images, client_id)
 
-    image_data = list(images.values())[0][0]
-    gen_image = Image.open(BytesIO(image_data))
+    # get generated media info for the video
+    media_info = None
+    for k in outputs:
+        output_types = list(outputs[k].keys())
+        if 'gifs' in output_types:
+            media_info = outputs[k]['gifs'][0]
 
-    buffered = BytesIO()
-    gen_image.save(buffered, format="JPEG")
-    base64_image = base64.b64encode(buffered.getvalue()).decode("utf-8")
-    base64_string = "data:image/jpeg;base64," + base64_image
-
+    if not mp4_media_info:
+        pass
+        #TODO error ?
+    
+    #TODO info text 
     info_text = params["prompt"]
+    filename = media_info['filename']
+
+    # load the video in RAM
+    media_bytes = get_media(media_info['filename'], media_info['subfolder'], media_info['type'])
+    
+    positioning.remove_coord(coord)
+    media_url = database.add_cell(filename, media_bytes, info_text, coord)
 
     response_data = {
-        "image_b64": base64_string,
+        "image_b64": media_url,
         "info_text": info_text
     }
-
-    positioning.remove_coord(coord)
-
-    database.add_cell(gen_image, info_text, coord, image_folder=media_folder)
-
+    
     return jsonify(response_data)
 
 
@@ -172,18 +177,9 @@ def get_cards():
     return rows
 
 
-@app.route('/media/<id>', methods=['GET'])
-def load_media(id):
-    # Build the file path for the requested video
-    video_path = os.path.join(media_folder, f"{id}.jpg")
-    
-    # Check if the file exists
-    if not os.path.isfile(video_path):
-        abort(404, description="Video not found")
-
-    # Return the video file
-    return send_from_directory(directory=media_folder, path=f"{id}.jpg")
-
+@app.route('/media/<filename>', methods=['GET'])
+def load_media(filename):
+    return database.load_media(filename)
 
 
 if __name__ == '__main__':

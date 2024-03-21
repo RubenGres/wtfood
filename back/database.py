@@ -2,6 +2,8 @@ import sqlite3
 import time
 import os
 
+media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
+
 # get database from configuration
 DB_PATH = os.environ.get("FD_DATABASE", "example.db")
 
@@ -27,16 +29,25 @@ def reset():
     initialize_database()
 
 
-def add_cell(gen_image, info_text, coord, image_folder="./"):
-    epoch_ms = round(time.time() * 1000)
+def load_media(filename):
+    # Build the file path for the requested video
+    video_path = os.path.join(media_folder, filename)
+    
+    if not os.path.isfile(video_path):
+        abort(404, description=f"Media {filename} not found")
 
-    gen_image.save(f"{image_folder}/{epoch_ms}.jpg")
+    return send_from_directory(directory=media_folder, path=filename)
 
+
+def add_cell(filename, media_bytes, info_text, coord):
+    with open(os.path.join(media_folder, filename), "wb") as media_file:
+        media_file.write(media_bytes)
+    
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
         # Using parameterized queries to avoid SQL injection
         cursor.execute("INSERT INTO cells (username, x, y, media_path, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                       ('useruuid', coord[0], coord[1], epoch_ms, info_text, 'google.fr', time.time()))
+                       ('useruuid', coord[0], coord[1], filename, info_text, 'google.fr', time.time()))
         conn.commit()
 
 
@@ -47,5 +58,6 @@ def get_all_cells_as_dict():
         cursor.execute("SELECT * FROM cells")
         rows = cursor.fetchall()
         return [dict(row) for row in rows]
+
 
 initialize_database()

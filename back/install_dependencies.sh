@@ -1,6 +1,6 @@
-git clone https://github.com/comfyanonymous/ComfyUI.git
+#git clone https://github.com/comfyanonymous/ComfyUI.git
 
-cd ComfyUI
+#cd ComfyUI
 
 # Install pytorch according to your GPU (uncommment what you need to install) 
 
@@ -13,7 +13,7 @@ pip install torch torchvision torchaudio --extra-index-url https://download.pyto
 pip3 install -r requirements.txt
 
 # custom nodes for the video workflow (from https://github.com/ltdrdata/ComfyUI-Manager/blob/main/extension-node-map.json)
-cd custom_nodes
+cd ComfyUI/custom_nodes
 git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git
 git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite
 git clone https://github.com/lordgasmic/ComfyUI-Wildcards

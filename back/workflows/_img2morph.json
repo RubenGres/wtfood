@@ -1,0 +1,5 @@
+{
+    "input_image": ["366", "inputs", "image"],
+    "prompt": ["411", "inputs", "text"],
+    "seed": ["255", "inputs", "seed"]
+}
