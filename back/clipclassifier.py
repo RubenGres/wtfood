@@ -35,7 +35,7 @@ def _get_single_text_embedding(clip_model, clip_tokenizer, text):
     return text_embeddings
 
 
-def _get_labels_embeddings(clip_model, clip_tokenizer):    
+def _get_labels_embeddings(clip_model, clip_tokenizer, labels):    
     embeddings = {
         k: _get_single_text_embedding(clip_model, clip_tokenizer, f"a photo of a {k}")
         for k in labels
@@ -64,6 +64,8 @@ def _image_class_cosim(image, labels_embeddings, clip_model):
 
 
 def classify(image):
+    #TODO resize image to 512x512
+    
     cosims =  _image_class_cosim(image, labels_embeddings, clip_model)
 
     # check if this is a fruit or a vegetable
@@ -72,10 +74,11 @@ def classify(image):
 
     return max(cosims, key=cosims.get)
 
-labels = ["fruit", "vegetable", "carrot", "tomato", "sweet potato", "radish", "banana", "coconut", "kiwi", "lemon"]
+with open('./recognized_classes.json', 'r') as file:
+    labels = json.load(file)
 
 device = "cuda:0"
 
 clip_model, clip_processor, clip_tokenizer = _get_clip("openai/clip-vit-base-patch32")
-labels_embeddings = _get_labels_embeddings(clip_model, clip_tokenizer)
+labels_embeddings = _get_labels_embeddings(clip_model, clip_tokenizer, labels)
 
