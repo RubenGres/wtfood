@@ -35,7 +35,7 @@ function create_cell(coords) {
 
     // Create and add a camera icon to the cell
     let camera_icon = document.createElement('img');
-    camera_icon.setAttribute('src', 'image/camera.png');
+    camera_icon.setAttribute('src', 'img/camera.png');
     camera_icon.setAttribute('class', 'camera_icon');
     div.appendChild(camera_icon);
 
