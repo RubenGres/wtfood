@@ -1,3 +1,4 @@
+from flask import send_from_directory
 import sqlite3
 import time
 import os
@@ -49,6 +50,8 @@ def add_cell(filename, media_bytes, info_text, coord):
         cursor.execute("INSERT INTO cells (username, x, y, media_path, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)",
                        ('useruuid', coord[0], coord[1], filename, info_text, 'google.fr', time.time()))
         conn.commit()
+
+    return filename
 
 
 def get_all_cells_as_dict():

@@ -17,7 +17,7 @@ import os
 import websocket
 import uuid
 
-from comfycaller import generate
+from comfycaller import generate, get_media
 from clipclassifier import classify
 import positioning
 import database
@@ -30,16 +30,12 @@ def load_b64(image_b64):
 
 def locate_ip(ip):
     url = f'http://ip-api.com/json/{ip}'
+    response = requests.get(url).json()
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an error for bad responses
-
-        #TODO handle error is ip not valid
-        
-        return response.json()  # Converts the JSON response to a Python dictionary
-    except requests.RequestException as e:
-        return {'country': "Uknown"}
+    if response['status'] == "fail":
+        return {'country': "unknown"}
+    
+    return response
 
 
 app = Flask(__name__)
@@ -75,29 +71,30 @@ def transform():
 
     k = list(input_images.keys())[0]
     image = load_b64(input_images[k])
-    image_class = classify(image)
-
-    #TODO
-    #if not image_class:
-    #    return "This is an error" 
     
-    params["prompt"] = f"Futuristic solar punk city, greenery, vines, {image_class}"
+    #TODO
+    image_class = classify(image)
+    if not image_class:
+        return "This is an error"
+
+    
+    params["prompt"] = f"Futuristic solar punk city, greenery, vines"
 
     input_images[k] = base64.b64decode(input_images[k])
 
     # generation is happening here
     outputs = generate(workflow, params, input_images, client_id)
-
+    
     # get generated media info for the video
     media_info = None
     for k in outputs:
-        output_types = list(outputs[k].keys())
-        if 'gifs' in output_types:
+        node_output = outputs[k]
+        if 'gifs' in node_output.keys():
             media_info = outputs[k]['gifs'][0]
 
-    if not mp4_media_info:
+    #TODO error ?
+    if not media_info:
         pass
-        #TODO error ?
     
     #TODO info text 
     info_text = params["prompt"]
@@ -110,7 +107,7 @@ def transform():
     media_url = database.add_cell(filename, media_bytes, info_text, coord)
 
     response_data = {
-        "image_b64": media_url,
+        "media_src": media_url,
         "info_text": info_text
     }
     
@@ -126,8 +123,6 @@ def info():
     caller_ip = request.remote_addr
 
     ip_info = locate_ip(caller_ip)
-
-    print(ip_info)
 
     image_class = classify(image)
 

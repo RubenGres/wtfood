@@ -169,4 +169,5 @@ def generate(workflow, params, input_images, client_id):
         upload_image(b64img, k, server_address, image_type="input", overwrite=True)
 
     prompt = load_workflow(workflow, params)
+    
     return get_outputs(ws, prompt, client_id)
