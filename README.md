@@ -8,10 +8,9 @@ Food Dysmorphia uses AI technology to empower citizens to critically examine the
 
 # Install
 
-#TODO
+Backend installation can be found in the `backend` folder.
 
-# Quickstart
 
-#TODO
+# Team
 
-team: [Bernat Cuní](https://www.cunicode.com/bernat-cuni) + [Ruben Gres](https://rubengr.es) + [EatThis](https://eatthis.info/) + [KU Leuven Institutes](https://ai.kuleuven.be/) + [Brno University of Technology](https://www.fit.vut.cz/units/upgm/.en) + [In4Art](https://www.in4art.eu/)
+[Bernat Cuní](https://www.cunicode.com/bernat-cuni) + [Ruben Gres](https://rubengr.es) + [EatThis](https://eatthis.info/) + [KU Leuven Institutes](https://ai.kuleuven.be/) + [Brno University of Technology](https://www.fit.vut.cz/units/upgm/.en) + [In4Art](https://www.in4art.eu/)

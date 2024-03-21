@@ -98,6 +98,7 @@ def transform():
     
     #TODO info text 
     info_text = params["prompt"]
+    
     filename = media_info['filename']
 
     # load the video in RAM
