@@ -21,6 +21,3 @@ git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts
 git clone https://github.com/Fannovel16/comfyui_controlnet_aux
 git clone https://github.com/Fannovel16/ComfyUI-Frame-Interpolation
 git clone https://github.com/Fannovel16/comfyui_controlnet_aux
-
-pip3 install imageio-ffmpeg
-pip3 install opencv-python
