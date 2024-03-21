@@ -2,4 +2,5 @@ ComfyUI
 .ipynb_checkpoints
 back/__pycache__/
 back/example.db
-back/media/
+back/media/**/*.mp4
+
