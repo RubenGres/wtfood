@@ -24,6 +24,8 @@ function getPointerPosition(e) {
 
 function pointerPressed(e) {
     if (e && (e.which == 2 || e.button == 4 )) { //if middle click
+        e.preventDefault();
+        
         updateState({ isMoving: true });
         let pos = getPointerPosition(e);
         delta_cam_x = pos.x + cam_x;
