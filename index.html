@@ -5,15 +5,43 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <title>Food Dysmorphia</title>
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/controlpanel.css">
     </head>
     
     <body>
-        <div id="foodmap"></div>
+
+        <div id="foodmap">
+            <div id="controlpanel">
+                <!-- Zoom Slider with Label -->
+                <label for="zoomSlider">Zoom:</label>
+                <input type="range" id="zoomSlider" min="0.1" max="5" step="0.1" value="1">
+                
+                <br/>
+
+                <!-- Sorting Label -->
+                <label>Sorting:</label>
+                
+                <!-- Buttons for Sorting Options -->
+                <button id="gridButton">Grid</button>
+                <button id="customButton">Custom</button>
+                
+                <!-- Input Fields for Labels -->
+                <div>
+                    <label for="xLabelInput">X Label:</label>
+                    <input type="text" id="xLabelInput" placeholder="Enter X label">
+                </div>
+                <div>
+                    <label for="yLabelInput">Y Label:</label>
+                    <input type="text" id="yLabelInput" placeholder="Enter Y label">
+                </div>
+            </div>           
+        </div>
+
+
         <input id="camerainput" type="file" accept="image/*" capture="camera">
 
         <!-- import all scripts -->
         <script src="global_params.js"></script>
-
         <script src="js/setup.js"></script>
         <script src="js/canvas.js"></script>
         <script src="js/card.js"></script>
@@ -22,6 +50,7 @@
         <script src="js/generate.js"></script>
         <script src="js/movement.js"></script>
         <script src="js/cell.js"></script>
+        <script src="js/controlpanel.js"></script>
         
     </body>
 </html>
