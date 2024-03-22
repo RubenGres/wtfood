@@ -6,10 +6,11 @@ grid_size = 11
 center_x = 0
 center_y = 0
 
+
 def _init_from_db():
     global possible_positions
 
-    cells = database.get_all_cells_as_dict()
+    cells = database.get_cards()
 
     if len(cells) == 0:
         possible_positions.add((0.,0.))
