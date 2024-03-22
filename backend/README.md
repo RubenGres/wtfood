@@ -17,14 +17,6 @@ pip install -r requirements.txt
 
 ## ComfyUI installation for FD
 
-First install ComfyUI from the official repository
-
-```bash
-git clone https://github.com/comfyanonymous/ComfyUI.git
-cd ComfyUI
-pip install -r requirements.txt 
-```
-
 Install pytorch according to your GPU type if you don't already have it
 
 ### AMD
@@ -35,6 +27,14 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 ### NVIDIA
 ```bash
 pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+```
+
+Then install ComfyUI from the official repository
+
+```bash
+git clone https://github.com/comfyanonymous/ComfyUI.git
+cd ComfyUI
+pip install -r requirements.txt 
 ```
 
 To install all custom nodes and models used in food-dysmorphia in one go you can use the script  `install_comfyui_deps.sh`

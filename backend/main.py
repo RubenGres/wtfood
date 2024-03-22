@@ -54,6 +54,7 @@ def home():
         <li> /cards </li>
         <li> /media/<id> </li>
         <li> /transform </li>
+        <li> /sorting </li>
         <li> /info </li>
     </ul>
     """
@@ -76,7 +77,6 @@ def transform():
     image_class = classify(image)
     if not image_class:
         return "This is an error"
-
     
     params["prompt"] = f"Futuristic solar punk city, greenery, vines"
 
@@ -173,9 +173,39 @@ def free_position():
     return positions
 
 
+@app.route('/sorting', methods=['GET'])
+def sorting():
+    x_label = request.args.get('x')
+    y_label = request.args.get('y')
+
+    cards = database.get_cards()
+    
+    # get sorting for x_label, if not exist create it
+    x_sorting = database.get_sorting(x_label)
+    if not x_sorting:
+        x_sorting = sorting.sort_cards(cards, x_label)
+        database.add_sorting(x_label, x_sorting)
+    
+    # get sorting for y_label, if not exist create it
+    y_sorting = database.get_sorting(y_label)
+    if not y_sorting:
+        y_sorting = sorting.sort_cards(cards, y_label)
+        database.add_sorting(y_label, y_sorting)
+        
+    # return {id: {x, y}} from labels
+    sorting = {}
+    for id in x_sorting:
+        sorting[id] = {
+            "x": x_sorting[id],
+            "y": y_sorting[id]
+        }
+    
+    return sorting
+    
+
 @app.route('/cards', methods=['GET'])
 def get_cards():
-    rows = database.get_all_cells_as_dict()
+    rows = database.get_cards()
     return rows
 
 
