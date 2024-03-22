@@ -84,7 +84,7 @@ img {
     height: 100%;
 }
 
-.generated_card {
+.generated-card {
     width: 100%;
     height: 100%;
     cursor: pointer;
@@ -106,7 +106,7 @@ img {
     padding: 10px; /* Optional: Add some padding inside the infotext box */
 }
 
-.generated-image {
+.generated-media {
     width: 100%;
     height: 100%;
     position: absolute; /* Position the image absolutely to allow the text overlay */

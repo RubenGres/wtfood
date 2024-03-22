@@ -2,11 +2,15 @@ var moving = false;
 var delta_cam_x = 0;
 var delta_cam_y = 0;
 
+let width = cell_w * zoom;
+let height = cell_h * zoom;
+let margin = cell_margin * zoom;
+
 //cam_x = (grid_width * (cell_w + cell_margin))/2
 //cam_y = (grid_height * (cell_h + cell_margin))/2
 
-cam_x = -(window.visualViewport.width - (cell_w + cell_margin))/2;
-cam_y = -(window.visualViewport.height - (cell_h + cell_margin))/2;
+cam_x = -(window.visualViewport.width - (width + margin)*zoom)/2;
+cam_y = -(window.visualViewport.height - (height + margin)*zoom)/2;
 
 
 function getPointerPosition(e) {
@@ -57,35 +61,44 @@ function padScroll(e) {
 
 
 function updateDivPositions() {
+    width = cell_w * zoom;
+    height = cell_h * zoom;
+    margin = cell_margin * zoom;
+
     for (let i = 0; i < cells.length; i++) {
-        let cell = cells[i]
-        cell_elem = cell["elem"]
-        cell_elem.style.left = (cell["x"] * (cell_w + cell_margin) - cam_x) + 'px';
-        cell_elem.style.top = (cell["y"] * (cell_h + cell_margin) - cam_y) + 'px';
+        let cell = cells[i];
+        cell_elem = cell["elem"];
+
+        cell_elem.style.width = width + 'px';
+        cell_elem.style.height = height + 'px';
+
+        cell_elem.style.left = (cell["x"] * (width + margin) - cam_x) + 'px';
+        cell_elem.style.top = (cell["y"] * (height + margin) - cam_y) + 'px';
     }
 }
 
 
+
 function swipe_left() {
-    cam_x += cell_w + cell_margin;
+    cam_x += width + margin;
     updateDivPositions();
 }
 
 
 function swipe_right() {
-    cam_x -= cell_w + cell_margin;
+    cam_x -= width + margin;
     updateDivPositions();
 }
 
 
 function swipe_down() {
-    cam_y += cell_h + cell_margin;
+    cam_y += height + margin;
     updateDivPositions();
 }
 
 
 function swipe_up() {
-    cam_y -= cell_h + cell_margin;
+    cam_y -= height + margin;
     updateDivPositions();
 }
 
@@ -98,8 +111,8 @@ async function focus_random_empty() {
 
     const random_position = await response.json();
 
-    cam_x += random_position['x'] * (cell_w + cell_margin)
-    cam_y += random_position['y'] * (cell_h + cell_margin)
+    cam_x += random_position['x'] * (width + margin)
+    cam_y += random_position['y'] * (height + margin)
 } 
 
 

@@ -1,0 +1,13 @@
+#controlpanel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    background-color: #f9f9f9; /* Light grey background */
+    border-top-right-radius: 8px; /* Rounded corners on the top right */
+    z-index: 999;
+}
+
+#zoomSlider {
+    width: 200px; /* Adjust as needed */
+}

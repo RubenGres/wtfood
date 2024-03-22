@@ -5,6 +5,9 @@ if(isMobile) {
     const mobileSize = Math.round(shorterSide * 0.85);
     cell_w = mobileSize;
     cell_h = mobileSize;
+
+    let cp = document.getElementById("controlpanel");
+    cp.remove();  
 }
 
 // global cell list that will contain all the cards

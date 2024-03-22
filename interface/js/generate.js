@@ -26,7 +26,7 @@ async function generateImage(camera_picture, coords) {
             "input_img.jpg": resizedImageData
         },
         image: resizedImageData,
-        workflow: "img2img",
+        workflow: "img2morph",
         client_id: uuidv4(), // Generate a new UUID for each request
         params: {
             input_image: "input_img.jpg",
@@ -50,5 +50,5 @@ async function generateImage(camera_picture, coords) {
 
     const responseData = await response.json();
 
-    return create_card(responseData.image_b64, responseData.info_text)
+    return create_card(SD_API_URL + "media/" + responseData.media_src, responseData.info_text)
 }

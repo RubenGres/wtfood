@@ -6,8 +6,8 @@ function basic_cell() {
     div.className = 'gridcell';
     
     // Set the cell's height and width based on predefined variables
-    div.style.height = `${cell_h}px`;
-    div.style.width = `${cell_w}px`;
+    div.style.height = `${cell_h*zoom}px`;
+    div.style.width = `${cell_w*zoom}px`;
 
     // If on a mobile device, add animation class for cell
     if(isMobile) {
@@ -59,14 +59,14 @@ function create_cell(coords) {
                         div.appendChild(camera_picture);
                         div.removeChild(camera_icon);
 
-                        div.setAttribute("state", "loading");
+                        div.setAttribute("state", "generating");
                         state.isTakingPicture = false;
                     } catch (error) {
                         console.error("Error taking picture:", error);
                     }
                     break;
                 
-                case "loading":
+                case "generating":
                     // While loading, show loading gizmo, then generate and display image
                     loading_gizmo.className = 'loading_gizmo display';
                     
@@ -76,10 +76,10 @@ function create_cell(coords) {
                     div.appendChild(generated_image);
                     add_empties();
 
-                    div.setAttribute("state", "picture_ready");
+                    div.setAttribute("state", "media_ready");
                     break;
 
-                case "picture_ready":
+                case "media_ready":
                     div.setAttribute("state", "done");
                     break;
             }

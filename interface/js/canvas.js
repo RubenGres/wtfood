@@ -1,4 +1,6 @@
 async function add_empties() {
+    //TODO do not add if already exist for a given coord
+
     const response = await fetch(SD_API_URL + "position/free", {
         method: 'GET'
     });
