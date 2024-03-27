@@ -2,31 +2,28 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
+import requests
 from transformers import AutoProcessor, CLIPSegForImageSegmentation
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 from diffusers import StableDiffusionInpaintPipeline
 import numpy as np
-from PIL import Image
-import requests
 from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
 
 import base64
-from io import BytesIO
-import os
+import argparse
 import websocket
 import uuid
 
-from src.comfycaller import generate, get_media
-from src.clipclassifier import classify
 import src.positioning as positioning
 import src.database as database
+import src.sd_generation as sd_generation
+import src.clipclassifier as clipclassifier
 
 
-# helpers
-def load_b64(image_b64):
-    image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1]))).convert("RGB")
-    return image
+# Set up argparse
+parser = argparse.ArgumentParser(description='Start food dysmorphia backend')
+parser.add_argument('--mock', action='store_true', help='Use mock generation for testing')
 
 def locate_ip(ip):
     url = f'http://ip-api.com/json/{ip}'
@@ -36,6 +33,10 @@ def locate_ip(ip):
         return {'country': "unknown"}
     
     return response
+
+
+def classify(input_images):
+    return classify_image(input_images, clip_model, clip_processor, clip_tokenizer, labels_embeddings)
 
 
 app = Flask(__name__)
@@ -70,55 +71,11 @@ def transform():
     client_id = data['client_id']
     coord = data['coords']
 
-    k = list(input_images.keys())[0]
-    image = load_b64(input_images[k])
-    
-    #TODO
-    image_class = classify(image)
-    if not image_class:
-        return "This is an error"
-    
-    params["prompt"] = f"Futuristic solar punk city, greenery, vines"
-
-    input_images[k] = base64.b64decode(input_images[k])
-
-    # generation is happening here
-    outputs = generate(workflow, params, input_images, client_id)
-    
-    # get generated media info for the video
-    videos = []
-    images = []
-    for k in outputs:
-        node_output = outputs[k]
-        if 'gifs' in node_output.keys():
-            videos.extend(outputs[k]['gifs'])
-        else:
-            images.extend(outputs[k]['images'])
-
-    media_info = None
-    if not len(videos) == 0:
-        media_info = videos[-1]
+    if not args.mock:
+        image_class = classify(input_images)
+        return sd_generation.create_video(input_images, workflow, params, client_id, coord, image_class)
     else:
-        media_info = images[-1]
-    
-        
-    #TODO info text 
-    info_text = params["prompt"]
-    
-    filename = media_info['filename']
-
-    # load the video in RAM
-    media_bytes = get_media(media_info['filename'], media_info['subfolder'], media_info['type'])
-    
-    positioning.remove_coord(coord)
-    media_url = database.add_cell(filename, media_bytes, info_text, coord)
-
-    response_data = {
-        "media_src": media_url,
-        "info_text": info_text
-    }
-    
-    return jsonify(response_data)
+        return sd_generation.create_mock(input_images, coord)
 
 
 @app.route('/info', methods=['POST'])
@@ -215,4 +172,10 @@ def load_media(filename):
 
 
 if __name__ == '__main__':
+    args = parser.parse_args()
+
     app.run(host='0.0.0.0', port=5000)
+
+    if not args.mock:
+        clip_model, clip_processor, clip_tokenizer = clipclassifier.get_clip("openai/clip-vit-base-patch32")
+        labels_embeddings = clipclassifier.get_labels_embeddings(clip_model, clip_tokenizer, labels)

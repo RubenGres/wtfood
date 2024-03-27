@@ -2,6 +2,16 @@ from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 import numpy as np
 import json
 
+
+def get_labels_embeddings(clip_model, clip_tokenizer, labels):    
+    embeddings = {
+        k: _get_single_text_embedding(clip_model, clip_tokenizer, f"a photo of a {k}")
+        for k in labels
+    }
+
+    return embeddings
+
+
 def _get_clip(model_ID):
     model = CLIPModel.from_pretrained(model_ID).to(device)
     processor = CLIPProcessor.from_pretrained(model_ID)
@@ -9,7 +19,7 @@ def _get_clip(model_ID):
     return model, processor, tokenizer
 
 
-def _get_single_image_embedding(clip_model, my_image):
+def _get_single_image_embedding(clip_model, clip_processor, my_image):
     image = clip_processor(
         text=None,
         images=my_image,
@@ -25,16 +35,7 @@ def _get_single_text_embedding(clip_model, clip_tokenizer, text):
     return text_embeddings
 
 
-def _get_labels_embeddings(clip_model, clip_tokenizer, labels):    
-    embeddings = {
-        k: _get_single_text_embedding(clip_model, clip_tokenizer, f"a photo of a {k}")
-        for k in labels
-    }
-
-    return embeddings
-
-
-def _image_class_cosim(image, labels_embeddings, clip_model):
+def _image_class_cosim(image, labels_embeddings, clip_model, clip_processor):
     def _cosine_similarity(A, B):
         A = A.flatten()
         B = B.flatten()
@@ -43,7 +44,7 @@ def _image_class_cosim(image, labels_embeddings, clip_model):
         norm_b = np.linalg.norm(B)
         return dot_product / (norm_a * norm_b)
 
-    image_emb = _get_single_image_embedding(clip_model, image)
+    image_emb = _get_single_image_embedding(clip_model, clip_processor, image)
 
     probas = {}
     for k in labels_embeddings:
@@ -53,10 +54,10 @@ def _image_class_cosim(image, labels_embeddings, clip_model):
     return probas
 
 
-def classify(image):
+def classify(image, clip_model, clip_processor, clip_tokenizer, labels_embeddings):
     #TODO resize image to 512x512
     
-    cosims =  _image_class_cosim(image, labels_embeddings, clip_model)
+    cosims =  _image_class_cosim(image, labels_embeddings, clip_model, clip_processor)
 
     # check if this is a fruit or a vegetable
     if cosims["fruit"] < 0.22 or cosims["vegetable"] < 0.22:
@@ -68,6 +69,3 @@ with open('./recognized_classes.json', 'r') as file:
     labels = json.load(file)
 
 device = "cuda:0"
-
-clip_model, clip_processor, clip_tokenizer = _get_clip("openai/clip-vit-base-patch32")
-labels_embeddings = _get_labels_embeddings(clip_model, clip_tokenizer, labels)
