@@ -3,6 +3,7 @@
 This folder contains the backend of the food-dysmorphia (FD) project. 
 
 Image recognition is made using CLIP from the `recognized classes.json` list.
+All prompts send to the LLM are in the `llm_prompts.json` file.
 The image generation backend is based on an ComfyUI instance. All configuration variables can be configured in the `.env` file.
 
 # Installation

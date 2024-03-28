@@ -37,7 +37,7 @@ def locate_ip(ip):
 
 
 def classify(input_images):
-    return classify_image(input_images, clip_model, clip_processor, clip_tokenizer, labels_embeddings)
+    return clipclassifier.classify(input_images, clip_model, clip_processor, labels_embeddings)
 
 
 app = Flask(__name__)
@@ -133,23 +133,27 @@ def free_position():
 
 @app.route('/sort', methods=['GET'])
 def card_sort():
+    def get_or_create_sorting(label, cards):
+        sorting = database.get_sorting(label)
+
+        # if the sorting doesn't exist, create it
+        if not sorting:
+            if not args.mock:
+                sorting = sorting.sort_cards(cards, label, clip_model, clip_tokenizer)
+            else:
+                sorting = sorting.mock_sort_cards(cards, label)
+
+            database.add_sorting(label, sorting)
+        return sorting
+    
     x_label = request.args.get('x')
     y_label = request.args.get('y')
 
     cards = database.get_cards()
     
-    # get sorting for x_label, if not exist create it
-    x_sorting = database.get_sorting(x_label)
-    if not x_sorting:
-        x_sorting = sorting.sort_cards(cards, x_label)
-        database.add_sorting(x_label, x_sorting)
-    
-    # get sorting for y_label, if not exist create it
-    y_sorting = database.get_sorting(y_label)
-    if not y_sorting:
-        y_sorting = sorting.sort_cards(cards, y_label)
-        database.add_sorting(y_label, y_sorting)
-        
+    x_sorting = get_or_create_sorting(x_label, cards)
+    y_sorting = get_or_create_sorting(y_label, cards)
+
     # return {id: {x, y}} from labels
     card_sort = {}
     for id in x_sorting:

@@ -3,16 +3,25 @@ import numpy as np
 import json
 
 
+def cosine_similarity(A, B):
+    A = A.flatten()
+    B = B.flatten()
+    dot_product = np.dot(A, B)
+    norm_a = np.linalg.norm(A)
+    norm_b = np.linalg.norm(B)
+    return dot_product / (norm_a * norm_b)
+
+
 def get_labels_embeddings(clip_model, clip_tokenizer, labels):    
     embeddings = {
-        k: _get_single_text_embedding(clip_model, clip_tokenizer, f"a photo of a {k}")
+        k: get_single_text_embedding(clip_model, clip_tokenizer, f"a photo of a {k}")
         for k in labels
     }
 
     return embeddings
 
 
-def _get_clip(model_ID):
+def get_clip(model_ID):
     model = CLIPModel.from_pretrained(model_ID).to(device)
     processor = CLIPProcessor.from_pretrained(model_ID)
     tokenizer = CLIPTokenizer.from_pretrained(model_ID)
@@ -29,32 +38,24 @@ def _get_single_image_embedding(clip_model, clip_processor, my_image):
     return embedding
 
 
-def _get_single_text_embedding(clip_model, clip_tokenizer, text):
+def get_single_text_embedding(clip_model, clip_tokenizer, text):
     inputs = clip_tokenizer(text, return_tensors="pt").to(device)
     text_embeddings = clip_model.get_text_features(**inputs)
     return text_embeddings
 
 
 def _image_class_cosim(image, labels_embeddings, clip_model, clip_processor):
-    def _cosine_similarity(A, B):
-        A = A.flatten()
-        B = B.flatten()
-        dot_product = np.dot(A, B)
-        norm_a = np.linalg.norm(A)
-        norm_b = np.linalg.norm(B)
-        return dot_product / (norm_a * norm_b)
-
     image_emb = _get_single_image_embedding(clip_model, clip_processor, image)
 
     probas = {}
     for k in labels_embeddings:
         label_emb = labels_embeddings[k]
-        probas[k] = _cosine_similarity(label_emb.cpu().detach().numpy(), image_emb.cpu().detach().numpy())
+        probas[k] = cosine_similarity(label_emb.cpu().detach().numpy(), image_emb.cpu().detach().numpy())
         
     return probas
 
 
-def classify(image, clip_model, clip_processor, clip_tokenizer, labels_embeddings):
+def classify(image, clip_model, clip_processor, labels_embeddings):
     #TODO resize image to 512x512
     
     cosims =  _image_class_cosim(image, labels_embeddings, clip_model, clip_processor)

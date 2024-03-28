@@ -65,7 +65,11 @@
 }
 
 .cell-animation {
-    transition: left 0.2s ease, top 0.2s ease; /* Adjust time and easing function as needed */
+    transition: left 0.2s ease, top 0.2s ease;
+}
+
+.cell-sorting {
+    transition: left 0.5s ease, top 0.5s ease;
 }
 
 img {
