@@ -81,7 +81,7 @@ def get_sorting(label):
         sorting = {}
         for row in rows:
             row_dict = dict(row)
-            sorting[row_dict['id']] = row_dict['column_name']
+            sorting[row_dict['id']] = row_dict[column_name]
         
         return sorting
 

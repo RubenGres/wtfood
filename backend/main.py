@@ -19,6 +19,7 @@ import src.positioning as positioning
 import src.database as database
 import src.sd_generation as sd_generation
 import src.clipclassifier as clipclassifier
+import src.sorting as sorting
 
 
 # Set up argparse
@@ -130,8 +131,8 @@ def free_position():
     return positions
 
 
-@app.route('/sorting', methods=['GET'])
-def sorting():
+@app.route('/sort', methods=['GET'])
+def card_sort():
     x_label = request.args.get('x')
     y_label = request.args.get('y')
 
@@ -150,14 +151,14 @@ def sorting():
         database.add_sorting(y_label, y_sorting)
         
     # return {id: {x, y}} from labels
-    sorting = {}
+    card_sort = {}
     for id in x_sorting:
-        sorting[id] = {
+        card_sort[id] = {
             "x": x_sorting[id],
             "y": y_sorting[id]
         }
     
-    return sorting
+    return card_sort
     
 
 @app.route('/cards', methods=['GET'])
