@@ -1,10 +1,10 @@
 async function add_empties() {
-    //TODO do not add if already exist for a given coord
-
+    // Use a Set to keep track of existing coordinates in a "x,y" string format.
+    const existingCoords = new Set(cells.map(cell => `${cell.x},${cell.y}`));
+    
     const response = await fetch(SD_API_URL + "position/free", {
         method: 'GET'
     });
-
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -13,16 +13,24 @@ async function add_empties() {
     const empties = await response.json();
 
     for (let i = 0; i < empties.length; i++) {
-        let empty = empties[i]
-        let element = create_cell([empty['x'], empty['y']]);
-        
-        cells.push({
-            "elem": element,
-            "x": empty['x'],
-            "y": empty['y']
-        });
+        let empty = empties[i];
+        let coordKey = `${empty['x']},${empty['y']}`;
 
-        container.appendChild(element);
+        // Check if the coordinate already exists
+        if (!existingCoords.has(coordKey)) {
+            let element = create_cell([empty['x'], empty['y']]);
+
+            cells.push({
+                "elem": element,
+                "x": empty['x'],
+                "y": empty['y']
+            });
+
+            container.appendChild(element);
+
+            // Add the new coordinate to the set to prevent future duplicates
+            existingCoords.add(coordKey);
+        }
     }
 
     updateDivPositions();
