@@ -10,6 +10,9 @@ if(isMobile) {
     cp.remove();  
 }
 
+//check if api available
+
+
 // global cell list that will contain all the cards
 let cells = [];
 

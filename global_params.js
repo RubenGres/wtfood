@@ -1,4 +1,4 @@
-const SD_API_URL = "https://toa4nqj3umza2o-5000.proxy.runpod.net/";
+const SD_API_URL = "https://effective-space-train-wvv66p47qxxh5xxw-5000.app.github.dev/";
 
 let zoom = 1;
 
