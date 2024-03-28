@@ -23,7 +23,8 @@ async function add_empties() {
             cells.push({
                 "elem": element,
                 "x": empty['x'],
-                "y": empty['y']
+                "y": empty['y'],
+                "id": -1
             });
 
             container.appendChild(element);
@@ -57,11 +58,26 @@ async function add_cards() {
         cells.push({
             "elem": element,
             "x": card['x'],
-            "y": card['y']
+            "y": card['y'],
+            "id": card['id']
         });
 
         container.appendChild(element);
     }
 
     updateDivPositions();
+}
+
+
+async function remove_all() {
+    cells = [];
+    const gridCells = document.querySelectorAll('.gridcell');
+    gridCells.forEach(cell => cell.remove());
+}
+
+
+async function remove_empties() {
+    cells = cells.filter(cell => cell.id !== -1);
+    const emptyGridCells = document.querySelectorAll('.gridcell[state="empty"]');
+    emptyGridCells.forEach(cell => cell.remove());
 }
