@@ -15,16 +15,25 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(apiUrl)
             .then(response => response.json()) // Assuming the response is in JSON format
             .then(data => {
-                const scale = Math.ceil(Math.sqrt(cells.length));
-
                 remove_empties();
+
+                const scale = Math.ceil(Math.sqrt(cells.length));
                 
                 cells.forEach(cell => {
+                    cell.elem.classList.add('cell-sorting');
+
                     if(data[cell.id]) {
                         cell.x = data[cell.id].x * scale;
                         cell.y = data[cell.id].y * scale;
                     }
+
+                    setTimeout(() => {
+                    cell.elem.classList.remove('cell-sorting');
+                    }, 10);
+
                 });
+
+
 
                 updateDivPositions();
             })
