@@ -15,12 +15,14 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(apiUrl)
             .then(response => response.json()) // Assuming the response is in JSON format
             .then(data => {
+                const scale = Math.ceil(Math.sqrt(cells.length));
+
                 remove_empties();
                 
                 cells.forEach(cell => {
                     if(data[cell.id]) {
-                        cell.x = data[cell.id].x;
-                        cell.y = data[cell.id].y;
+                        cell.x = data[cell.id].x * scale;
+                        cell.y = data[cell.id].y * scale;
                     }
                 });
 

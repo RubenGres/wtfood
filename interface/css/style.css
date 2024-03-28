@@ -29,6 +29,12 @@
     height: 25%;
 }
 
+.gridcell:hover {
+    z-index: 10;
+    transform: scale(1.02);
+    transition: transform 0.1s ease;
+}
+
 @keyframes spin {
     0% {
       transform: rotate(0deg);
