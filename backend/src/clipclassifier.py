@@ -66,7 +66,4 @@ def classify(image, clip_model, clip_processor, labels_embeddings):
 
     return max(cosims, key=cosims.get)
 
-with open('./recognized_classes.json', 'r') as file:
-    labels = json.load(file)
-
 device = "cuda:0"

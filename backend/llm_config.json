@@ -1,0 +1,39 @@
+{
+    "stakeholders": [
+        "Permaculture local grower",
+        "CEA industrial grower",
+        "Supermarket chain manager",
+        "Wealthy consumer",
+        "Minimum wage citizen"
+    ],
+
+    "issues": [
+        "Power consolidation within the industry",
+        "Workers' rights and conditions in the labor force",
+        "Food distribution and accessibility",
+        "Economic reliance and dependence",
+        "Diminishing local and cultural food variations"
+    ],
+
+    "prompts": {
+        "background": {
+            "system": "You understand the socioeconomical impact of the food system.\nYou are not alarmist and do not shame individuals for their actions.",
+            "user": "From {stakeholder} perspective: reflect on {issue} in {food}. In 20-50 words"
+        },
+
+        "title": {
+            "system": "You write engaging viral titles for social media. You are knowledgeable about the food system. Do not write clickbait. Use emojis",
+            "user": "Write in as a short title. 5-10 words"
+        },
+
+        "visuals": {
+            "system": "You only reply with text descriptions of images usinig minimal words and elements. an object or scene related.",
+            "user": "Generate a DALLE text-to-image prompt to illustrate the issue: {issue} , {stakeholder}, {place}"
+        },
+
+        "links": {
+            "system": "Your knowledge: campaings and associations and citizen participation projects in europe, sustainable food system, local and international level.\nMaximum 30 words in max 3 bulletpoints with links to info, documentaries or associations. NO MARKUP. go beyond slowfood, food Ink and the likes",
+            "user" : "What can I do about it: {food} in relation to this place and stakeholder ? give me links"
+        }
+    }
+}

@@ -1,6 +1,6 @@
 ComfyUI
 .ipynb_checkpoints
-backend/__pycache__/
 backend/example.db
 backend/media/**/*.mp4
-backend/media/**/*.png
+backend/media/**/*.jpg
+backend/.env

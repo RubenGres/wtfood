@@ -1,4 +1,5 @@
 from io import BytesIO
+import random
 import base64
 import time
 from PIL import Image
@@ -7,6 +8,7 @@ from .comfycaller import generate, get_media
 from .clipclassifier import classify
 import src.positioning as positioning
 import src.database as database
+import src.llmcaller as llmcaller
 
 def load_b64(image_b64):
     image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1]))).convert("RGB")
@@ -24,8 +26,9 @@ def classify_image(input_images, clip_model, clip_processor, clip_tokenizer, lab
 
     return image_class
 
-def create_video(input_images, workflow, params, client_id, coord, image_class):
-    params["prompt"] = f"Futuristic solar punk city, greenery, vines"
+
+def create_video(input_images, workflow, params, client_id, coord, llm_response):
+    params["prompt"] = llm_response["visuals"]
 
     input_images[k] = base64.b64decode(input_images[k])
 
@@ -47,14 +50,13 @@ def create_video(input_images, workflow, params, client_id, coord, image_class):
         media_info = videos[-1]
     else:
         media_info = images[-1]
-    
         
-    #TODO info text 
-    info_text = params["prompt"]
+    #TODO format card text
+    info_text = llm_response["title"] + llm_response["background"]
     
-    filename = media_info['filename']
 
     # load the video in RAM
+    filename = media_info['filename']
     media_bytes = get_media(media_info['filename'], media_info['subfolder'], media_info['type'])
     
     positioning.remove_coord(coord)

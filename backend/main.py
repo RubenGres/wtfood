@@ -1,25 +1,19 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-import os
+import random
+import json
+import argparse
 import requests
-from transformers import AutoProcessor, CLIPSegForImageSegmentation
-from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
-from diffusers import StableDiffusionInpaintPipeline
-import numpy as np
 from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
-
-import base64
-import argparse
-import websocket
-import uuid
 
 import src.positioning as positioning
 import src.database as database
 import src.sd_generation as sd_generation
 import src.clipclassifier as clipclassifier
 import src.sorting as sorting
+import src.llmcaller as llmcaller
 
 
 # Set up argparse
@@ -31,9 +25,9 @@ def locate_ip(ip):
     response = requests.get(url).json()
 
     if response['status'] == "fail":
-        return {'country': "unknown"}
+        return f"unknown"
     
-    return response
+    return f"{response['city']}, {response['country']}"
 
 
 def classify(input_images):
@@ -56,7 +50,7 @@ def home():
         <li> /cards </li>
         <li> /media/<id> </li>
         <li> /transform </li>
-        <li> /sorting </li>
+        <li> /sort </li>
         <li> /info </li>
     </ul>
     """
@@ -72,37 +66,21 @@ def transform():
     client_id = data['client_id']
     coord = data['coords']
 
-    if not args.mock:
-        image_class = classify(input_images)
-        return sd_generation.create_video(input_images, workflow, params, client_id, coord, image_class)
-    else:
-        return sd_generation.create_mock(input_images, coord)
-
-
-@app.route('/info', methods=['POST'])
-def info():
-    data = request.json
-    image_b64 = data['image']  # Base64 encoded image
-    image = load_b64(image_b64)
-
     caller_ip = request.remote_addr
 
-    ip_info = locate_ip(caller_ip)
 
-    image_class = classify(image)
+    if not args.mock:
+        prompts = llmconfig['prompts']
+        stakeholder = random.choice(llmconfig['stakeholder'])
+        issue = random.choice(llmconfig['issues'])
+        food = classify(input_images)
+        location = locate_ip(caller_ip)
 
-    if not image_class:
-        return {
-            "is_valid": False,
-            "fruit": None,
-            "country": ip_info["country"]
-        }
+        llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
+
+        return sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response)
     else:
-        return {
-            "is_valid": True,
-            "fruit": image_class,
-            "country": ip_info["country"]
-        }
+        return sd_generation.create_mock(input_images, coord)
 
 
 @app.route('/position/pick', methods=['GET'])
@@ -134,17 +112,18 @@ def free_position():
 @app.route('/sort', methods=['GET'])
 def card_sort():
     def get_or_create_sorting(label, cards):
-        sorting = database.get_sorting(label)
+        sort_order = database.get_sorting(label)
 
         # if the sorting doesn't exist, create it
-        if not sorting:
+        if not sort_order:
             if not args.mock:
-                sorting = sorting.sort_cards(cards, label, clip_model, clip_tokenizer)
+                sort_order = sorting.sort_cards(cards, label, clip_model, clip_tokenizer)
             else:
-                sorting = sorting.mock_sort_cards(cards, label)
+                sort_order = sorting.mock_sort_cards(cards, label)
 
-            database.add_sorting(label, sorting)
-        return sorting
+            database.add_sorting(label, sort_order)
+        
+        return sort_order
     
     x_label = request.args.get('x')
     y_label = request.args.get('y')
@@ -179,8 +158,14 @@ def load_media(filename):
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    app.run(host='0.0.0.0', port=5000)
+    with open('./recognized_classes.json', 'r') as file:
+        labels = json.load(file)
 
-    if not args.mock:
+    with open('./llm_config.json', 'r') as file:
+        llmconfig = json.load(file)
+
+    if not args.mock:        
         clip_model, clip_processor, clip_tokenizer = clipclassifier.get_clip("openai/clip-vit-base-patch32")
         labels_embeddings = clipclassifier.get_labels_embeddings(clip_model, clip_tokenizer, labels)
+
+    app.run(host='0.0.0.0', port=5000)
