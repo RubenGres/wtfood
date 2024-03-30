@@ -30,6 +30,7 @@ def classify_image(input_images, clip_model, clip_processor, clip_tokenizer, lab
 def create_video(input_images, workflow, params, client_id, coord, llm_response):
     params["prompt"] = llm_response["visuals"]
 
+    k = list(input_images.keys())[0]
     input_images[k] = base64.b64decode(input_images[k])
 
     # generation is happening here
