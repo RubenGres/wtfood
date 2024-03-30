@@ -7,6 +7,9 @@ import argparse
 import requests
 from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
+from io import BytesIO
+import base64
+from PIL import Image
 
 import src.positioning as positioning
 import src.database as database
@@ -20,6 +23,10 @@ import src.llmcaller as llmcaller
 parser = argparse.ArgumentParser(description='Start food dysmorphia backend')
 parser.add_argument('--mock', action='store_true', help='Use mock generation for testing')
 
+def load_b64(image_b64):
+    image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1]))).convert("RGB")
+    return image
+
 def locate_ip(ip):
     url = f'http://ip-api.com/json/{ip}'
     response = requests.get(url).json()
@@ -30,8 +37,8 @@ def locate_ip(ip):
     return f"{response['city']}, {response['country']}"
 
 
-def classify(input_images):
-    return clipclassifier.classify(input_images, clip_model, clip_processor, labels_embeddings)
+def classify(image):
+    return clipclassifier.classify(image, clip_model, clip_processor, labels_embeddings)
 
 
 app = Flask(__name__)
@@ -67,13 +74,14 @@ def transform():
     coord = data['coords']
 
     caller_ip = request.remote_addr
-
+    b64_image = list(input_images.values())[0]
+    image = load_b64(b64_image)
 
     if not args.mock:
         prompts = llmconfig['prompts']
-        stakeholder = random.choice(llmconfig['stakeholder'])
+        stakeholder = random.choice(llmconfig['stakeholders'])
         issue = random.choice(llmconfig['issues'])
-        food = classify(input_images)
+        food = classify(image)
         location = locate_ip(caller_ip)
 
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)

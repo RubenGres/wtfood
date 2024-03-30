@@ -12,3 +12,4 @@ requests_toolbelt
 imageio-ffmpeg
 opencv-python
 openai
+ffmpeg
