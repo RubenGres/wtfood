@@ -27,6 +27,7 @@ def load_b64(image_b64):
     image = Image.open(BytesIO(base64.b64decode(image_b64.split(',', 1)[-1]))).convert("RGB")
     return image
 
+
 def locate_ip(ip):
     url = f'http://ip-api.com/json/{ip}'
     response = requests.get(url).json()
@@ -35,6 +36,21 @@ def locate_ip(ip):
         return f"unknown"
     
     return f"{response['city']}, {response['country']}"
+
+
+def get_or_create_sorting(label, cards):
+    sort_order = database.get_sorting(label)
+
+    # if the sorting doesn't exist, create it
+    if not sort_order:
+        if not args.mock:
+            sort_order = sorting.sort_cards(cards, label, clip_model, clip_tokenizer)
+        else:
+            sort_order = sorting.mock_sort_cards(cards, label)
+
+        database.add_sorting(label, sort_order)
+    
+    return sort_order
 
 
 def classify(image):
@@ -84,6 +100,10 @@ def transform():
         food = classify(image)
         location = locate_ip(caller_ip)
 
+        #TODO return an error is food is None
+        if food is None:
+            return jsonify({'error': 'No fruit or vegetable found in image'}), 404
+
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
 
         return sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response)
@@ -119,20 +139,6 @@ def free_position():
 
 @app.route('/sort', methods=['GET'])
 def card_sort():
-    def get_or_create_sorting(label, cards):
-        sort_order = database.get_sorting(label)
-
-        # if the sorting doesn't exist, create it
-        if not sort_order:
-            if not args.mock:
-                sort_order = sorting.sort_cards(cards, label, clip_model, clip_tokenizer)
-            else:
-                sort_order = sorting.mock_sort_cards(cards, label)
-
-            database.add_sorting(label, sort_order)
-        
-        return sort_order
-    
     x_label = request.args.get('x')
     y_label = request.args.get('y')
 
