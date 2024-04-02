@@ -71,12 +71,19 @@ function create_cell(coords) {
                     loading_gizmo.className = 'loading_gizmo display';
                     
                     generated_image = await generateImage(camera_picture, coords);
-                    div.removeChild(loading_gizmo);
-                    div.removeChild(camera_picture);
-                    div.appendChild(generated_image);
-                    add_empties();
 
-                    div.setAttribute("state", "media_ready");
+                    loading_gizmo.className = 'loading_gizmo';
+                    div.removeChild(camera_picture);
+
+                    if(generated_image != null) {
+                        div.appendChild(generated_image);
+                        add_empties();
+    
+                        div.setAttribute("state", "media_ready");
+                    } else {
+                        div.appendChild(camera_icon);
+                        div.setAttribute("state", "empty");
+                    }
                     break;
 
                 case "media_ready":
@@ -92,6 +99,6 @@ function create_cell(coords) {
 
 function create_card(image, text) {
     let div = basic_cell();
-    div.appendChild(card_content(image, text))
+    div.appendChild(create_card_content(image, text))
     return div
 }
