@@ -10,8 +10,18 @@ if(isMobile) {
     cp.remove();  
 }
 
-//check if api available
 
+async function checkApiAvailability() {
+    const response = await fetch(SD_API_URL + "cards", {
+        method: 'GET'
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response; // For example, you might want to return the response for further processing
+}
 
 // global cell list that will contain all the cards
 let cells = [];
@@ -24,4 +34,10 @@ async function setup() {
     add_cards();
 }
 
-window.onload = setup;
+window.onload = checkApiAvailability().then(response => {
+    setup();
+})
+.catch(error => {
+    container.innerText = `Error: API at \"${SD_API_URL}\" is not responding, make sur it is running`;
+});
+;
