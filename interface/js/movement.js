@@ -2,16 +2,14 @@ var moving = false;
 var delta_cam_x = 0;
 var delta_cam_y = 0;
 
-let width = cell_w * zoom;
-let height = cell_h * zoom;
-let margin = cell_margin * zoom;
-
 //cam_x = (grid_width * (cell_w + cell_margin))/2
 //cam_y = (grid_height * (cell_h + cell_margin))/2
 
-cam_x = -(window.visualViewport.width - (width + margin)*zoom)/2;
-cam_y = -(window.visualViewport.height - (height + margin)*zoom)/2;
+//cam_x = -(window.visualViewport.width - (width + margin)*zoom)/2;
+//cam_y = -(window.visualViewport.height - (height + margin)*zoom)/2;
 
+cam_x = 0;
+cam_y = 0;
 
 function getPointerPosition(e) {
     if (e.touches) {
@@ -55,30 +53,11 @@ function pointerMoved(e) {
 
 function padScroll(e) {
     updateState({ isMoving: true });
-    cam_x = cam_x + e.deltaX;
-    cam_y = cam_y + e.deltaY;
+    cam_x = cam_x + e.deltaX / zoom;
+    cam_y = cam_y + e.deltaY / zoom;
     updateDivPositions();
     updateState({ isMoving: false });
 }
-
-
-function updateDivPositions() {
-    width = cell_w * zoom;
-    height = cell_h * zoom;
-    margin = cell_margin * zoom;
-
-    for (let i = 0; i < cells.length; i++) {
-        let cell = cells[i];
-        cell_elem = cell["elem"];
-
-        cell_elem.style.width = width + 'px';
-        cell_elem.style.height = height + 'px';
-
-        cell_elem.style.left = (cell["x"] * (width + margin) - cam_x) + 'px';
-        cell_elem.style.top = (cell["y"] * (height + margin) - cam_y) + 'px';
-    }
-}
-
 
 
 function swipe_left() {
@@ -116,6 +95,38 @@ async function focus_random_empty() {
     cam_x += random_position['x'] * (width + margin)
     cam_y += random_position['y'] * (height + margin)
 } 
+
+
+function updateDivPositions() {
+    width = cell_w * zoom;
+    height = cell_h * zoom;
+    margin = cell_margin * zoom;
+
+    const viewportWidth = window.visualViewport.width;
+    const viewportHeight = window.visualViewport.height;
+
+    // Center of the viewport
+    const viewportCenterX = viewportWidth / 2;
+    const viewportCenterY = viewportHeight / 2;
+
+    for (let i = 0; i < cells.length; i++) {
+        let cell = cells[i];
+        let cell_elem = cell["elem"];
+
+        cell_elem.style.width = width + 'px';
+        cell_elem.style.height = height + 'px';
+
+        // Calculate positions considering the zoom and centered on the viewport
+        let centeredX = (cell["x"] * (width + margin)) + viewportCenterX - cam_x * zoom;
+        let centeredY = (cell["y"] * (height + margin)) + viewportCenterY - cam_y * zoom;
+
+        cell_elem.style.left = centeredX + 'px';
+        cell_elem.style.top = centeredY + 'px';
+    }
+
+    console.log(cam_x, cam_y, zoom);
+}
+
 
 
 if(isMobile) {
@@ -179,3 +190,4 @@ if(isMobile) {
     container.addEventListener('touchmove', pointerMoved);
     container.addEventListener('touchend', pointerReleased);
 }
+
