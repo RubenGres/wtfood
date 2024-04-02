@@ -45,10 +45,14 @@ async function generateImage(camera_picture, coords) {
 
 
     if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        response.json().then(response_json => {
+            alert(response_json.error);
+        })
+
+        return null;
     }
 
     const responseData = await response.json();
 
-    return create_card(SD_API_URL + "media/" + responseData.media_src, responseData.info_text)
+    return create_card_content(SD_API_URL + "media/" + responseData.media_src, responseData.info_text)
 }

@@ -1,4 +1,4 @@
-function card_content(media_src, cardtext) {
+function create_card_content(media_src, cardtext) {
     // Create image element
     const generated_card = document.createElement('div');
     generated_card.setAttribute('class', 'generated-card')
