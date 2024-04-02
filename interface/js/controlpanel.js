@@ -1,3 +1,15 @@
+document.querySelectorAll('input[name="sortOption"]').forEach((elem) => {
+    elem.addEventListener("change", function(event) {
+        const value = event.target.value;
+        const customOptions = document.getElementById("customOptions");
+        if (value === "Custom") {
+            customOptions.style.display = "block";
+        } else {
+            customOptions.style.display = "none";
+        }
+    });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     var zoomSlider = document.getElementById('zoomSlider');
     zoomSlider.oninput = function() {
@@ -5,11 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
         updateDivPositions();
     };
 
-    var customButton = document.getElementById('customButton');
+    var okButton = document.getElementById('okButton');
     var xLabelInput = document.getElementById('xLabelInput');
     var yLabelInput = document.getElementById('yLabelInput');
 
-    customButton.onclick = function() {
+    okButton.onclick = function() {
         const apiUrl = `${SD_API_URL}sort?x=${encodeURIComponent(xLabelInput.value)}&y=${encodeURIComponent(yLabelInput.value)}`;
 
         fetch(apiUrl)
@@ -32,8 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 10);
 
                 });
-
-
 
                 updateDivPositions();
             })
