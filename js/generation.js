@@ -54,5 +54,5 @@ async function generateImage(camera_picture, coords) {
 
     const responseData = await response.json();
 
-    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.info_text)
+    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.title, responseData.text)
 }
