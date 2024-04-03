@@ -334,7 +334,7 @@
       "pix_fmt": "yuv420p",
       "crf": 19,
       "save_metadata": true,
-      "pingpong": false,
+      "pingpong": true,
       "save_output": true,
       "images": [
         "380",

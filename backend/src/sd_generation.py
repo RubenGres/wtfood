@@ -55,7 +55,6 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response)
     #TODO format card text
     info_text = llm_response["title"] + llm_response["background"]
     
-
     # load the video in RAM
     filename = media_info['filename']
     media_bytes = get_media(media_info['filename'], media_info['subfolder'], media_info['type'])
