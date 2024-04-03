@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var yLabelInput = document.getElementById('yLabelInput');
 
     okButton.onclick = function() {
-        const apiUrl = `${SD_API_URL}sort?x=${encodeURIComponent(xLabelInput.value)}&y=${encodeURIComponent(yLabelInput.value)}`;
+        const apiUrl = `${FD_API_URL}sort?x=${encodeURIComponent(xLabelInput.value)}&y=${encodeURIComponent(yLabelInput.value)}`;
 
         fetch(apiUrl)
             .then(response => response.json()) // Assuming the response is in JSON format

@@ -85,7 +85,7 @@ function swipe_up() {
 
 
 async function focus_random_empty() {
-    const response = await fetch(SD_API_URL + "position/pick", {method: 'GET'});
+    const response = await fetch(FD_API_URL + "position/pick", {method: 'GET'});
     
     if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -117,8 +117,8 @@ function updateDivPositions() {
         cell_elem.style.height = height + 'px';
 
         // Calculate positions considering the zoom and centered on the viewport
-        let centeredX = (cell["x"] * (width + margin)) + viewportCenterX - cam_x * zoom;
-        let centeredY = (cell["y"] * (height + margin)) + viewportCenterY - cam_y * zoom;
+        let centeredX = (width + margin)/2 + (cell["x"] * (width + margin)) + viewportCenterX - cam_x * zoom;
+        let centeredY = (height + margin)/2 + (cell["y"] * (height + margin)) + viewportCenterY - cam_y * zoom;
 
         cell_elem.style.left = centeredX + 'px';
         cell_elem.style.top = centeredY + 'px';
