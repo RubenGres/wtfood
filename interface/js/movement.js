@@ -2,12 +2,6 @@ var moving = false;
 var delta_cam_x = 0;
 var delta_cam_y = 0;
 
-//cam_x = (grid_width * (cell_w + cell_margin))/2
-//cam_y = (grid_height * (cell_h + cell_margin))/2
-
-//cam_x = -(window.visualViewport.width - (width + margin)*zoom)/2;
-//cam_y = -(window.visualViewport.height - (height + margin)*zoom)/2;
-
 cam_x = 0;
 cam_y = 0;
 
@@ -143,7 +137,7 @@ if(isMobile) {
         let distX = 0;      
         let distY = 0;
 
-        const min_swipe_dist = 70;
+        const min_swipe_dist = 30;
             
         surface.addEventListener("touchstart", function (e) {
             startX = e.changedTouches[0].pageX;
