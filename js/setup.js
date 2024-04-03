@@ -12,7 +12,7 @@ if(isMobile) {
 
 
 async function checkApiAvailability() {
-    const response = await fetch(SD_API_URL + "cards", {
+    const response = await fetch(FD_API_URL, {
         method: 'GET'
     });
 
@@ -20,24 +20,45 @@ async function checkApiAvailability() {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return response; // For example, you might want to return the response for further processing
+    return response;
 }
 
 // global cell list that will contain all the cards
 let cells = [];
 
-var container = document.getElementById('foodmap');
-var camerainput = document.getElementById('camerainput');
+const container = document.getElementById('foodmap');
+const camerainput = document.getElementById('camerainput');
 
 async function setup() {
     add_empties();
     add_cards();
 }
 
-window.onload = checkApiAvailability().then(response => {
-    setup();
-})
-.catch(error => {
-    container.innerText = `Error: API at \"${SD_API_URL}\" is not responding, make sur it is running`;
-});
-;
+window.onload = function() {
+    function attemptApiCheck(apiUrl) {
+        checkApiAvailability(apiUrl).then(response => {
+            setup();
+        })
+        .catch(error => {
+            container.innerHTML = `Error: API at <b>"${apiUrl}"</b> is not responding, make sure it is running. <br> <br>`;
+            
+            const inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.id = 'apiUrlInput';
+            inputField.placeholder = 'Enter new API URL';
+            container.appendChild(inputField);
+
+            const submitButton = document.createElement('button');
+            submitButton.innerText = 'Retry';
+            container.appendChild(submitButton);
+
+            submitButton.onclick = function() {
+                FD_API_URL = document.getElementById('apiUrlInput').value;
+                container.innerHTML = '';
+                attemptApiCheck(FD_API_URL);
+            }
+        });
+    }
+
+    attemptApiCheck(FD_API_URL);
+};
