@@ -2,7 +2,7 @@ async function add_empties() {
     // Use a Set to keep track of existing coordinates in a "x,y" string format.
     const existingCoords = new Set(cells.map(cell => `${cell.x},${cell.y}`));
     
-    const response = await fetch(SD_API_URL + "position/free", {
+    const response = await fetch(FD_API_URL + "position/free", {
         method: 'GET'
     });
 
@@ -39,7 +39,7 @@ async function add_empties() {
 
 
 async function add_cards() {
-    const response = await fetch(SD_API_URL + "cards", {
+    const response = await fetch(FD_API_URL + "cards", {
         method: 'GET'
     });
 
@@ -52,7 +52,7 @@ async function add_cards() {
 
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
-        let media_url = SD_API_URL + "media/"+card['media_path']
+        let media_url = FD_API_URL + "media/"+card['media_path']
         let element = create_card(media_url, card['text'])
 
         cells.push({

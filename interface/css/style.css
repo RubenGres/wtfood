@@ -29,6 +29,10 @@
     height: 25%;
 }
 
+img {
+    pointer-events: none;
+}
+
 .gridcell:hover {
     z-index: 10;
     transform: scale(1.02);
@@ -102,7 +106,6 @@ img {
 }
 
 .infotext {
-    width: 100%;
     height: 100%;
     display: flex; /* Use flexbox for alignment */
     justify-content: center; /* Center horizontally */
@@ -113,7 +116,6 @@ img {
     color: #FFFFFF; /* Example text color, adjust as needed */
     background-color: rgba(0, 0, 0, 0.5); /* Optional: Add background to improve readability */
     text-align: center; /* Ensure the text itself is centered, useful for multi-line text */
-    padding: 10px; /* Optional: Add some padding inside the infotext box */
 }
 
 .generated-media {

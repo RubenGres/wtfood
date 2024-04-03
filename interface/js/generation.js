@@ -35,7 +35,7 @@ async function generateImage(camera_picture, coords) {
         coords: coords
     }
 
-    const response = await fetch(SD_API_URL + "transform", {
+    const response = await fetch(FD_API_URL + "transform", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -54,5 +54,5 @@ async function generateImage(camera_picture, coords) {
 
     const responseData = await response.json();
 
-    return create_card_content(SD_API_URL + "media/" + responseData.media_src, responseData.info_text)
+    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.info_text)
 }
