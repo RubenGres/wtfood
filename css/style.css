@@ -29,6 +29,10 @@
     height: 25%;
 }
 
+img {
+    pointer-events: none;
+}
+
 .gridcell:hover {
     z-index: 10;
     transform: scale(1.02);

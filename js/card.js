@@ -33,7 +33,9 @@ function create_card_content(media_src, cardtext) {
 
     // Add click event listener to the image
     generated_card.addEventListener('click', async function() {
-        infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
+        if(!state.isMoving) {
+            infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
+        }
     });
 
     // Check if generated_card has a video child, then play/pause the video on hover
