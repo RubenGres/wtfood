@@ -122,6 +122,10 @@ function updateDivPositions() {
 
         cell_elem.style.left = centeredX + 'px';
         cell_elem.style.top = centeredY + 'px';
+
+        //Update div text
+        const fontSize = width / 20; // Example calculation, adjust as needed
+        cell_elem.style.fontSize = `${fontSize}px`;
     }
 
     console.log(cam_x, cam_y, zoom);
