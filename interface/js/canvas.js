@@ -53,7 +53,7 @@ async function add_cards() {
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
         let media_url = FD_API_URL + "media/"+card['media_path']
-        let element = create_card(media_url, card['text'])
+        let element = create_card(media_url, card['title'], card['text'])
 
         cells.push({
             "elem": element,

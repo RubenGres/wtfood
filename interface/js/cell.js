@@ -97,8 +97,8 @@ function create_cell(coords) {
 }
 
 
-function create_card(image, text) {
+function create_card(image, title, text) {
     let div = basic_cell();
-    div.appendChild(create_card_content(image, text))
+    div.appendChild(create_card_content(image, title, text))
     return div
 }

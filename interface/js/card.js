@@ -1,4 +1,4 @@
-function create_card_content(media_src, cardtext) {
+function create_card_content(media_src, cardtitle, cardtext) {
     // Create image element
     const generated_card = document.createElement('div');
     generated_card.setAttribute('class', 'generated-card')
@@ -26,7 +26,17 @@ function create_card_content(media_src, cardtext) {
 
     // Create text element
     const infotext = document.createElement('div');
-    infotext.textContent = cardtext;
+    
+    const title = document.createElement('h3');
+    title.textContent = cardtitle;
+    infotext.appendChild(title);
+
+    infotext.appendChild(document.createElement('br'));
+    
+    const textContent = document.createElement('p');
+    textContent.textContent = cardtext;
+    infotext.appendChild(textContent);
+
     infotext.setAttribute('class', 'infotext');
     infotext.style.display = 'none';
     generated_card.appendChild(infotext);
