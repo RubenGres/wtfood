@@ -9,7 +9,7 @@ media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
 DB_PATH = os.environ.get("FD_DATABASE", "example.db")
 
 CREATE_QUERY = '''CREATE TABLE IF NOT EXISTS cells
-               (id INTEGER PRIMARY KEY, username TEXT, x FLOAT, y FLOAT, media_path TEXT, text TEXT, links TEXT, datetime DATETIME)'''
+               (id INTEGER PRIMARY KEY, username TEXT, x FLOAT, y FLOAT, media_path TEXT, title TEXT, text TEXT, links TEXT, datetime DATETIME)'''
 
 def get_db_connection(db_path):
     return sqlite3.connect(db_path)
@@ -38,15 +38,15 @@ def load_media(filename):
     return send_from_directory(directory=media_folder, path=filename)
 
 
-def add_cell(filename, media_bytes, info_text, coord):
+def add_cell(filename, media_bytes, title, info_text, coord):
     with open(os.path.join(media_folder, filename), "wb") as media_file:
         media_file.write(media_bytes)
     
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
         # Using parameterized queries to avoid SQL injection
-        cursor.execute("INSERT INTO cells (username, x, y, media_path, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                       ('useruuid', coord[0], coord[1], filename, info_text, 'google.fr', time.time()))
+        cursor.execute("INSERT INTO cells (username, x, y, media_path, title, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                       ('useruuid', coord[0], coord[1], filename, title, info_text, 'google.fr', time.time()))
         conn.commit()
 
     return filename
@@ -56,7 +56,7 @@ def get_cards():
     with get_db_connection(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        cursor.execute("SELECT id, text, media_path, x, y FROM cells")
+        cursor.execute("SELECT id, title, text, media_path, x, y FROM cells")
         rows = cursor.fetchall()
         return [dict(row) for row in rows]
 
