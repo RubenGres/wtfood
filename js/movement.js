@@ -10,6 +10,55 @@ var delta_cam_y = 0;
 var cam_x = 0;
 var cam_y = 0;
 
+let zoomAnimation = {
+    startTime: null,
+    duration: 50, // milliseconds
+    startZoom: 1,
+    endZoom: 1,
+    animating: false,
+};
+
+function startZoomAnimation(newZoom) {
+    if (zoomAnimation.animating) return; // Prevent concurrent animations
+
+    zoomAnimation.startTime = null; // Will be set on the first animation frame
+    zoomAnimation.startZoom = zoom;
+    zoomAnimation.endZoom = newZoom;
+    zoomAnimation.animating = true;
+
+    requestAnimationFrame(animateZoom);
+}
+
+function animateZoom(timestamp) {
+    if (!zoomAnimation.startTime) zoomAnimation.startTime = timestamp;
+    const elapsedTime = timestamp - zoomAnimation.startTime;
+    const progress = Math.min(elapsedTime / zoomAnimation.duration, 1); // Ensure progress doesn't exceed 1
+
+    // Calculate the current zoom level based on the animation progress
+    zoom = zoomAnimation.startZoom + (zoomAnimation.endZoom - zoomAnimation.startZoom) * progress;
+
+    updateDivPositions(); // Update positions based on the new zoom
+
+    if (progress < 1) {
+        requestAnimationFrame(animateZoom); // Continue animation
+    } else {
+        updateState({ isMoving: false });
+        zoomAnimation.animating = false; // Animation complete
+    }
+}
+
+function padScroll(e) {
+    updateState({ isMoving: true });
+
+    var zoom_speed = 0.005;
+    var minZoom = 0.25;
+    var maxZoom = 8;
+    var zoomChange = -e.deltaY * zoom_speed * zoom;
+
+    let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));
+    startZoomAnimation(newZoom);
+}
+
 function getPointerPosition(e) {
     if (e.touches) {
         return { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -56,22 +105,6 @@ function pointerMoved(e) {
         updateDivPositions();
     }
 }
-
-
-function padScroll(e) {
-    updateState({ isMoving: true });
-
-    var zoom_speed = 0.005;
-    var zoomChange = -e.deltaY * zoom_speed * zoom;
-    zoom += zoomChange;
-
-    zoom = Math.max(0.2, zoom);
-
-    updateDivPositions();
-    
-    updateState({ isMoving: false });
-}
-
 
 function swipe_left() {
     cam_x += width + margin;
