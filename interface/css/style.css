@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+img {
+    pointer-events: none;
+}
+
 #foodmap {
     width: 100vw;
     height: 100vh;
@@ -22,21 +26,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    transition: transform 0.3s ease-out;
 }
 
 .gridcell .camera_icon {
     height: 25%;
 }
 
-img {
-    pointer-events: none;
-}
-
 .gridcell:hover {
     z-index: 10;
     transform: scale(1.02);
     transition: transform 0.1s ease;
+}
+
+.gridcell:hover {
+    cursor: pointer;    
 }
 
 @keyframes spin {
@@ -62,10 +66,6 @@ img {
 
 .loading_gizmo.display {
   visibility: visible;
-}
-
-.gridcell:hover {
-    cursor: pointer;    
 }
 
 .cell-animation {
