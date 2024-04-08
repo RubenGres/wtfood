@@ -90,7 +90,7 @@ function pointerReleased(e) {
                 updateState({ isMoving: false });
             }, 20);
 
-            container.style.cursor = 'grab';
+            container.style.cursor = 'auto';
         }
     }
 }
