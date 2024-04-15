@@ -82,7 +82,7 @@ def create_mock(input_images, coord):
     info_text = "This is a call to action"
 
     positioning.remove_coord(coord)
-    media_url = database.add_cell(f"{time.time()}.jpg", base64_image, info_text, coord)
+    media_url = database.add_cell(f"{time.time()}.jpg", base64_image, "title", info_text, coord)
 
     response_data = {
         "media_src": media_url,

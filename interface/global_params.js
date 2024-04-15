@@ -1,4 +1,4 @@
-var FD_API_URL = "https://42fwyqerpmdu72-5000.proxy.runpod.net/";
+var FD_API_URL = "https://obscure-journey-vpp4495vxxwfp4qj-5000.app.github.dev/";
 
 let zoom = 1;
 
