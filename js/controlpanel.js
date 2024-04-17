@@ -11,45 +11,22 @@ document.querySelectorAll('input[name="sortOption"]').forEach((elem) => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    var okButton = document.getElementById('okButton');
-    var xLabelInput = document.getElementById('xLabelInput');
-    var yLabelInput = document.getElementById('yLabelInput');
-
-    okButton.onclick = function() {
-        const apiUrl = `${FD_API_URL}sort?x=${encodeURIComponent(xLabelInput.value)}&y=${encodeURIComponent(yLabelInput.value)}`;
-
-        fetch(apiUrl)
-            .then(response => response.json()) // Assuming the response is in JSON format
-            .then(data => {
-                remove_empties();
-
-                const scale = Math.ceil(Math.sqrt(cells.length));
-                
-                cells.forEach(cell => {
-                    cell.elem.classList.add('cell-sorting');
-
-                    if(data[cell.id]) {
-                        cell.x = data[cell.id].x * scale;
-                        cell.y = data[cell.id].y * scale;
-                    }
-
-                    setTimeout(() => {
-                    cell.elem.classList.remove('cell-sorting');
-                    }, 10);
-
-                });
-
-                updateDivPositions();
-            })
-            .catch(error => {
-                console.error('Error:', error); // Handle any errors
-            });
-    }
-
     var gridButton = document.getElementById('gridButton');
     gridButton.onclick = function() {
-        remove_all();
-        add_empties();
-        add_cards();
+        hideAxis();
+        show_empties();
+        reposition_on_grid();
+    }
+    
+    var customButton = document.getElementById('customButton');
+    customButton.onclick = function() {
+        hide_empties();
+    }
+
+    var okButton = document.getElementById('okButton');
+    okButton.onclick = function() {
+        var xLabelInput = document.getElementById('xLabelInput');
+        var yLabelInput = document.getElementById('yLabelInput');
+        customSort(xLabelInput.value, yLabelInput.value)
     }
 });

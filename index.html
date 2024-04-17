@@ -5,12 +5,23 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <title>Food Dysmorphia</title>
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/axis.css">
         <link rel="stylesheet" href="css/controlpanel.css">
     </head>
     
     <body>
 
         <div id="foodmap">
+            <div id="axis-cont">
+                <div class="axis" id="x-axis">
+                    <p>x-axis</p>
+                </div>
+
+                <div class="axis" id="y-axis">
+                    <p>y-axis</p>
+                </div>
+            </div>
+
             <div id="controlpanel">            
                 <!-- Sorting Label -->
                 <label>Sorting:</label>
@@ -51,6 +62,7 @@
         <script src="js/generation.js"></script>
         <script src="js/movement.js"></script>
         <script src="js/cell.js"></script>
+        <script src="js/sorting.js"></script>
         <script src="js/controlpanel.js"></script>
         
     </body>
