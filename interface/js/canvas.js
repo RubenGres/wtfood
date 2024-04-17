@@ -37,6 +37,11 @@ async function add_empties() {
     updateDivPositions();
 }
 
+function show_empties() {
+    const emptyGridCells = document.querySelectorAll('.gridcell[state="empty"]');
+    emptyGridCells.forEach(cell => cell.style.display = "flex");
+}
+
 
 async function add_cards() {
     const response = await fetch(FD_API_URL + "cards", {
@@ -59,6 +64,8 @@ async function add_cards() {
             "elem": element,
             "x": card['x'],
             "y": card['y'],
+            "init_x": card['x'],
+            "init_y": card['y'],
             "id": card['id']
         });
 
@@ -76,8 +83,8 @@ async function remove_all() {
 }
 
 
-async function remove_empties() {
-    cells = cells.filter(cell => cell.id !== -1);
+async function hide_empties() {
+    //cells = cells.filter(cell => cell.id !== -1);
     const emptyGridCells = document.querySelectorAll('.gridcell[state="empty"]');
-    emptyGridCells.forEach(cell => cell.remove());
+    emptyGridCells.forEach(cell => cell.style.display = "none");
 }

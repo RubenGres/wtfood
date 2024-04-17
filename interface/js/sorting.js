@@ -16,8 +16,6 @@ function customSort(xLabel, yLabel) {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            remove_empties();
-
             const scale = Math.ceil(Math.sqrt(cells.length));
             
             cells.forEach(cell => {
@@ -31,7 +29,6 @@ function customSort(xLabel, yLabel) {
                 setTimeout(() => {
                 cell.elem.classList.remove('cell-sorting');
                 }, 1000);
-
             });
 
             updateDivPositions();
@@ -40,4 +37,24 @@ function customSort(xLabel, yLabel) {
             console.error('Error:', error); // Handle any errors
         });
 
+}
+
+function reposition_on_grid() {
+    
+    cells.forEach(cell => {
+        
+        // if not empty cell, move it to initial position
+        if(cell.elem.getAttribute("state") != "empty") {
+            cell.elem.classList.add('cell-sorting');
+            cell.x = cell.init_x;
+            cell.y = cell.init_y;
+            setTimeout(() => {
+                cell.elem.classList.remove('cell-sorting');
+                }, 1000);
+            }
+        }
+
+    );
+
+    updateDivPositions();
 }

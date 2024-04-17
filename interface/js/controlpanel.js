@@ -11,19 +11,22 @@ document.querySelectorAll('input[name="sortOption"]').forEach((elem) => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    var okButton = document.getElementById('okButton');
-    var xLabelInput = document.getElementById('xLabelInput');
-    var yLabelInput = document.getElementById('yLabelInput');
-
-    okButton.onclick = function() {
-        customSort(xLabelInput.value, yLabelInput.value)
-    }
-
     var gridButton = document.getElementById('gridButton');
     gridButton.onclick = function() {
         hideAxis();
-        remove_all();
-        add_empties();
-        add_cards();
+        show_empties();
+        reposition_on_grid();
+    }
+    
+    var customButton = document.getElementById('customButton');
+    customButton.onclick = function() {
+        hide_empties();
+    }
+
+    var okButton = document.getElementById('okButton');
+    okButton.onclick = function() {
+        var xLabelInput = document.getElementById('xLabelInput');
+        var yLabelInput = document.getElementById('yLabelInput');
+        customSort(xLabelInput.value, yLabelInput.value)
     }
 });

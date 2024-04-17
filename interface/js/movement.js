@@ -67,7 +67,7 @@ function padScroll(e) {
             if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
                 inside_infotext = true;
             }
-            
+
             noInfoTextElements = activeCard && infotext.length == 0;
             infoTextHidden = !noInfoTextElements && infotext.style.display === "none";
             
@@ -97,7 +97,8 @@ function padScroll(e) {
             var zoom_speed = 0.005;
             var minZoom = 0.25;
             var maxZoom = 8;
-            var zoomChange = -e.deltaY * zoom_speed * zoom;
+            var clamped_delta = Math.min(Math.max(e.deltaY, -100), 100)
+            var zoomChange = -clamped_delta * zoom_speed * zoom;
         
             let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));    
     
