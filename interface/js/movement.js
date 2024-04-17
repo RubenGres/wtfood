@@ -12,7 +12,7 @@ var cam_y = 0;
 
 let zoomAnimation = {
     startTime: null,
-    duration: 50, // milliseconds
+    duration: 70, // milliseconds
     startZoom: 1,
     endZoom: 1,
     animating: false,
@@ -47,16 +47,64 @@ function animateZoom(timestamp) {
     }
 }
 
-function padScroll(e) {
-    updateState({ isMoving: true });
+function padScroll(e) {            
+    var activeCard = getActiveCard(e);
+    
+    var noInfoTextElements = true;
+    var infoTextHidden = true;
+    var scrollUnlocked = true;
+    var inside_infotext = false;
 
-    var zoom_speed = 0.005;
-    var minZoom = 0.25;
-    var maxZoom = 8;
-    var zoomChange = -e.deltaY * zoom_speed * zoom;
+    if(activeCard) {
+        var infotext = activeCard.getElementsByClassName("infotext")[0]
 
-    let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));
-    startZoomAnimation(newZoom);
+        const x = e.clientX;
+        const y = e.clientY;
+
+        
+        if(infotext) {
+            const rect = infotext.getElementsByTagName("p")[0].getBoundingClientRect();
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                inside_infotext = true;
+            }
+            
+            noInfoTextElements = activeCard && infotext.length == 0;
+            infoTextHidden = !noInfoTextElements && infotext.style.display === "none";
+            
+            scrollable = infotext.getElementsByTagName("p")[0]
+    
+            if(scrollable) {
+                if (scrollable.scrollHeight) {
+                    var a = scrollable.scrollTop;
+                    var b = scrollable.scrollHeight - scrollable.clientHeight;
+                    var c = a / b;
+                    
+                    if(e.deltaY < 0) {
+                        scrollUnlocked = c <= 0.1
+                    } else {
+                        scrollUnlocked = c >= 0.9
+                    }
+
+                }
+            }
+        }
+    }
+
+    if (!inside_infotext || noInfoTextElements || infoTextHidden || scrollUnlocked) {
+        if(!state.isMoving) {
+            updateState({ isMoving: true });
+    
+            var zoom_speed = 0.005;
+            var minZoom = 0.25;
+            var maxZoom = 8;
+            var zoomChange = -e.deltaY * zoom_speed * zoom;
+        
+            let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));    
+    
+            startZoomAnimation(newZoom);
+        }
+    }
+    
 }
 
 function getPointerPosition(e) {
@@ -65,6 +113,26 @@ function getPointerPosition(e) {
     } else {
         return { x: e.clientX, y: e.clientY };
     }
+}
+
+function getActiveCard(e) {
+    if (!isMobile) {
+        // Get the cursor position
+        const x = e.clientX;
+        const y = e.clientY;
+
+        for (let i = 0; i < cells.length; i++) {
+            const cell_elem = cells[i]["elem"];
+            const rect = cell_elem.getBoundingClientRect(); // Get the position and size of the cell
+
+            // Check if the cursor is within the cell's bounds
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                return cell_elem; // Return the cell element if the cursor is inside
+            }
+        }
+    }
+
+    return null; // Return null if no cell contains the cursor or if it's a mobile device
 }
 
 

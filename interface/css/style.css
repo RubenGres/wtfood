@@ -127,6 +127,11 @@ img {
     text-align: center;
 }
 
+.infotext p {
+    overflow-y: auto;
+    height: 65%;
+}
+
 .generated-media {
     width: 100%;
     height: 100%;
