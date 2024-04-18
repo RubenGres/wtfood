@@ -5,12 +5,28 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <title>Food Dysmorphia</title>
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/axis.css">
         <link rel="stylesheet" href="css/controlpanel.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </head>
     
     <body>
 
+        <div id="toast">Message</div>
+
+
         <div id="foodmap">
+            <div id="axis-cont">
+                <div class="axis" id="x-axis">
+                    <p>x-axis</p>
+                </div>
+
+                <div class="axis" id="y-axis">
+                    <p>y-axis</p>
+                </div>
+            </div>
+
             <div id="controlpanel">            
                 <!-- Sorting Label -->
                 <label>Sorting:</label>
@@ -49,8 +65,10 @@
         <script src="js/state_manager.js"></script>
         <script src="js/camera.js"></script>
         <script src="js/generation.js"></script>
-        <script src="js/movement.js"></script>
         <script src="js/cell.js"></script>
+        <script src="js/sorting.js"></script>
+        <script src="js/toast.js"></script>
+        <script src="js/movement.js"></script>
         <script src="js/controlpanel.js"></script>
         
     </body>

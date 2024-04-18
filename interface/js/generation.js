@@ -5,7 +5,7 @@ const uuidv4 = () => {
     });
 }
 
-async function generateImage(camera_picture, coords) {
+async function generateCard(camera_picture, coords) {
     const base64ImageData = camera_picture.src.split(',')[1];
     
     // resize to desired size
@@ -54,5 +54,8 @@ async function generateImage(camera_picture, coords) {
 
     const responseData = await response.json();
 
-    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.title, responseData.text)
+    //TODO change this
+    responseData.id = 0;
+
+    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.title, responseData.text, responseData.id)
 }

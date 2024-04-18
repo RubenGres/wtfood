@@ -12,11 +12,12 @@ var cam_y = 0;
 
 let zoomAnimation = {
     startTime: null,
-    duration: 50, // milliseconds
+    duration: 70, // milliseconds
     startZoom: 1,
     endZoom: 1,
     animating: false,
 };
+
 
 function startZoomAnimation(newZoom) {
     if (zoomAnimation.animating) return; // Prevent concurrent animations
@@ -47,17 +48,80 @@ function animateZoom(timestamp) {
     }
 }
 
-function padScroll(e) {
-    updateState({ isMoving: true });
 
-    var zoom_speed = 0.005;
-    var minZoom = 0.25;
-    var maxZoom = 8;
-    var zoomChange = -e.deltaY * zoom_speed * zoom;
+function zoom_to_card(id, targetZoom) {
+    const targetCard = cells[id];
+    if (!targetCard) return;
+    
+    // Calculate the new camera position to center the card
+    cam_x = (targetCard.x + 1) * (cell_w + cell_margin);
+    cam_y = (targetCard.y + 1) * (cell_h + cell_margin);
 
-    let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));
-    startZoomAnimation(newZoom);
+    startZoomAnimation(targetZoom);
 }
+
+
+function padScroll(e) {            
+    var activeCard = getActiveCard(e);
+    
+    var noInfoTextElements = true;
+    var infoTextHidden = true;
+    var scrollUnlocked = true;
+    var inside_infotext = false;
+
+    if(activeCard) {
+        var infotext = activeCard.getElementsByClassName("infotext")[0]
+
+        const x = e.clientX;
+        const y = e.clientY;
+
+        
+        if(infotext) {
+            const rect = infotext.getElementsByTagName("p")[0].getBoundingClientRect();
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                inside_infotext = true;
+            }
+
+            noInfoTextElements = activeCard && infotext.length == 0;
+            infoTextHidden = !noInfoTextElements && infotext.style.display === "none";
+            
+            scrollable = infotext.getElementsByTagName("p")[0]
+    
+            if(scrollable) {
+                if (scrollable.scrollHeight) {
+                    var a = scrollable.scrollTop;
+                    var b = scrollable.scrollHeight - scrollable.clientHeight;
+                    var c = a / b;
+                    
+                    if(e.deltaY < 0) {
+                        scrollUnlocked = c <= 0.1
+                    } else {
+                        scrollUnlocked = c >= 0.9
+                    }
+
+                }
+            }
+        }
+    }
+
+    if (!inside_infotext || noInfoTextElements || infoTextHidden || scrollUnlocked) {
+        if(!state.isMoving) {
+            updateState({ isMoving: true });
+    
+            var zoom_speed = 0.005;
+            var minZoom = 0.25;
+            var maxZoom = 8;
+            var clamped_delta = Math.min(Math.max(e.deltaY, -100), 100)
+            var zoomChange = -clamped_delta * zoom_speed * zoom;
+        
+            let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));    
+    
+            startZoomAnimation(newZoom);
+        }
+    }
+    
+}
+
 
 function getPointerPosition(e) {
     if (e.touches) {
@@ -65,6 +129,27 @@ function getPointerPosition(e) {
     } else {
         return { x: e.clientX, y: e.clientY };
     }
+}
+
+
+function getActiveCard(e) {
+    if (!isMobile) {
+        // Get the cursor position
+        const x = e.clientX;
+        const y = e.clientY;
+
+        for (const [key, cell] of Object.entries(cells)) {
+            const cell_elem = cell["elem"];
+            const rect = cell_elem.getBoundingClientRect(); // Get the position and size of the cell
+
+            // Check if the cursor is within the cell's bounds
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                return cell_elem; // Return the cell element if the cursor is inside
+            }
+        }
+    }
+
+    return null; // Return null if no cell contains the cursor or if it's a mobile device
 }
 
 
@@ -105,6 +190,7 @@ function pointerMoved(e) {
         updateDivPositions();
     }
 }
+
 
 function swipe_left() {
     cam_x += width + margin;
@@ -148,9 +234,8 @@ function updateDivPositions() {
     height = cell_h * zoom;
     margin = cell_margin * zoom;
 
-    for (let i = 0; i < cells.length; i++) {
-        let cell = cells[i];
-        let cell_elem = cell["elem"];
+    for (const [key, cell] of Object.entries(cells)) {
+        const cell_elem = cell["elem"];
 
         cell_elem.style.width = width + 'px';
         cell_elem.style.height = height + 'px';
@@ -167,8 +252,6 @@ function updateDivPositions() {
         cell_elem.style.fontSize = `${fontSize}px`;
     }
 }
-
-
 
 if(isMobile) {
     focus_random_empty();
@@ -231,4 +314,5 @@ if(isMobile) {
     container.addEventListener('touchmove', pointerMoved);
     container.addEventListener('touchend', pointerReleased);
 }
+
 

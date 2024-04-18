@@ -91,6 +91,7 @@ def transform():
 
     caller_ip = request.remote_addr
     b64_image = list(input_images.values())[0]
+
     image = load_b64(b64_image)
 
     prompts = llmconfig['prompts']

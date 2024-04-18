@@ -1,0 +1,67 @@
+#axis-cont {
+    display: none;
+}
+
+.axis {
+    position: fixed;
+    top: 0;
+    left: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+#x-axis{
+    width: 100%;
+    height: 2.2em;
+}
+
+#x-axis p {
+    position: absolute;
+    z-index: 1000;
+    background-color: #ffffff;
+    padding: 0px 20px;
+    left: 50%;
+    top: 0;
+    transform: translateY(50%);
+}
+
+#x-axis::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    margin-left: 10px;
+    background-color: #999999;
+}
+
+#y-axis {
+    height: 100%;
+    width: 2.2em;
+}
+
+#y-axis p {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    margin: auto;
+    height: fit-content; /* Adjust height dynamically */
+    padding: 20px 0; /* Padding top and bottom for spacing */
+    writing-mode: vertical-lr; /* Text runs vertically */
+    left: 50%; /* Center text horizontally */
+    top: 0; /* Start from the top */
+    bottom: 0; /* Extend to the bottom */
+    transform: translateX(-50%); /* Center the text block */
+}
+
+#y-axis::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%; /* Position line in the middle of the y-axis div width */
+    height: 100%;
+    width: 2px; /* Line thickness */
+    background-color: #999999;
+    margin-top: 10px;
+}
