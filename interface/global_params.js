@@ -8,6 +8,8 @@ let cell_margin = 10;
 
 const camera_output_size = 512;
 
+const card_focus_zoom_level = 5
+
 const predifined_labels = [
     "working conditions",
     "fair trade",

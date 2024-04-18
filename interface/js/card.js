@@ -1,4 +1,4 @@
-function create_card_content(media_src, cardtitle, cardtext) {
+function create_card_content(media_src, cardtitle, cardtext, id) {
     // Create image element
     const generated_card = document.createElement('div');
     generated_card.setAttribute('class', 'generated-card')
@@ -53,7 +53,8 @@ function create_card_content(media_src, cardtitle, cardtext) {
 
     // Add click event on share button
     share_button.addEventListener('click', async function() {
-        const currentUrl = window.location.href + "?card=123";
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('card', id);
 
         navigator.clipboard.writeText(currentUrl)
         .then(() => {
@@ -67,6 +68,7 @@ function create_card_content(media_src, cardtitle, cardtext) {
 
     // Add click event listener to the image
     generated_card.addEventListener('click', async function() {
+        //zoom_to_card(id, card_focus_zoom_level);
         if(!state.isMoving) {
             infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
         }
