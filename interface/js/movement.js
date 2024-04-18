@@ -18,6 +18,7 @@ let zoomAnimation = {
     animating: false,
 };
 
+
 function startZoomAnimation(newZoom) {
     if (zoomAnimation.animating) return; // Prevent concurrent animations
 
@@ -46,6 +47,19 @@ function animateZoom(timestamp) {
         zoomAnimation.animating = false; // Animation complete
     }
 }
+
+
+function zoom_to_card(id, targetZoom) {
+    const targetCard = cells[id];
+    if (!targetCard) return;
+    
+    // Calculate the new camera position to center the card
+    cam_x = (targetCard.x + 1) * (cell_w + cell_margin);
+    cam_y = (targetCard.y + 1) * (cell_h + cell_margin);
+
+    startZoomAnimation(targetZoom);
+}
+
 
 function padScroll(e) {            
     var activeCard = getActiveCard(e);
@@ -108,6 +122,7 @@ function padScroll(e) {
     
 }
 
+
 function getPointerPosition(e) {
     if (e.touches) {
         return { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -116,14 +131,15 @@ function getPointerPosition(e) {
     }
 }
 
+
 function getActiveCard(e) {
     if (!isMobile) {
         // Get the cursor position
         const x = e.clientX;
         const y = e.clientY;
 
-        for (let i = 0; i < cells.length; i++) {
-            const cell_elem = cells[i]["elem"];
+        for (const [key, cell] of Object.entries(cells)) {
+            const cell_elem = cell["elem"];
             const rect = cell_elem.getBoundingClientRect(); // Get the position and size of the cell
 
             // Check if the cursor is within the cell's bounds
@@ -175,6 +191,7 @@ function pointerMoved(e) {
     }
 }
 
+
 function swipe_left() {
     cam_x += width + margin;
     updateDivPositions();
@@ -217,9 +234,8 @@ function updateDivPositions() {
     height = cell_h * zoom;
     margin = cell_margin * zoom;
 
-    for (let i = 0; i < cells.length; i++) {
-        let cell = cells[i];
-        let cell_elem = cell["elem"];
+    for (const [key, cell] of Object.entries(cells)) {
+        const cell_elem = cell["elem"];
 
         cell_elem.style.width = width + 'px';
         cell_elem.style.height = height + 'px';
@@ -236,8 +252,6 @@ function updateDivPositions() {
         cell_elem.style.fontSize = `${fontSize}px`;
     }
 }
-
-
 
 if(isMobile) {
     focus_random_empty();
@@ -300,4 +314,5 @@ if(isMobile) {
     container.addEventListener('touchmove', pointerMoved);
     container.addEventListener('touchend', pointerReleased);
 }
+
 

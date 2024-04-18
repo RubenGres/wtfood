@@ -54,5 +54,8 @@ async function generateCard(camera_picture, coords) {
 
     const responseData = await response.json();
 
-    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.title, responseData.text)
+    //TODO change this
+    responseData.id = 0;
+
+    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.title, responseData.text, responseData.id)
 }

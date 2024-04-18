@@ -16,10 +16,10 @@ function customSort(xLabel, yLabel) {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            const scale = Math.ceil(Math.sqrt(cells.length));
+            const scale = Math.ceil(Math.sqrt(Object.values(cells).length));
             
-            cells.forEach(cell => {
-                cell.elem.classList.add('cell-sorting');
+            Object.values(cells).forEach(cell => {
+                cell["elem"].classList.add('cell-sorting');
 
                 if(data[cell.id]) {
                     cell.x = data[cell.id].x * scale;
@@ -41,7 +41,7 @@ function customSort(xLabel, yLabel) {
 
 function reposition_on_grid() {
     
-    cells.forEach(cell => {
+    Object.values(cells).forEach(cell => {
         
         // if not empty cell, move it to initial position
         if(cell.elem.getAttribute("state") != "empty") {

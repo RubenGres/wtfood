@@ -23,8 +23,8 @@ async function checkApiAvailability() {
     return response;
 }
 
-// global cell list that will contain all the cards
-let cells = [];
+// global cell dict that will contain all the cards
+let cells = {};
 
 const container = document.getElementById('foodmap');
 const camerainput = document.getElementById('camerainput');
@@ -61,8 +61,4 @@ window.onload = function() {
     }
 
     attemptApiCheck(FD_API_URL);
-
-    // TODO card id and movement
-    const params = new URLSearchParams(window.location.search);
-    const cardValue = params.get('card');
 };

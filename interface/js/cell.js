@@ -90,14 +90,16 @@ function create_cell(coords) {
                     div.setAttribute("state", "done");
 
                     //TODO
-                    cells.push({
+                    id = Object.values(cells).length + 1
+
+                    cells[id] = {
                         "elem": div,
                         "x": coords[0],
                         "y": coords[1],
                         "init_x": coords[0],
                         "init_y": coords[1],
-                        "id": 0 //TODO
-                    });
+                        "id": id
+                    };
 
                     break;
             }
@@ -108,10 +110,10 @@ function create_cell(coords) {
 }
 
 
-function create_card(image, title, text) {
+function create_card(image, title, text, id) {
     let div = basic_cell();
     
-    div.appendChild(create_card_content(image, title, text));
+    div.appendChild(create_card_content(image, title, text, id));
     div.setAttribute("state","card");
 
     return div;
