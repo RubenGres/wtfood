@@ -65,5 +65,4 @@ window.onload = function() {
     // TODO card id and movement
     const params = new URLSearchParams(window.location.search);
     const cardValue = params.get('card');
-    console.log("active card=", cardValue);
 };
