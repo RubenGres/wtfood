@@ -91,6 +91,7 @@ def transform():
 
     caller_ip = request.remote_addr
     b64_image = list(input_images.values())[0]
+
     image = load_b64(b64_image)
 
     if not args.mock:
@@ -100,7 +101,7 @@ def transform():
         food = classify(image)
         location = locate_ip(caller_ip)
 
-        #TODO return an error is food is None
+        #TODO return an error if food is None
         if food is None:
             return jsonify({'error': 'No fruit or vegetable found in image'}), 404
 
