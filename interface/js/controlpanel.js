@@ -1,8 +1,18 @@
 function sort_from_labels() {
     var xLabelInput = document.getElementById('xLabelInput');
     var yLabelInput = document.getElementById('yLabelInput');
-    if(xLabelInput.value != "" && yLabelInput.value != "")
-        customSort(xLabelInput.value, yLabelInput.value)
+
+    console.log(predifined_labels)
+
+    if(!xLabelInput.value) {
+        xLabelInput.value = predifined_labels[Math.floor(Math.random() * predifined_labels.length)];
+    }
+    
+    if (!yLabelInput.value) {
+        yLabelInput.value = predifined_labels[Math.floor(Math.random() * predifined_labels.length)];
+    }
+
+    customSort(xLabelInput.value, yLabelInput.value)
 }
 
 
