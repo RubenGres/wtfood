@@ -1,3 +1,11 @@
+function sort_from_labels() {
+    var xLabelInput = document.getElementById('xLabelInput');
+    var yLabelInput = document.getElementById('yLabelInput');
+    if(xLabelInput.value != "" && yLabelInput.value != "")
+        customSort(xLabelInput.value, yLabelInput.value)
+}
+
+
 document.querySelectorAll('input[name="sortOption"]').forEach((elem) => {
     elem.addEventListener("change", function(event) {
         const value = event.target.value;
@@ -10,6 +18,7 @@ document.querySelectorAll('input[name="sortOption"]').forEach((elem) => {
     });
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
     var gridButton = document.getElementById('gridButton');
     gridButton.onclick = function() {
@@ -21,12 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var customButton = document.getElementById('customButton');
     customButton.onclick = function() {
         hide_empties();
+        sort_from_labels();
     }
 
     var okButton = document.getElementById('okButton');
     okButton.onclick = function() {
-        var xLabelInput = document.getElementById('xLabelInput');
-        var yLabelInput = document.getElementById('yLabelInput');
-        customSort(xLabelInput.value, yLabelInput.value)
+        sort_from_labels();
     }
 });
