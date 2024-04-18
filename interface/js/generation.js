@@ -5,7 +5,7 @@ const uuidv4 = () => {
     });
 }
 
-async function generateImage(camera_picture, coords) {
+async function generateCard(camera_picture, coords) {
     const base64ImageData = camera_picture.src.split(',')[1];
     
     // resize to desired size
