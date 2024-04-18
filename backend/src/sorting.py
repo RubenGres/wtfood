@@ -11,6 +11,8 @@ def mock_sort_cards(cards, label):
 
 def sort_cards(cards, label, clip_model, clip_tokenizer):
     sorting = {}
+
+    #TODO include more than text
     cards_text = {card["id"]: card["text"] for card in cards}
     label_emb = clipclassifier.get_single_text_embedding(clip_model, clip_tokenizer, label)
     

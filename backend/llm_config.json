@@ -33,7 +33,7 @@
 
         "links": {
             "system": "Your knowledge: campaings and associations and citizen participation projects in europe, sustainable food system, local and international level.\nMaximum 30 words in max 3 bulletpoints with links to info, documentaries or associations. NO MARKUP. go beyond slowfood, food Ink and the likes",
-            "user" : "What can I do about it: {food} in relation to this place and stakeholder ? give me links"
+            "user" : "What can I do about it: {food} in relation to this place and stakeholder ? give me url to relevant content"
         }
     }
 }

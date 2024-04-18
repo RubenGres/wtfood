@@ -1,5 +1,6 @@
 from flask import send_from_directory
 import sqlite3
+import base64
 import time
 import os
 
@@ -10,6 +11,10 @@ DB_PATH = os.environ.get("FD_DATABASE", "example.db")
 
 CREATE_QUERY = '''CREATE TABLE IF NOT EXISTS cells
                (id INTEGER PRIMARY KEY, username TEXT, x FLOAT, y FLOAT, media_path TEXT, title TEXT, text TEXT, links TEXT, datetime DATETIME)'''
+
+
+def sql_safify(s):
+    return s.encode().hex()
 
 def get_db_connection(db_path):
     return sqlite3.connect(db_path)
@@ -47,9 +52,12 @@ def add_cell(filename, media_bytes, title, info_text, coord):
         # Using parameterized queries to avoid SQL injection
         cursor.execute("INSERT INTO cells (username, x, y, media_path, title, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                        ('useruuid', coord[0], coord[1], filename, title, info_text, 'google.fr', time.time()))
+        
+        new_id = cursor.lastrowid
+        
         conn.commit()
 
-    return filename
+    return filename, new_id
 
 
 def get_cards():
@@ -69,7 +77,7 @@ def get_sorting(label):
         # Check if the label exists as a column
         cursor.execute("PRAGMA table_info(cells)")
         columns = [row[1] for row in cursor.fetchall()]
-        column_name = f"sorting_{label}"
+        column_name = f"sorting_{sql_safify(label)}"
         
         if column_name not in columns:
             return None
@@ -94,7 +102,7 @@ def add_sorting(label, sorting):
     label (str): The label indicating the specific sorting column.
     sorting (dict): A dictionary of id: value pairs for updating the database.
     """
-    column_name = f"sorting_{label}"
+    column_name = f"sorting_{sql_safify(label)}"
     
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
