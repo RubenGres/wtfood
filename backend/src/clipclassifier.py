@@ -56,8 +56,8 @@ def _image_class_cosim(image, labels_embeddings, clip_model, clip_processor):
 
 
 def classify(image, clip_model, clip_processor, labels_embeddings):
-    #TODO resize image to 512x512
-    
+    image = image.resize((512, 512), Image.LANCZOS)
+
     cosims =  _image_class_cosim(image, labels_embeddings, clip_model, clip_processor)
 
     # check if this is a fruit or a vegetable
