@@ -41,6 +41,30 @@ function create_card_content(media_src, cardtitle, cardtext) {
     infotext.style.display = 'none';
     generated_card.appendChild(infotext);
 
+    // Create share button
+    const share_button = document.createElement('div');
+    share_button.setAttribute('class', 'share-button');
+
+    share_icon = document.createElement('i');
+    share_icon.setAttribute("class", "fas fa-share");
+    share_button.appendChild(share_icon)
+
+    generated_card.appendChild(share_button);
+
+    // Add click event on share button
+    share_button.addEventListener('click', async function() {
+        const currentUrl = window.location.href + "?card=123";
+
+        navigator.clipboard.writeText(currentUrl)
+        .then(() => {
+            showToast('Share link copied to clipboard!');
+        })
+        .catch(err => {
+            showToast('Failed to copy URL.');
+        });
+
+    });
+
     // Add click event listener to the image
     generated_card.addEventListener('click', async function() {
         if(!state.isMoving) {
