@@ -58,7 +58,7 @@ function create_card_content(media_src, cardtitle, cardtext, id) {
 
         navigator.clipboard.writeText(currentUrl)
         .then(() => {
-            showToast('Share link copied to clipboard!');
+            showToast('Card link copied to clipboard!');
         })
         .catch(err => {
             showToast('Failed to copy URL.');
