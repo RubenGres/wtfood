@@ -2,8 +2,6 @@ function sort_from_labels() {
     var xLabelInput = document.getElementById('xLabelInput');
     var yLabelInput = document.getElementById('yLabelInput');
 
-    console.log(predifined_labels)
-
     if(!xLabelInput.value) {
         xLabelInput.value = predifined_labels[Math.floor(Math.random() * predifined_labels.length)];
     }
