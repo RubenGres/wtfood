@@ -1,6 +1,6 @@
 async function add_empties() {
     // Use a Set to keep track of existing coordinates in a "x,y" string format.
-    const existingCoords = new Set(cells.map(cell => `${cell.x},${cell.y}`));
+    const existingCoords = new Set(Object.values(cells).map(cell => `${cell.x},${cell.y}`));
     
     const response = await fetch(FD_API_URL + "position/free", {
         method: 'GET'
@@ -20,12 +20,12 @@ async function add_empties() {
         if (!existingCoords.has(coordKey)) {
             let element = create_cell([empty['x'], empty['y']]);
 
-            cells.push({
+            cells[empty['id']] = {
                 "elem": element,
                 "x": empty['x'],
                 "y": empty['y'],
-                "id": -1
-            });
+                "id": empty['id']
+            };
 
             container.appendChild(element);
 
@@ -58,33 +58,41 @@ async function add_cards() {
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
         let media_url = FD_API_URL + "media/"+card['media_path']
-        let element = create_card(media_url, card['title'], card['text'])
+        let element = create_card(media_url, card['title'], card['text'], card['id'])
 
-        cells.push({
+        cells[card['id']] = {
             "elem": element,
             "x": card['x'],
             "y": card['y'],
             "init_x": card['x'],
             "init_y": card['y'],
             "id": card['id']
-        });
+        };
 
         container.appendChild(element);
     }
 
-    updateDivPositions();
+
+    //TODO move ?
+    const params = new URLSearchParams(window.location.search);
+    const cardId = params.get('card');
+
+    if(cardId) {
+        zoom_to_card(cardId, card_focus_zoom_level);
+    } else {
+        updateDivPositions();
+    }
 }
 
 
 async function remove_all() {
-    cells = [];
+    cells = {};
     const gridCells = document.querySelectorAll('.gridcell');
     gridCells.forEach(cell => cell.remove());
 }
 
 
 async function hide_empties() {
-    //cells = cells.filter(cell => cell.id !== -1);
     const emptyGridCells = document.querySelectorAll('.gridcell[state="empty"]');
     emptyGridCells.forEach(cell => cell.style.display = "none");
 }

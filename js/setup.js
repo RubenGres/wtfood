@@ -23,8 +23,8 @@ async function checkApiAvailability() {
     return response;
 }
 
-// global cell list that will contain all the cards
-let cells = [];
+// global cell dict that will contain all the cards
+let cells = {};
 
 const container = document.getElementById('foodmap');
 const camerainput = document.getElementById('camerainput');

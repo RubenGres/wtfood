@@ -8,6 +8,29 @@ img {
     pointer-events: none;
 }
 
+#toast {
+    visibility: hidden; /* Use visibility instead of display to allow for transitions */
+    position: fixed;
+    top: 20px;
+    right: 50%;
+    background-color: #333; /* Darker shade for better visibility */
+    color: white;
+    padding: 12px 20px; /* More padding for better text display */
+    border-radius: 8px; /* Smoother border radius */
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow for a layered effect */
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+    transform: translateY(-20px); /* Starts slightly below, moving up as it fades in */
+}
+
+#toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0); /* Moves to its final position as it fades in */
+}
+
+
 #foodmap {
     width: 100vw;
     height: 100vh;
@@ -40,7 +63,7 @@ img {
 }
 
 .gridcell:hover {
-    cursor: pointer;    
+    cursor: pointer;   
 }
 
 @keyframes spin {
@@ -90,7 +113,7 @@ img {
 }
 
 #video:hover {
-    cursor: pointer;  
+    cursor: pointer; 
 }
 
 .snapshot {
@@ -103,6 +126,34 @@ img {
     height: 100%;
     cursor: pointer;
     position: relative; /* Ensure absolute positioning is relative to this container */
+}
+
+.share-button {
+    height: 10%;
+    width: 10%;
+    z-index: 9999;
+    position: absolute;
+    bottom: -15%;
+    right: 2%;
+    transition: bottom 0.4s ease; /* Smooth transition for the bottom property */
+    background-color: hsla(0, 0%, 82%, 0.9); /* Semi-transparent gray background */
+    border-radius: 5px 5px 0 0;
+    display: flex; /* Use flexbox to align children */
+    align-items: center; /* Center children vertically */
+    justify-content: center; /* Center children horizontally */
+}
+
+.share-button i {
+    font-size: 1.1em;
+    color: black; /* Icon color */
+}
+
+.generated-card:hover .share-button {
+    bottom: 0%; /* Set bottom to 0% when hovering over .generated-card */
+}
+
+.share-button:hover {
+    background-color: hsla(0, 0%, 82%, 1); /* Semi-transparent gray background */
 }
 
 .infotext {

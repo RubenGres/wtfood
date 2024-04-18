@@ -70,7 +70,7 @@ function create_cell(coords) {
                     // While loading, show loading gizmo, then generate and display image
                     loading_gizmo.className = 'loading_gizmo display';
                     
-                    generated_image = await generateImage(camera_picture, coords);
+                    generated_image = await generateCard(camera_picture, coords);
 
                     loading_gizmo.className = 'loading_gizmo';
                     div.removeChild(camera_picture);
@@ -88,6 +88,19 @@ function create_cell(coords) {
 
                 case "media_ready":
                     div.setAttribute("state", "done");
+
+                    //TODO
+                    id = Object.values(cells).length + 1
+
+                    cells[id] = {
+                        "elem": div,
+                        "x": coords[0],
+                        "y": coords[1],
+                        "init_x": coords[0],
+                        "init_y": coords[1],
+                        "id": id
+                    };
+
                     break;
             }
         }
@@ -97,9 +110,10 @@ function create_cell(coords) {
 }
 
 
-function create_card(image, title, text) {
+function create_card(image, title, text, id) {
     let div = basic_cell();
-    div.appendChild(create_card_content(image, title, text));
+    
+    div.appendChild(create_card_content(image, title, text, id));
     div.setAttribute("state","card");
 
     return div;
