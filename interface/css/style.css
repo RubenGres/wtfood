@@ -11,8 +11,8 @@ img {
 #toast {
     visibility: hidden; /* Use visibility instead of display to allow for transitions */
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    top: 20px;
+    right: 50%;
     background-color: #333; /* Darker shade for better visibility */
     color: white;
     padding: 12px 20px; /* More padding for better text display */
@@ -21,7 +21,7 @@ img {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow for a layered effect */
     opacity: 0;
     transition: opacity 0.5s, transform 0.5s;
-    transform: translateY(20px); /* Starts slightly below, moving up as it fades in */
+    transform: translateY(-20px); /* Starts slightly below, moving up as it fades in */
 }
 
 #toast.show {
