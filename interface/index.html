@@ -4,19 +4,29 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <title>Food Dysmorphia</title>
+        
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/axis.css">
         <link rel="stylesheet" href="css/controlpanel.css">
+        <link rel="stylesheet" href="css/header.css">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </head>
     
     <body>
-
-        <div id="toast">Message</div>
-
+        <header>
+            <div class="header-container">
+                <h3 class="title">Food Dysmorphia</h3>
+                <nav>
+                    <a href="/about"><button class="header-btn">About</button></a>
+                    <a href="/"> <button class="header-btn">Map</button></a>
+                </nav>
+            </div>
+        </header>
 
         <div id="foodmap">
+            <div id="toast">Message</div>
+
             <div id="axis-cont">
                 <div class="axis" id="x-axis">
                     <p>x-axis</p>
@@ -27,30 +37,21 @@
                 </div>
             </div>
 
-            <div id="controlpanel">            
-                <!-- Sorting Label -->
-                <label>Sorting:</label>
-                
+            <div id="controlpanel">
                 <!-- Radio Buttons for Sorting Options -->
-                <input type="radio" id="gridButton" name="sortOption" value="Grid" checked>
-                <label for="gridButton">Grid</label>
-                
-                <input type="radio" id="customButton" name="sortOption" value="Custom">
-                <label for="customButton">Custom</label>
-                
+                <input id="gridButton" name="sortOption" type="button" value="MAP" checked>
+                <input id="customButton" name="sortOption" type="button" value="SORT" checked>                
+                  
                 <!-- Input Fields for Labels -->
                 <div id="customOptions" style="display:none;">
                     <div>
-                        <label for="xLabelInput">X:</label>
                         <input type="text" id="xLabelInput" placeholder="Enter X label">
-                        <button id="xLabelRandom">Random</button>
+                        <label for="xLabelInput">X</label>
                     </div>
                     <div>
-                        <label for="yLabelInput">Y:</label>
                         <input type="text" id="yLabelInput" placeholder="Enter Y label">
-                        <button id="yLabelRandom">Random</button>
+                        <label for="yLabelInput">Y</label>
                     </div>
-                    <button id="okButton">OK</button>
                 </div>
             </div>         
         </div>
