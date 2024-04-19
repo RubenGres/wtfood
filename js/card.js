@@ -70,9 +70,12 @@ function create_card_content(media_src, cardtitle, cardtext, id) {
 
     // Add click event listener to the image
     generated_card.addEventListener('click', async function() {
-        //zoom_to_card(id, card_focus_zoom_level);
         if(!state.isMoving) {
-            infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
+            if( zoom != card_focus_zoom_level) {
+                zoom_to_card(id, card_focus_zoom_level);
+            } else {
+                infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
+            }
         }
     });
 
