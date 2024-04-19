@@ -71,22 +71,27 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response)
     return response_data
 
 
-def create_mock(input_images, coord):
+def create_mock(input_images, coord, llm_response):
     image = load_b64(list(input_images.values())[0])
 
     buffered = BytesIO()
-    gen_image = image.convert('1')
+
+    gen_image = image.point(lambda p: 255 if p > 128 else 128)
+    
     gen_image.save(buffered, format="JPEG")
     base64_image = buffered.getvalue()
 
-    info_text = "This is a call to action"
-
     positioning.remove_coord(coord)
-    media_url = database.add_cell(f"{time.time()}.jpg", base64_image, "title", info_text, coord)
+
+    title = llm_response["title"]
+    text = llm_response["background"]
+    media_url, id = database.add_cell(f"{time.time()}.jpg", base64_image, title, text, coord)
 
     response_data = {
         "media_src": media_url,
-        "info_text": info_text
+        "title": title,
+        "text": text,
+        "id" : id
     }
 
     return response_data

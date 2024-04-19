@@ -94,22 +94,25 @@ def transform():
 
     image = load_b64(b64_image)
 
-    if not args.mock:
-        prompts = llmconfig['prompts']
-        stakeholder = random.choice(llmconfig['stakeholders'])
-        issue = random.choice(llmconfig['issues'])
-        food = classify(image)
-        location = locate_ip(caller_ip)
+    prompts = llmconfig['prompts']
+    stakeholder = random.choice(llmconfig['stakeholders'])
+    issue = random.choice(llmconfig['issues'])
 
-        #TODO return an error if food is None
+    if not args.mock:
+        food = classify(image)
+
         if food is None:
             return jsonify({'error': 'No fruit or vegetable found in image'}), 404
-
+        
+        location = locate_ip(caller_ip)
+    
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
-
         return sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response)
     else:
-        return sd_generation.create_mock(input_images, coord)
+        food = random.choice(labels)
+        location = "Brussels"
+        llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
+        return sd_generation.create_mock(input_images, coord, llm_response)
 
 
 @app.route('/position/pick', methods=['GET'])
@@ -129,10 +132,11 @@ def free_position():
     free_pos = positioning.get_possible_positions()
     
     positions = []
-    for pos in free_pos:
+    for i, pos in enumerate(free_pos):
         positions.append({
             "x": pos[0],
-            "y": pos[1]
+            "y": pos[1],
+            "id": -i
         })
     
     return positions
