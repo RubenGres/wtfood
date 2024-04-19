@@ -65,7 +65,8 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response)
     response_data = {
         "media_src": media_url,
         "title": title,
-        "text": text
+        "text": text,
+        "id": cell_id
     }
     
     return response_data
@@ -85,13 +86,13 @@ def create_mock(input_images, coord, llm_response):
 
     title = llm_response["title"]
     text = llm_response["background"]
-    media_url, id = database.add_cell(f"{time.time()}.jpg", base64_image, title, text, coord)
+    media_url, cell_id = database.add_cell(f"{time.time()}.jpg", base64_image, title, text, coord)
 
     response_data = {
         "media_src": media_url,
         "title": title,
         "text": text,
-        "id" : id
+        "id": cell_id
     }
 
     return response_data

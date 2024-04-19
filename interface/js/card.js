@@ -1,4 +1,4 @@
-function create_card_content(media_src, cardtitle, cardtext, id) {
+function create_card_content(media_src, cardtitle, cardtext, cell_id) {
     // Create image element
     const generated_card = document.createElement('div');
     generated_card.setAttribute('class', 'generated-card')
@@ -56,7 +56,7 @@ function create_card_content(media_src, cardtitle, cardtext, id) {
         e.stopPropagation();
 
         const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set('card', id);
+        currentUrl.searchParams.set('card', cell_id);
 
         navigator.clipboard.writeText(currentUrl)
         .then(() => {
@@ -72,7 +72,7 @@ function create_card_content(media_src, cardtitle, cardtext, id) {
     generated_card.addEventListener('click', async function() {
         if(!state.isMoving) {
             if( zoom != card_focus_zoom_level) {
-                zoom_to_card(id, card_focus_zoom_level);
+                zoom_to_card(cell_id, card_focus_zoom_level);
             } else {
                 infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
             }
@@ -92,5 +92,7 @@ function create_card_content(media_src, cardtitle, cardtext, id) {
         });
     }
 
-    return generated_card;
+    generated_card.setAttribute("id", cell_id);
+
+    return  generated_card;
 }
