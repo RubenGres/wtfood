@@ -6,9 +6,6 @@ if(isMobile) {
     cell_w = mobileSize;
     cell_h = mobileSize;
 
-    let cp = document.getElementById("controlpanel");
-    cp.remove();
-
     card_focus_zoom_level = 1;
 } else {
     card_focus_zoom_level = CARD_ZOOM_LEVEL;
