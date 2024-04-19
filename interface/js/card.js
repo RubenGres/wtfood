@@ -52,7 +52,9 @@ function create_card_content(media_src, cardtitle, cardtext, id) {
     generated_card.appendChild(share_button);
 
     // Add click event on share button
-    share_button.addEventListener('click', async function() {
+    share_button.addEventListener('click', async function(e) {
+        e.stopPropagation();
+
         const currentUrl = new URL(window.location.href);
         currentUrl.searchParams.set('card', id);
 
