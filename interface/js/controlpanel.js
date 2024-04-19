@@ -15,17 +15,29 @@ function sort_from_labels() {
 
 
 document.querySelectorAll('input[name="sortOption"]').forEach((elem) => {
-    elem.addEventListener("change", function(event) {
-        const value = event.target.value;
+    elem.addEventListener('click', function() {
         const customOptions = document.getElementById("customOptions");
-        if (value === "Custom") {
-            customOptions.style.display = "block";
+        if (this.value === "SORT") {
+            customOptions.style.display = "flex";
         } else {
             customOptions.style.display = "none";
         }
     });
 });
 
+// Event listeners for the input fields to select all text on focus
+const inputs = document.querySelectorAll('#xLabelInput, #yLabelInput');
+inputs.forEach((input) => {
+    input.addEventListener('focus', function() {
+        this.select();
+    });
+
+    input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            document.getElementById('customButton').click();
+        }
+    });
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     var gridButton = document.getElementById('gridButton');
@@ -38,11 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var customButton = document.getElementById('customButton');
     customButton.onclick = function() {
         hide_empties();
-        sort_from_labels();
-    }
-
-    var okButton = document.getElementById('okButton');
-    okButton.onclick = function() {
         sort_from_labels();
     }
 });

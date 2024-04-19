@@ -2,13 +2,43 @@
     position: absolute;
     bottom: 0;
     left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
-    background-color: #f9f9f9; /* Light grey background */
-    border-top-right-radius: 8px; /* Rounded corners on the top right */
-    z-index: 999;
-    border: solid 1px grey;
+    z-index: 11;
+    height: 60px;
 }
 
-#zoomSlider {
-    width: 200px; /* Adjust as needed */
+#controlpanel input[type="button"]:hover {
+    cursor: pointer;
+}
+
+#controlpanel input[type="button"] {
+    margin-right: 5px;
+    height: 100%;
+    width: 60px;
+    border-radius: 0px;
+    border: none;
+    background-color: #d2d2d2;
+}
+
+#customOptions {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin: 0;
+}
+
+#customOptions input[type="text"] {
+    border: none;
+    padding: 5px;
+    background-color: #d2d2d2;
+    text-align: center;
+}
+
+#customOptions label {
+    font-size: 0.7em;
 }
