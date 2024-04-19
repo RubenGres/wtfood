@@ -1,7 +1,4 @@
 async function add_empties() {
-    // Use a Set to keep track of existing coordinates in a "x,y" string format.
-    const existingCoords = new Set(Object.values(cells).map(cell => `${cell.x},${cell.y}`));
-    
     const response = await fetch(FD_API_URL + "position/free", {
         method: 'GET'
     });
@@ -17,21 +14,22 @@ async function add_empties() {
         let coordKey = `${empty['x']},${empty['y']}`;
 
         // Check if the coordinate already exists
-        if (!existingCoords.has(coordKey)) {
-            let element = create_cell([empty['x'], empty['y']]);
+        let element = create_empty([empty['x'], empty['y']]);
 
-            cells[empty['id']] = {
+        console.log(empty.id)
+        console.log(" in cells ? " + empty['id'] in cells);
+
+        if(!(empty.id in cells)) {
+            cells[empty.id] = {
                 "elem": element,
                 "x": empty['x'],
                 "y": empty['y'],
-                "id": empty['id']
+                "id": empty.id
             };
 
             container.appendChild(element);
-
-            // Add the new coordinate to the set to prevent future duplicates
-            existingCoords.add(coordKey);
         }
+
     }
 
     updateDivPositions();
@@ -72,11 +70,8 @@ async function add_cards() {
         container.appendChild(element);
     }
 
-
     //TODO move ?
-    const params = new URLSearchParams(window.location.search);
-    const cardId = params.get('card');
-
+    const cardId = new URLSearchParams(window.location.search).get('card');
     if(cardId) {
         zoom_to_card(cardId, card_focus_zoom_level);
     } else {

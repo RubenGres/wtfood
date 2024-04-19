@@ -9,16 +9,11 @@ function basic_cell() {
     div.style.height = `${cell_h*zoom}px`;
     div.style.width = `${cell_w*zoom}px`;
 
-    // If on a mobile device, add animation class for cell
-    if(isMobile) {
-        div.classList.add('cell-animation');
-    }
-
     return div    
 }
 
 
-function create_cell(coords) {
+function create_empty(coords) {
     let div = basic_cell();
 
     // Calculate the cell color based on its index
@@ -70,16 +65,17 @@ function create_cell(coords) {
                     // While loading, show loading gizmo, then generate and display image
                     loading_gizmo.className = 'loading_gizmo display';
                     
-                    generated_image = await generateCard(camera_picture, coords);
+                    let generated_card = await generateCard(camera_picture, coords);
 
                     loading_gizmo.className = 'loading_gizmo';
                     div.removeChild(camera_picture);
 
-                    if(generated_image != null) {
-                        div.appendChild(generated_image);
+                    if(generated_card != null) {
+                        div.appendChild(generated_card);
+                        div.setAttribute("id", generated_card.id)
+                        div.setAttribute("state", "media_ready");
                         add_empties();
     
-                        div.setAttribute("state", "media_ready");
                     } else {
                         div.appendChild(camera_icon);
                         div.setAttribute("state", "empty");
@@ -89,16 +85,13 @@ function create_cell(coords) {
                 case "media_ready":
                     div.setAttribute("state", "done");
 
-                    //TODO
-                    id = Object.values(cells).length + 1
-
-                    cells[id] = {
+                    cells[div.getAttribute("id")] = {
                         "elem": div,
                         "x": coords[0],
                         "y": coords[1],
                         "init_x": coords[0],
                         "init_y": coords[1],
-                        "id": id
+                        "id": div.getAttribute("id")
                     };
 
                     break;
