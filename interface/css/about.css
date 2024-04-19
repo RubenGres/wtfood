@@ -1,0 +1,21 @@
+.text-center {
+    text-align: center;
+}
+
+.container {
+    display: flex;        /* Enables flexbox layout */
+    flex-direction: column;/* Stacks children vertically */
+    align-items: center;  /* Centers children horizontally in the container */
+    justify-content: center;/* Optionally centers children vertically too */
+    width: 100%;          /* Takes full width of its container */
+    max-width: 550px;    /* Maximum width of the container */
+    margin: 0 auto;       /* Centers the container horizontally */
+    padding: 20px;        /* Adds some space inside the container */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;   /* Smaller padding on smaller screens */
+    }
+}
