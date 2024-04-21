@@ -110,7 +110,8 @@ def transform():
         return sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response)
     else:
         food = random.choice(labels)
-        location = "Brussels"
+        location = locate_ip(caller_ip)
+        print(caller_ip, location)
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
         return sd_generation.create_mock(input_images, coord, llm_response)
 

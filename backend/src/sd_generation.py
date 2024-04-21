@@ -59,7 +59,7 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response)
     positioning.remove_coord(coord)
 
     title = llm_response["title"]
-    text = llm_response["background"]
+    text = llm_response["article"]
     media_url = database.add_cell(filename, media_bytes, title, text, coord)
 
     response_data = {
@@ -85,7 +85,7 @@ def create_mock(input_images, coord, llm_response):
     positioning.remove_coord(coord)
 
     title = llm_response["title"]
-    text = llm_response["background"]
+    text = llm_response["article"]
     media_url, cell_id = database.add_cell(f"{time.time()}.jpg", base64_image, title, text, coord)
 
     response_data = {

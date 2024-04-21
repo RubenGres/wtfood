@@ -8,3 +8,6 @@ imageio-ffmpeg
 opencv-python
 openai
 ffmpeg
+langchain-community
+tavily-python
+langchain-openai
