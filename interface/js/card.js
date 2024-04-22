@@ -34,7 +34,7 @@ function create_card_content(media_src, cardtitle, cardtext, cell_id) {
     infotext.appendChild(document.createElement('br'));
     
     const textContent = document.createElement('p');
-    textContent.textContent = cardtext+cardtext+cardtext+cardtext;
+    textContent.innerHTML = cardtext.replace(/\n/g, "<br />");
     infotext.appendChild(textContent);
 
     infotext.setAttribute('class', 'infotext');
