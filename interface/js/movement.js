@@ -170,7 +170,8 @@ function snap_to_nearest_cell() {
 }
 
 function mobile_zoom(distance_delta) {
-    zoomChange = distance_delta / 10000;
+    var zoom_speed = 0.0005;
+    var zoomChange = distance_delta * zoom_speed * zoom;
     
     var minZoom = MOBILE_MIN_ZOOM;
     var maxZoom = 1;
