@@ -1,6 +1,7 @@
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 import numpy as np
 import json
+from PIL import Image
 
 
 def cosine_similarity(A, B):

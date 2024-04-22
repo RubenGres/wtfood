@@ -60,7 +60,7 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response)
 
     title = llm_response["title"]
     text = llm_response["article"]
-    media_url = database.add_cell(filename, media_bytes, title, text, coord)
+    media_url, cell_id = database.add_cell(filename, media_bytes, title, text, coord)
 
     response_data = {
         "media_src": media_url,
