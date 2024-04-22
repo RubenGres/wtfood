@@ -9,7 +9,7 @@ var delta_cam_x = 0;
 var delta_cam_y = 0;
 
 function padScroll(e) {            
-    var activeCard = getActiveCard(e)["elem"];
+    var activeCard = getActiveCard(e);
     
     var noInfoTextElements = true;
     var infoTextHidden = true;
@@ -17,7 +17,7 @@ function padScroll(e) {
     var inside_infotext = false;
 
     if(activeCard) {
-        var infotext = activeCard.getElementsByClassName("infotext")[0]
+        var infotext = activeCard["elem"].getElementsByClassName("infotext")[0]
 
         const x = e.clientX;
         const y = e.clientY;
@@ -29,7 +29,7 @@ function padScroll(e) {
                 inside_infotext = true;
             }
 
-            noInfoTextElements = activeCard && infotext.length == 0;
+            noInfoTextElements = activeCard["elem"] && infotext.length == 0;
             infoTextHidden = !noInfoTextElements && infotext.style.display === "none";
             
             scrollable = infotext.getElementsByTagName("p")[0]

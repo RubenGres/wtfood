@@ -11,22 +11,18 @@ async function add_empties() {
 
     for (let i = 0; i < empties.length; i++) {
         let empty = empties[i];
-        let coordKey = `${empty['x']},${empty['y']}`;
+        let coordKey = `e${empty['x']},${empty['y']}`;
 
         // Check if the coordinate already exists
-        let element = create_empty([empty['x'], empty['y']]);
-
-        console.log(empty.id)
-        console.log(" in cells ? " + empty['id'] in cells);
-
-        if(!(empty.id in cells)) {
-            cells[empty.id] = {
+        if(!(coordKey in cells)) {
+            let element = create_empty([empty['x'], empty['y']]);
+            
+            cells[coordKey] = {
                 "elem": element,
                 "x": empty['x'],
                 "y": empty['y'],
-                "id": empty.id
+                "id": coordKey
             };
-
             container.appendChild(element);
         }
 

@@ -1,6 +1,6 @@
 #controlpanel {
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     display: flex;
     justify-content: space-between;
