@@ -8,7 +8,10 @@ var zoomAnchorY = viewportHeight / 2;
 var delta_cam_x = 0;
 var delta_cam_y = 0;
 
-function padScroll(e) {            
+function padScroll(e) {         
+    if (state.movelocked)
+        return;
+
     var activeCard = getActiveCard(e);
     
     var noInfoTextElements = true;
@@ -63,7 +66,7 @@ function padScroll(e) {
             var maxZoom = 8;
             let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));    
     
-            startCameraAnimation(newZoom);
+            startCameraAnimation(newZoom, undefined, undefined, 100);
         }
     }
     
@@ -135,6 +138,10 @@ function pointerReleased(e) {
 
 
 function pointerMoved(e) {
+    if(state.movelocked) {
+        return;
+    }
+
     if (pointer_down) {
         updateState({ isMoving: true });
         let pos = getPointerPosition(e);
@@ -145,6 +152,10 @@ function pointerMoved(e) {
 }
 
 function swipe_camera(distX, distY) {
+    if (state.movelocked) {
+        return;
+    }
+
     var target_cam_x = undefined;
     var target_cam_y = undefined;
 
@@ -170,6 +181,10 @@ function snap_to_nearest_cell() {
 }
 
 function mobile_zoom(distance_delta) {
+    if (state.movelocked) {
+        return;
+    }
+    
     var zoom_speed = 0.0005;
     var zoomChange = distance_delta * zoom_speed * zoom;
     

@@ -17,6 +17,15 @@ img {
     pointer-events: none;
 }
 
+#movelock {
+    width: 100%;
+    height: 100%;
+    background-color: #000000e5;
+    z-index: 8;
+    position: absolute;
+    visibility: hidden;
+}
+
 #toast {
     visibility: hidden; /* Use visibility instead of display to allow for transitions */
     position: absolute;
@@ -55,6 +64,7 @@ img {
 
 .gridcell {
     position: absolute;
+    z-index: 4;
     border: solid 1px hsl(0, 0%, 73%);
     display: flex;
     justify-content: center;
@@ -68,7 +78,7 @@ img {
 }
 
 .gridcell:hover {
-    z-index: 4;
+    z-index: 10;
     transform: scale(1.02);
     transition: transform 0.1s ease;
 }

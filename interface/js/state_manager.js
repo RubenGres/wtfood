@@ -1,7 +1,8 @@
 let state = {
     isMoving: false,
     isTakingPicture: false,
-    canMove: true
+    canMove: true,
+    movelocked: false
 };
 
 
