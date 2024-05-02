@@ -69,7 +69,7 @@ async function add_cards() {
     //TODO move ?
     const cardId = new URLSearchParams(window.location.search).get('card');
     if(cardId) {
-        focus_on_card(cardId);
+        focus_on_card(cardId, true);
     } else {
         updateDivPositions();
     }

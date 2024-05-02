@@ -55,9 +55,7 @@ function padScroll(e) {
     }
 
     if (!inside_infotext || noInfoTextElements || infoTextHidden || scrollUnlocked) {
-        if(!state.isMoving) {
-            updateState({ isMoving: true });
-    
+        if(!state.isMoving) {    
             var zoom_speed = 0.005;
             var clamped_delta = Math.min(Math.max(e.deltaY, -100), 100)
             var zoomChange = -clamped_delta * zoom_speed * zoom;
@@ -161,22 +159,24 @@ function swipe_camera(distX, distY) {
     var x = window.innerWidth/2;
     var y = window.innerHeight/2;
 
-    unfocus_card();
-
     if (Math.abs(distX) > Math.abs(distY)) {
         if (Math.abs(distX) > MIN_SWIPE_DIST) {
             target_cam_x =  cam_x + -Math.sign(distX) * (width + margin);
         }
-        x += -window.innerWidth * Math.sign(distX)
+        x += -cell_w*zoom * Math.sign(distX)
     } else {
         if (Math.abs(distY) > MIN_SWIPE_DIST) {
             target_cam_y =  cam_y + -Math.sign(distY) * (height + margin);
         }
-        y += window.innerWidth * Math.sign(distX)
+        y += cell_h*zoom * Math.sign(distX)
     }
-    
+
     let card = getCardOnScreenCoord(x, y);
-    focus_on_card(card.id);
+
+    if(card != null){
+        unfocus_card(false);
+        focus_on_card(card.id, false);
+    }
 }
 
 function snap_to_nearest_cell() {
@@ -305,7 +305,7 @@ if(isMobile) {
             active_card = null;
 
             if (e.changedTouches.length === 1){
-                if(zoom == card_focus_zoom_level) {
+                if(zoom == card_focus_zoom_level && !state.isMoving) {
                     distX = e.changedTouches[0].pageX - startX;
                     distY = e.changedTouches[0].pageY - startY;
 

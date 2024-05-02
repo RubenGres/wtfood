@@ -1,26 +1,39 @@
 let focused_card_id = undefined;
 
-function focus_on_card(cell_id) {
+function focus_on_card(cell_id, save_position) {
+    const cell = cells[cell_id];
+    if (!cell) {
+        console.error("No cell found at index: " + cell_id);
+        return;
+    }
+
     focused_card_id = cell_id;
-    card_elem = cells[cell_id]['elem'];
-    card_elem.style.zIndex = 9;
-    
-    saveCameraPosition();
+
+    if(save_position) {
+        saveCameraPosition();
+    }
+
     zoom_to_card(cell_id, card_focus_zoom_level);
+    show_movelock();
     
+    card_elem = cell['elem'];
+    if(!card_elem) {
+        console.error("No element found for cell at index: " + cell_id);
+        return;
+    }
+
+    card_elem.style.zIndex = 9;
     let video_element = card_elem.querySelector('video');
     if (video_element) video_element.play();
-    
-    show_movelock();
 }
 
-function unfocus_card() {
+function unfocus_card(restore_position) {
     if(focused_card_id) {
         card_elem = cells[focused_card_id]['elem']
         card_elem.style.zIndex = 4;
         let video_element = card_elem.querySelector('video');
         if (video_element) video_element.pause();
-        if(old_camera_position.zoom != card_focus_zoom_level) restoreCameraPosition();
+        if(restore_position) restoreCameraPosition();
     }
 
     hide_movelock();
@@ -101,7 +114,7 @@ function create_card_content(media_src, cardtitle, cardtext, cell_id) {
     generated_card.addEventListener('click', async function() {
         if(!state.isMoving) {
             if(focused_card_id == undefined) {
-                focus_on_card(cell_id);
+                focus_on_card(cell_id, true);
             } else {
                 infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
                 
