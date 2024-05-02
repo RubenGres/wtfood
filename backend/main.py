@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
+import os
 import random
 import json
 import argparse
@@ -108,14 +109,18 @@ def transform():
         location = locate_ip(caller_ip)
     
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
-        return sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response, location, food, stakeholder, issue)
+        response_data = sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response, location, food, stakeholder, issue)
     else:
         food = random.choice(labels)
         location = locate_ip(caller_ip)
         print(caller_ip, location)
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
-        return sd_generation.create_mock(input_images, coord, llm_response, location, food, stakeholder, issue)
+        response_data = sd_generation.create_mock(input_images, coord, llm_response, location, food, stakeholder, issue)
+    
+    image_name = ".".join(response_data["media_src"].split(".")[:-1])
+    image.save(os.path.join(thumbnail_folder, f"{image_name}.jpg"));
 
+    return response_data
 
 @app.route('/position/pick', methods=['GET'])
 def pick_position():
@@ -176,12 +181,23 @@ def load_media(filename):
     return database.load_media(filename)
 
 
+@app.route('/thumbnail/<filename>', methods=['GET'])
+def load_thumbnail(filename):
+    return database.load_thumb(filename)
+
+
 @app.route('/dump.json', methods=['GET'])
 def dump_database():
     return database.dump_database_json()
 
 if __name__ == '__main__':
     args = parser.parse_args()
+
+    media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
+    thumbnail_folder = os.path.join(media_folder, "thumbnails")
+
+    if not os.path.exists(thumbnail_folder):
+        os.makedirs(thumbnail_folder)
 
     with open('./recognized_classes.json', 'r') as file:
         labels = json.load(file)

@@ -35,13 +35,12 @@ def reset():
 
 
 def load_media(filename):
-    # Build the file path for the requested video
-    video_path = os.path.join(media_folder, filename)
-    
-    if not os.path.isfile(video_path):
-        abort(404, description=f"Media {filename} not found")
-
     return send_from_directory(directory=media_folder, path=filename)
+
+
+def load_thumb(filename):
+    return send_from_directory(directory=os.path.join(media_folder, "thumbnails"), path=filename)
+
 
 
 def add_cell(client_id, filename, media_bytes, title, info_text, coord, country, food, stakeholder, issue, image_prompt):
