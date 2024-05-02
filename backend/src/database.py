@@ -1,5 +1,6 @@
 from flask import send_from_directory
 import sqlite3
+import json
 import base64
 import time
 import os
@@ -10,7 +11,7 @@ media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
 DB_PATH = os.environ.get("FD_DATABASE", "example.db")
 
 CREATE_QUERY = '''CREATE TABLE IF NOT EXISTS cells
-               (id INTEGER PRIMARY KEY, username TEXT, x FLOAT, y FLOAT, media_path TEXT, title TEXT, text TEXT, links TEXT, datetime DATETIME)'''
+               (id INTEGER PRIMARY KEY, username TEXT, country TEXT, food TEXT, stakeholder TEXT, issue TEXT, image_prompt TEXT, x FLOAT, y FLOAT, media_path TEXT, title TEXT, text TEXT, datetime DATETIME)'''
 
 
 def sql_safify(s):
@@ -43,15 +44,15 @@ def load_media(filename):
     return send_from_directory(directory=media_folder, path=filename)
 
 
-def add_cell(filename, media_bytes, title, info_text, coord):
+def add_cell(client_id, filename, media_bytes, title, info_text, coord, country, food, stakeholder, issue, image_prompt):
     with open(os.path.join(media_folder, filename), "wb") as media_file:
         media_file.write(media_bytes)
     
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
         # Using parameterized queries to avoid SQL injection
-        cursor.execute("INSERT INTO cells (username, x, y, media_path, title, text, links, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                       ('useruuid', coord[0], coord[1], filename, title, info_text, 'google.fr', time.time()))
+        cursor.execute("INSERT INTO cells (username, country, food, stakeholder, issue, image_prompt, x, y, media_path, title, text, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       (client_id, country, food, stakeholder, issue, image_prompt, coord[0], coord[1], filename, title, info_text, time.time()))
         
         new_id = cursor.lastrowid
         
@@ -120,5 +121,22 @@ def add_sorting(label, sorting):
         
         conn.commit()
 
+
+def dump_database_json():
+    # Connect to the SQLite database
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        
+        # Query to select all records from specified table
+        cursor.execute(f"SELECT * FROM cells")
+        data = cursor.fetchall()
+        
+        # Get column headers
+        headers = [description[0] for description in cursor.description]
+        
+        # Convert data to a list of dictionaries (one per row)
+        json_data = [dict(zip(headers, row)) for row in data]
+        
+        return json_data
 
 initialize_database()

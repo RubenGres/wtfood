@@ -27,7 +27,7 @@ def classify_image(input_images, clip_model, clip_processor, clip_tokenizer, lab
     return image_class
 
 
-def create_video(input_images, workflow, params, client_id, coord, llm_response):
+def create_video(input_images, workflow, params, client_id, coord, llm_response, country, food, stakeholder, issue):
     params["prompt"] = llm_response["visuals"]
 
     k = list(input_images.keys())[0]
@@ -60,7 +60,8 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response)
 
     title = llm_response["title"]
     text = llm_response["article"]
-    media_url, cell_id = database.add_cell(filename, media_bytes, title, text, coord)
+    image_prompt = llm_response["visuals"]
+    media_url, cell_id = database.add_cell(client_id, filename, media_bytes, title, text, coord, country, food, stakeholder, issue, image_prompt)
 
     response_data = {
         "media_src": media_url,
@@ -72,7 +73,7 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response)
     return response_data
 
 
-def create_mock(input_images, coord, llm_response):
+def create_mock(input_images, coord, llm_response, country, food, stakeholder, issue):
     image = load_b64(list(input_images.values())[0])
 
     buffered = BytesIO()
@@ -86,7 +87,8 @@ def create_mock(input_images, coord, llm_response):
 
     title = llm_response["title"]
     text = llm_response["article"]
-    media_url, cell_id = database.add_cell(f"{time.time()}.jpg", base64_image, title, text, coord)
+    image_prompt = llm_response["visuals"]
+    media_url, cell_id = database.add_cell("client_id", f"{time.time()}.jpg", base64_image, title, text, coord, country, food, stakeholder, issue, image_prompt)
 
     response_data = {
         "media_src": media_url,
