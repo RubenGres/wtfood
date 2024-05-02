@@ -8,7 +8,10 @@ var zoomAnchorY = viewportHeight / 2;
 var delta_cam_x = 0;
 var delta_cam_y = 0;
 
-function padScroll(e) {            
+function padScroll(e) {         
+    if (state.movelocked)
+        return;
+
     var activeCard = getActiveCard(e);
     
     var noInfoTextElements = true;
@@ -63,7 +66,7 @@ function padScroll(e) {
             var maxZoom = 8;
             let newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomChange));    
     
-            startCameraAnimation(newZoom);
+            startCameraAnimation(newZoom, undefined, undefined, 100);
         }
     }
     
@@ -78,6 +81,19 @@ function getPointerPosition(e) {
     }
 }
 
+function getCardOnScreenCoord(x, y) {
+    for (const [key, cell] of Object.entries(cells)) {
+        const cell_elem = cell["elem"];
+        const rect = cell_elem.getBoundingClientRect(); // Get the position and size of the cell
+
+        // Check if the cursor is within the cell's bounds
+        if (x >= rect.left - margin && x <= rect.right + margin && y >= rect.top - margin && y <= rect.bottom + margin) {
+            return cell; // Return the cell element if the cursor is inside
+        }
+    }
+
+    return null; // Return null if no cell contains the cursor or if it's a mobile device
+}
 
 function getActiveCard(e) {
     let x, y;
@@ -92,17 +108,7 @@ function getActiveCard(e) {
         y = window.innerHeight / 2;
     }
 
-    for (const [key, cell] of Object.entries(cells)) {
-        const cell_elem = cell["elem"];
-        const rect = cell_elem.getBoundingClientRect(); // Get the position and size of the cell
-
-        // Check if the cursor is within the cell's bounds
-        if (x >= rect.left - margin && x <= rect.right + margin && y >= rect.top - margin && y <= rect.bottom + margin) {
-            return cell; // Return the cell element if the cursor is inside
-        }
-    }
-
-    return null; // Return null if no cell contains the cursor or if it's a mobile device
+    return getCardOnScreenCoord(x, y);
 }
 
 
@@ -135,6 +141,10 @@ function pointerReleased(e) {
 
 
 function pointerMoved(e) {
+    if(state.movelocked) {
+        return;
+    }
+
     if (pointer_down) {
         updateState({ isMoving: true });
         let pos = getPointerPosition(e);
@@ -148,17 +158,25 @@ function swipe_camera(distX, distY) {
     var target_cam_x = undefined;
     var target_cam_y = undefined;
 
+    var x = window.innerWidth/2;
+    var y = window.innerHeight/2;
+
+    unfocus_card();
+
     if (Math.abs(distX) > Math.abs(distY)) {
         if (Math.abs(distX) > MIN_SWIPE_DIST) {
             target_cam_x =  cam_x + -Math.sign(distX) * (width + margin);
         }
+        x += -window.innerWidth * Math.sign(distX)
     } else {
         if (Math.abs(distY) > MIN_SWIPE_DIST) {
             target_cam_y =  cam_y + -Math.sign(distY) * (height + margin);
         }
+        y += window.innerWidth * Math.sign(distX)
     }
     
-    startCameraAnimation(zoom, target_cam_x, target_cam_y);
+    let card = getCardOnScreenCoord(x, y);
+    focus_on_card(card.id);
 }
 
 function snap_to_nearest_cell() {
@@ -170,6 +188,10 @@ function snap_to_nearest_cell() {
 }
 
 function mobile_zoom(distance_delta) {
+    if (state.movelocked) {
+        return;
+    }
+    
     var zoom_speed = 0.0005;
     var zoomChange = distance_delta * zoom_speed * zoom;
     
@@ -287,7 +309,7 @@ if(isMobile) {
                     distX = e.changedTouches[0].pageX - startX;
                     distY = e.changedTouches[0].pageY - startY;
 
-                    if(Date.now() - swipe_start_time < SWIPE_MAX_DURATION_MS) {
+                    if(Date.now() - swipe_start_time < SWIPE_MAX_DURATION_MS && Math.abs(distX) > MIN_SWIPE_DIST || Math.abs(distY) > MIN_SWIPE_DIST) {
                         swipe_camera(distX, distY);
                     }
                 }

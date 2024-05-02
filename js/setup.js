@@ -8,7 +8,7 @@ if(isMobile) {
 
     card_focus_zoom_level = 1;
 } else {
-    card_focus_zoom_level = CARD_ZOOM_LEVEL;
+    card_focus_zoom_level = CARD_ZOOM_LEVEL * Math.min(window.innerWidth, window.innerHeight) / (cell_w + cell_margin);
 }
 
 

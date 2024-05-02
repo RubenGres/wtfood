@@ -1,3 +1,32 @@
+let focused_card_id = undefined;
+
+function focus_on_card(cell_id) {
+    focused_card_id = cell_id;
+    card_elem = cells[cell_id]['elem'];
+    card_elem.style.zIndex = 9;
+    
+    saveCameraPosition();
+    zoom_to_card(cell_id, card_focus_zoom_level);
+    
+    let video_element = card_elem.querySelector('video');
+    if (video_element) video_element.play();
+    
+    show_movelock();
+}
+
+function unfocus_card() {
+    if(focused_card_id) {
+        card_elem = cells[focused_card_id]['elem']
+        card_elem.style.zIndex = 4;
+        let video_element = card_elem.querySelector('video');
+        if (video_element) video_element.pause();
+        if(old_camera_position.zoom != card_focus_zoom_level) restoreCameraPosition();
+    }
+
+    hide_movelock();
+    focused_card_id = undefined;
+}
+
 function create_card_content(media_src, cardtitle, cardtext, cell_id) {
     // Create image element
     const generated_card = document.createElement('div');
@@ -71,26 +100,14 @@ function create_card_content(media_src, cardtitle, cardtext, cell_id) {
     // Add click event listener to the image
     generated_card.addEventListener('click', async function() {
         if(!state.isMoving) {
-            if( zoom != card_focus_zoom_level) {
-                zoom_to_card(cell_id, card_focus_zoom_level);
+            if(focused_card_id == undefined) {
+                focus_on_card(cell_id);
             } else {
                 infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
+                
             }
         }
     });
-
-    // Check if generated_card has a video child, then play/pause the video on hover
-    if (generated_card.querySelector('video')) {
-        generated_card.addEventListener('mouseenter', function() {
-            // Play video
-            this.querySelector('video').play();
-        });
-
-        generated_card.addEventListener('mouseleave', function() {
-            // Pause video
-            this.querySelector('video').pause();
-        });
-    }
 
     generated_card.setAttribute("id", cell_id);
 
