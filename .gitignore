@@ -4,3 +4,4 @@ backend/example.db
 backend/media/**/*.mp4
 backend/media/**/*.jpg
 backend/.env
+__pycache__
