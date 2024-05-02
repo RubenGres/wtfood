@@ -107,13 +107,13 @@ def transform():
         location = locate_ip(caller_ip)
     
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
-        return sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response)
+        return sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response, location, food, stakeholder, issue)
     else:
         food = random.choice(labels)
         location = locate_ip(caller_ip)
         print(caller_ip, location)
         llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
-        return sd_generation.create_mock(input_images, coord, llm_response)
+        return sd_generation.create_mock(input_images, coord, llm_response, location, food, stakeholder, issue)
 
 
 @app.route('/position/pick', methods=['GET'])
@@ -174,6 +174,10 @@ def get_cards():
 def load_media(filename):
     return database.load_media(filename)
 
+
+@app.route('/dump.json', methods=['GET'])
+def dump_database():
+    return database.dump_database_json()
 
 if __name__ == '__main__':
     args = parser.parse_args()
