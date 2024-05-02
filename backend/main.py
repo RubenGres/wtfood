@@ -75,6 +75,7 @@ def home():
         <li> /transform </li>
         <li> /sort </li>
         <li> /info </li>
+        <li> /dump.json </li>
     </ul>
     """
 
