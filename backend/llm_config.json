@@ -18,9 +18,11 @@
     "prompts": {
         "system" : "Your goal is to anwser the user with or without searching the internet. When asked, you must use the provided Tavily search API function to find relevant online information.\nIf so, you should never use your own knowledge to answer questions, answer the question based only on the context provided.\nIf search is used, return as many paragraphs as there are urls in the context, please include relevant url sources in the end of your answers",
         "user": {
-            "article": "Your knowledge: campaings and associations and citizen participation projects in europe, sustainable food system, local and international level.\nYou understand the socioeconomical impact of the food system.\nYou are not alarmist and do not shame individuals for their actions. Use the internet and from {stakeholder} perspective: reflect on {issue} in {food}.\nIn 20-50 words.\nReturn links to info, documentaries or associations within a html <a> tag throughout the document. Do not return markdown",
-            "title": "You write engaging viral titles for social media. You are knowledgeable about the food system. Do not write clickbait. Use emojis. Write a short title for this article. Return only the title in 5-10 words. DO NOT SEARCH ONLINE. DO NOT RETURN LINKS",
+            "article": "You understand the socioeconomical impact of the food system.\nYou are not alarmist and do not shame individuals for their actions.  Reflect on {food}  and {issue} for {stakeholder}.\nIn 20-50 words. DO NOT REPEAT issue:{issue} or stakeholder:{stakeholder} with the reply",
+            "title": "You write engaging viral titles. You are knowledgeable about the food system. Do not write clickbait. You can Use emojis. Write a short title for this article. Return only the title in 5-10 words. DO NOT SEARCH ONLINE. DO NOT RETURN LINKS",
+            "links": "What can I do about this issue?: Search the interntet using Tavily API to Find links, events, associations, policies and actions. Search country and city: {place}. Search diverse sources, discard same domain or similar results and search again.\nReturn 3 links a html <a> tag. Do not return markdown. ",
             "visuals": "You only reply with text descriptions of images usinig minimal words and elements. an object or scene related. Generate a DALLE text-to-image prompt to illustrate the article. Only return the prompt and nothing else"
+            
         }
     }
 }
