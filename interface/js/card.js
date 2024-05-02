@@ -20,7 +20,7 @@ function unfocus_card() {
         card_elem.style.zIndex = 4;
         let video_element = card_elem.querySelector('video');
         if (video_element) video_element.pause();
-        restoreCameraPosition();
+        if(old_camera_position.zoom != card_focus_zoom_level) restoreCameraPosition();
     }
 
     hide_movelock();
