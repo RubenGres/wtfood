@@ -55,7 +55,6 @@ function create_empty(coords) {
                         div.removeChild(camera_icon);
 
                         div.setAttribute("state", "generating");
-                        state.isTakingPicture = false;
                     } catch (error) {
                         console.error("Error taking picture:", error);
                     }

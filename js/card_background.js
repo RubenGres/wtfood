@@ -1,6 +1,6 @@
 movelock = document.getElementById('movelock')
 movelock.addEventListener('click', function() {
-  unfocus_card();
+  unfocus_card(true);
 });
 
 function show_movelock() {

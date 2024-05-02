@@ -26,6 +26,23 @@ img {
     visibility: hidden;
 }
 
+.close-btn {
+    position: absolute;
+    top: 20px;      /* Adjusts the distance from the top */
+    right: 20px;    /* Adjusts the distance from the right */
+    border: none;   /* Removes the border */
+    background: none; /* Removes any background */
+    color: white;   /* Sets the color of the cross to white */
+    font-size: 24px; /* Sets the size of the cross */
+    cursor: pointer; /* Changes the mouse cursor on hover */
+    outline: none;  /* Removes the outline to avoid focus highlight */
+}
+
+/* Optional: Style for hover effect */
+.close-btn:hover {
+    color: #ccc; /* Lightens the cross on hover */
+}
+
 #toast {
     visibility: hidden; /* Use visibility instead of display to allow for transitions */
     position: absolute;

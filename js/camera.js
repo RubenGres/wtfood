@@ -34,6 +34,8 @@ function restoreCameraPosition() {
 }
 
 function startCameraAnimation(newZoom, newCamX, newCamY, duration) {
+    updateState({ isMoving: true });
+
     if (cameraAnimation.animating) return; // Prevent concurrent animations
     
     cameraAnimation.startZoom = zoom;
@@ -113,11 +115,9 @@ function animateZoom(timestamp) {
                 cameraAnimation.phase = 'zoom';
                 cameraAnimation.startTime = timestamp;
                 progress = 0;
-                console.log("now we're zooming")
             }
         }
     }else if(cameraAnimation.phase == 'zoom') {
-        console.log("zooooming, progress=" + progress)
         // Calculate the current zoom level based on the animation progress
         zoom = cameraAnimation.startZoom + (cameraAnimation.endZoom - cameraAnimation.startZoom) * progress;
         if(progress >= 1)
