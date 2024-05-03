@@ -74,7 +74,8 @@ def home():
         <li> /position/pick </li>
         <li> /position/free </li>
         <li> /cards </li>
-        <li> /media/<id> </li>
+        <li> /media/<filename> </li>
+        <li> /thumbnail/<filename> </li>
         <li> /transform </li>
         <li> /sort </li>
         <li> /info </li>
@@ -92,8 +93,8 @@ def transform():
     params = data['params']
     client_id = data['client_id']
     coord = data['coords']
-
-    caller_ip = request.remote_addr
+    caller_ip = data['user_ip']
+    
     b64_image = list(input_images.values())[0]
 
     image = load_b64(b64_image)

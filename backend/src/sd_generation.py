@@ -60,6 +60,10 @@ def create_video(input_images, workflow, params, client_id, coord, llm_response,
 
     title = llm_response["title"]
     text = llm_response["article"]
+
+    # making the article HTML friendly
+    text = text.replace("\n", "<br>")
+    
     image_prompt = llm_response["visuals"]
     media_url, cell_id = database.add_cell(client_id, filename, media_bytes, title, text, coord, country, food, stakeholder, issue, image_prompt)
 
