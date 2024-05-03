@@ -21,7 +21,7 @@ import src.llmcaller as llmcaller
 
 
 # Set up argparse
-parser = argparse.ArgumentParser(description='Start food dysmorphia backend')
+parser = argparse.ArgumentParser(description='Start WTFood backend')
 parser.add_argument('--mock', action='store_true', help='Use mock generation for testing')
 
 def load_b64(image_b64):
@@ -44,6 +44,8 @@ def get_or_create_sorting(label, cards):
 
     # if the sorting doesn't exist, create it
     if not sort_order:
+
+        # sort using mock or clip sorting depending on the passed argument
         if not args.mock:
             sort_order = sorting.sort_cards(cards, label, clip_model, clip_tokenizer)
         else:
@@ -65,7 +67,7 @@ CORS(app)
 @app.route('/')
 def home():
     return """
-    <h1> Food dysmorphia API running </h1>
+    <h1> WTFood API running </h1>
 
     Routes:
     <ul>

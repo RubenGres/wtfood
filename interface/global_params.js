@@ -1,4 +1,4 @@
-var FD_API_URL = "https://obscure-journey-vpp4495vxxwfp4qj-5000.app.github.dev/";
+var FD_API_URL = "https://38.110.4.130:11918/";
 
 let zoom = 1;
 
