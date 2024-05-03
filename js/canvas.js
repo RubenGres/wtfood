@@ -51,8 +51,7 @@ async function add_cards() {
 
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
-        let media_url = FD_API_URL + "media/"+card['media_path']
-        let element = create_card(media_url, card['title'], card['text'], card['id'])
+        let element = create_card(card['media_path'], card['title'], card['text'], card['id'])
 
         cells[card['id']] = {
             "elem": element,
@@ -69,7 +68,7 @@ async function add_cards() {
     //TODO move ?
     const cardId = new URLSearchParams(window.location.search).get('card');
     if(cardId) {
-        focus_on_card(cardId, true);
+        focus_on_card(cardId);
     } else {
         updateDivPositions();
     }

@@ -159,24 +159,27 @@ function swipe_camera(distX, distY) {
     var x = window.innerWidth/2;
     var y = window.innerHeight/2;
 
-    if (Math.abs(distX) > Math.abs(distY)) {
-        if (Math.abs(distX) > MIN_SWIPE_DIST) {
-            target_cam_x =  cam_x + -Math.sign(distX) * (width + margin);
-        }
-        x += -cell_w*zoom * Math.sign(distX)
-    } else {
-        if (Math.abs(distY) > MIN_SWIPE_DIST) {
-            target_cam_y =  cam_y + -Math.sign(distY) * (height + margin);
-        }
+    let is_swiping = false;
+    if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > MIN_SWIPE_DIST) {
+        target_cam_x = cam_x + -Math.sign(distX) * (width + margin);
+        x += -cell_w*zoom * Math.sign(distX);
+        is_swiping = true;
+    } else if (Math.abs(distY) > MIN_SWIPE_DIST) {
+        target_cam_y = cam_y + -Math.sign(distY) * (height + margin);
         y += cell_h*zoom * Math.sign(distX)
+        is_swiping = true;
     }
 
-    let card = getCardOnScreenCoord(x, y);
+    if(is_swiping) {
+        pause_current_card();
+        startCameraAnimation(zoom, target_cam_x, target_cam_y);
+        card = getCardOnScreenCoord(x, y);
+        card_elem = card["elem"];
+        focused_card_id = card.id;
 
-    if(card != null){
-        unfocus_card(false);
-        focus_on_card(card.id, false);
+        play_video(card_elem);
     }
+
 }
 
 function snap_to_nearest_cell() {
@@ -309,7 +312,7 @@ if(isMobile) {
                     distX = e.changedTouches[0].pageX - startX;
                     distY = e.changedTouches[0].pageY - startY;
 
-                    if(Date.now() - swipe_start_time < SWIPE_MAX_DURATION_MS && Math.abs(distX) > MIN_SWIPE_DIST || Math.abs(distY) > MIN_SWIPE_DIST) {
+                    if(Date.now() - swipe_start_time < SWIPE_MAX_DURATION_MS && (Math.abs(distX) > MIN_SWIPE_DIST || Math.abs(distY) > MIN_SWIPE_DIST)) {
                         swipe_camera(distX, distY);
                     }
                 }

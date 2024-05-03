@@ -1,30 +1,60 @@
 let focused_card_id = undefined;
 
-function focus_on_card(cell_id, save_position) {
+function play_video(card_elem) {
+    let video_element = card_elem.querySelector('video');
+    if(!video_element) return;
+
+    video_element.style.display = "block";
+    if (video_element) video_element.play();
+}
+
+
+function pause_other_videos(card_elem) {
+    let video_element = card_elem.querySelector('video');
+    if(!video_element) return;
+    
+    if(card_elem.children[0].getAttribute("id") == focused_card_id.toString()) return;
+    
+    video_element.style.display = "block";
+    if (video_element) video_element.pause();
+}
+
+function pause_video(card_elem) {
+    let video_element = card_elem.querySelector('video');
+    if(!video_element) return;
+    
+    video_element.style.display = "block";
+    if (video_element) video_element.pause();
+}
+
+
+function focus_on_card(cell_id) {
     const cell = cells[cell_id];
     if (!cell) {
         console.error("No cell found at index: " + cell_id);
         return;
     }
 
-    focused_card_id = cell_id;
-
-    if(save_position) {
-        saveCameraPosition();
-    }
-
-    zoom_to_card(cell_id, card_focus_zoom_level);
-    show_movelock();
-    
     card_elem = cell['elem'];
     if(!card_elem) {
         console.error("No element found for cell at index: " + cell_id);
         return;
     }
 
-    card_elem.style.zIndex = 9;
-    let video_element = card_elem.querySelector('video');
-    if (video_element) video_element.play();
+    focused_card_id = cell_id;
+    saveCameraPosition();
+
+    
+    if(!isMobile) {
+        show_movelock();
+        zoom_to_card(cell_id, card_focus_zoom_level);
+        card_elem.style.zIndex = 20;
+        play_video(card_elem);
+    } else if(zoom != card_focus_zoom_level) {
+        card_elem.style.zIndex = 20;
+        zoom_to_card(cell_id, card_focus_zoom_level);
+        play_video(card_elem);
+    }
 }
 
 function unfocus_card(restore_position) {
@@ -40,30 +70,65 @@ function unfocus_card(restore_position) {
     focused_card_id = undefined;
 }
 
-function create_card_content(media_src, cardtitle, cardtext, cell_id) {
+function pause_current_card() {
+    if(focused_card_id == undefined) return;
+    
+    const cell = cells[focused_card_id];
+    if (!cell) {
+        console.error("No cell found at index: " + cell_id);
+        return;
+    }
+
+    card_elem = cell['elem'];
+    if(!card_elem) {
+        console.error("No element found for cell at index: " + cell_id);
+        return;
+    }
+    
+    let video_element = card_elem.querySelector('video');
+    if (video_element) video_element.pause();
+}
+
+
+function create_card_content(media_filename, cardtitle, cardtext, cell_id) {
+    let media_src = FD_API_URL + "media/" + media_filename
+
     // Create image element
     const generated_card = document.createElement('div');
     generated_card.setAttribute('class', 'generated-card')
 
     // Check if media_src is an image (ends with .jpg, .png, etc.)
-    if (/\.(jpg|jpeg|png|gif)$/i.test(media_src)) {
+    if (/\.(jpg|jpeg|png|gif)$/i.test(media_filename)) {
         const img = document.createElement('img');
         img.src = media_src;
         img.setAttribute('class', 'generated-media');
         generated_card.appendChild(img);
     }
     // Otherwise, if media_src is a video (ends with .mp4)
-    else if (/\.mp4$/i.test(media_src)) {
+    else if (/\.mp4$/i.test(media_filename)) {
         const video = document.createElement('video');
-        video.setAttribute('class', 'generated-media');
+        video.setAttribute('preload', 'none');
+        video.setAttribute('class', 'generated-media video');
         video.setAttribute('loop', '');
-        //video.setAttribute('autoplay', '');
         video.setAttribute('muted', ''); // Muted attribute to allow autoplay in most browsers
+
         const source = document.createElement('source');
         source.src = media_src;
         source.type = 'video/mp4';
         video.appendChild(source);
         generated_card.appendChild(video);
+
+        const thumbnail = document.createElement('img');
+        thumbnail.setAttribute('class', 'thumbnail');
+        const media_id = media_filename.split('.').slice(0, -1).join('.') || media_filename
+        let thumb_src = FD_API_URL + "thumbnail/" + media_id + ".jpg"
+        thumbnail.src = thumb_src;
+        generated_card.appendChild(thumbnail);
+
+        const glass_pane = document.createElement('div');
+        glass_pane.setAttribute('class', 'glasspane');
+        generated_card.appendChild(glass_pane);
+        
     }
 
     // Create text element
@@ -113,12 +178,19 @@ function create_card_content(media_src, cardtitle, cardtext, cell_id) {
     // Add click event listener to the image
     generated_card.addEventListener('click', async function() {
         if(!state.isMoving) {
-            if(focused_card_id == undefined) {
-                focus_on_card(cell_id, true);
+            if(!isMobile) {
+                if(focused_card_id == undefined) {
+                    focus_on_card(cell_id);
+                } else {
+                    infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
+                }
             } else {
-                infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
-                
+                focus_on_card(cell_id);
+                if(zoom == card_focus_zoom_level) {
+                    infotext.style.display = infotext.style.display === 'none' ? 'block' : 'none';
+                }
             }
+            
         }
     });
 

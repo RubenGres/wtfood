@@ -6,6 +6,14 @@ const uuidv4 = () => {
 }
 
 async function generateCard(camera_picture, coords) {
+    let user_ip = "127.0.0.1" // start with a loopback ip
+
+    await fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => {
+        user_ip = data.ip;
+    })
+
     const base64ImageData = camera_picture.src.split(',')[1];
     
     // resize to desired size
@@ -14,6 +22,7 @@ async function generateCard(camera_picture, coords) {
     await new Promise((resolve) => {
         img.onload = resolve;
     });
+
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = camera_output_size;
@@ -32,7 +41,8 @@ async function generateCard(camera_picture, coords) {
             input_image: "input_img.jpg",
             seed: Date.now()
         },
-        coords: coords
+        coords: coords,
+        user_ip: user_ip
     }
 
     const response = await fetch(FD_API_URL + "transform", {
@@ -54,5 +64,5 @@ async function generateCard(camera_picture, coords) {
 
     const responseData = await response.json();
 
-    return create_card_content(FD_API_URL + "media/" + responseData.media_src, responseData.title, responseData.text, responseData.id)
+    return create_card_content(responseData.media_src, responseData.title, responseData.text, responseData.id)
 }

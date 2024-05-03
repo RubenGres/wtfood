@@ -34,6 +34,7 @@ const camerainput = document.getElementById('camerainput');
 async function setup() {
     add_empties();
     add_cards();
+    loopFireflyAnimation();
 }
 
 window.onload = function() {

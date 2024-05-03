@@ -1,3 +1,10 @@
+function clear_labels() {
+    var xLabelInput = document.getElementById('xLabelInput');
+    var yLabelInput = document.getElementById('yLabelInput');
+    xLabelInput.value = ""
+    yLabelInput.value = ""
+}
+
 function sort_from_labels() {
     var xLabelInput = document.getElementById('xLabelInput');
     var yLabelInput = document.getElementById('yLabelInput');
@@ -42,6 +49,7 @@ inputs.forEach((input) => {
 document.addEventListener('DOMContentLoaded', function() {
     var gridButton = document.getElementById('gridButton');
     gridButton.onclick = function() {
+        clear_labels();
         hideAxis();
         show_empties();
         reposition_on_grid();

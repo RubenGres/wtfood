@@ -1,0 +1,40 @@
+
+.loading_gizmo {
+    height: 25%;
+    width: 25%;
+    border: 4px solid #eeeeee;
+    border-top: 4px solid hsl(120, 100%, 30%);
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    z-index: 3;
+    visibility: collapse;
+}
+
+.loading_gizmo.display {
+    visibility: visible;
+}
+
+/** loading bar **/
+.loading_bar_container {
+    width: 90%;
+    border: 1px rgb(160, 160, 160) solid;
+    background-color: #eee;
+    height: 3%;
+    border-radius: 0px;
+    position: absolute;
+    bottom: 20%;
+    visibility: collapse;
+}
+
+.loading_bar_container.display {
+    visibility: visible;
+}
+
+.loading_bar {
+    height: 100%;
+    width: 2%;
+    background-color: hsl(120, 100%, 30%);
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+}

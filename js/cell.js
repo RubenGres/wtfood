@@ -39,6 +39,13 @@ function create_empty(coords) {
     loading_gizmo.setAttribute('class', 'loading_gizmo');
     div.appendChild(loading_gizmo);
 
+    let loading_bar_container = document.createElement('div');
+    let loading_bar = document.createElement('div')
+    loading_bar.setAttribute('class', 'loading_bar');
+    loading_bar_container.setAttribute('class', 'loading_bar_container');
+    loading_bar_container.appendChild(loading_bar)
+    div.appendChild(loading_bar_container)
+    
     // Placeholder for a camera picture
     let camera_picture;
     
@@ -54,15 +61,17 @@ function create_empty(coords) {
                         div.appendChild(camera_picture);
                         div.removeChild(camera_icon);
 
-                        div.setAttribute("state", "generating");
                     } catch (error) {
                         console.error("Error taking picture:", error);
                     }
-                    break;
-                
-                case "generating":
+                    
                     // While loading, show loading gizmo, then generate and display image
                     loading_gizmo.className = 'loading_gizmo display';
+                    
+                    // Loading bar animation
+                    loading_bar.style.transition = `width ${LOADING_BAR_DURATION_S}s`;
+                    loading_bar.style.width = "100%";
+                    loading_bar_container.className = 'loading_bar_container display'
                     
                     let generated_card = await generateCard(camera_picture, coords);
 

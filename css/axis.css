@@ -52,7 +52,7 @@
     left: 50%; /* Center text horizontally */
     top: 0; /* Start from the top */
     bottom: 0; /* Extend to the bottom */
-    transform: translateX(-50%); /* Center the text block */
+    transform: translateX(-50%) rotate(180deg); /* Added rotation to flip the text */
 }
 
 #y-axis::after {
