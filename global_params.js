@@ -1,4 +1,4 @@
-var FD_API_URL = "https://user-rgres-1653-0.user.lab.sspcloud.fr/proxy/5000/";
+var FD_API_URL = "https://38.110.4.130:11918/";
 
 let zoom = 1;
 
