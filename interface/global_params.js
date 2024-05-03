@@ -1,4 +1,4 @@
-var FD_API_URL = "https://38.110.4.130:11918/";
+var FD_API_URL = "https://t9d85x63425y5t-5000.proxy.runpod.net/";
 
 let zoom = 1;
 
@@ -13,6 +13,10 @@ const ZOOM_DURATION_MS = 300;
 const MOBILE_MIN_ZOOM = 0.05;
 const SWIPE_MAX_DURATION_MS = 300;
 const MIN_SWIPE_DIST = 30;
+const LOADING_BAR_DURATION_S = 80;
+
+const FIREFLY_ANIMATION_TIME_MS = 30000;
+const FIREFLY_AMOUNT = 5;
 
 const predifined_labels = [
     "working conditions",
@@ -20,4 +24,7 @@ const predifined_labels = [
     "consumer rights",
     "water consumption",
     "global emissions",
+    "france",
+    "spain",
+    "portugal"
 ]
