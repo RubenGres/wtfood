@@ -186,7 +186,7 @@ img {
     position: absolute;
     top: 0; /* Position the infotext at the top left corner of the generated_card */
     left: 0;
-    z-index: 2; /* Ensure the infotext is above the image */
+    z-index: 4; /* Ensure the infotext is above the image */
     background-color: rgba(255, 255, 255, 0.75); /* Semi-transparent background to improve readability */
     backdrop-filter: blur(10px);
     
@@ -222,6 +222,15 @@ img {
     top: 0;
     left: 0;
     z-index: 0; /* Ensure the image is below the infotext */
+}
+
+.glasspane {
+    width: 100%;
+    height: 100%;
+    position: absolute; /* Position the image absolutely to allow the text overlay */
+    top: 0;
+    left: 0;
+    z-index: 2;
 }
 
 .generated-media.video {

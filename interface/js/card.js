@@ -124,6 +124,11 @@ function create_card_content(media_filename, cardtitle, cardtext, cell_id) {
         let thumb_src = FD_API_URL + "thumbnail/" + media_id + ".jpg"
         thumbnail.src = thumb_src;
         generated_card.appendChild(thumbnail);
+
+        const glass_pane = document.createElement('div');
+        glass_pane.setAttribute('class', 'glasspane');
+        generated_card.appendChild(glass_pane);
+        
     }
 
     // Create text element
