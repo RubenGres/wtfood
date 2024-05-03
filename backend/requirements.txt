@@ -11,3 +11,4 @@ ffmpeg
 langchain-community
 tavily-python
 langchain-openai
+transformers
