@@ -1,4 +1,4 @@
-var FD_API_URL = "https://obscure-journey-vpp4495vxxwfp4qj-5000.app.github.dev/";
+var FD_API_URL = "https://user-rgres-1653-0.user.lab.sspcloud.fr/proxy/5000/";
 
 let zoom = 1;
 
