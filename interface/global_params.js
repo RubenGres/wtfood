@@ -1,4 +1,4 @@
-var FD_API_URL = "https://t9d85x63425y5t-5000.proxy.runpod.net/";
+var FD_API_URL = "https://6z8wzg7gc62klm-5000.proxy.runpod.net";
 
 let zoom = 1;
 
