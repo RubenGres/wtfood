@@ -1,14 +1,16 @@
-# Food-dysmorphia backend
+# WTFood backend
 
-This folder contains the backend of the food-dysmorphia (FD) project. 
+This folder contains the backend of the food-dysmorphia project. This includes code for the database and API.
+ComfyUI also need to be run for the video generation. 
 
-Image recognition is made using CLIP from the `recognized classes.json` list.
-All prompts send to the LLM are in the `llm_prompts.json` file.
-The image generation backend is based on an ComfyUI instance. All configuration variables can be configured in the `.env` file.
+COnfiguration can be made in the .env and *.json files in this repository:
+- `recognized classes.json`: All classes allowed by the CLIP model for generating the images.
+- `llm_config.json`: All prompts sent to the LLM, articles, titles and visuals are needed keys to create the card.
+- `.env`, global configuration file, include database path, media folder and API keys.
 
-# Installation
+# Install instructions
 
-## FD API installation
+## Installing the API
 
 To use the API you'll first need to install all dependencies using pip
 
@@ -16,34 +18,10 @@ To use the API you'll first need to install all dependencies using pip
 pip install -r requirements.txt 
 ```
 
-## ComfyUI installation for FD
+## ComfyUI
+The simplest way to set it up is to use the docker: `docker run wtfood-comfyui`. You can also set up ComfyUI manually and use the `install_comfyui_deps.sh` script in the backend folder. ComfyUI install instruction can be found in the  [official repository](https://github.com/comfyanonymous/ComfyUI)
 
-Install pytorch according to your GPU type if you don't already have it
+## Usage
 
-### AMD
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
-```
-
-### NVIDIA
-```bash
-pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
-```
-
-Then install ComfyUI from the official repository
-
-```bash
-git clone https://github.com/comfyanonymous/ComfyUI.git
-cd ComfyUI
-pip install -r requirements.txt 
-```
-
-To install all custom nodes and models used in food-dysmorphia in one go you can use the script  `install_comfyui_deps.sh`
-
-```bash
-./install_comfyui_deps.sh
-```
-
-# Usage
-
-Once everything is installed you can start the API with `python main.py`
+Once everything is installed you can start the API with `python main.py`.
+You can pass the --mock argument if you don't want to rely on AI generation for testing purposes.
