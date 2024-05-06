@@ -21,7 +21,6 @@
             "article": "Article: Critically reflect on negative impact of {issue} in the food system for {stakeholder}, and if relevant do it in the context of {food}.\nIn 20-50 words. DO NOT REPEAT issue:{issue} or stakeholder:{stakeholder} within the reply.\n\nBegin the article by inserting up to three links as reference like so:\n\n-link\n-link\n-link\n\nrest of the article. \n\n Skip lines between links! Never return more that three links. \n\nLinks instructions:\n Search the internet using Tavily API to provide people in {place} with links in the form of 'join this, do that, read that...' to associations, events, communities, resources or policies to do something about the Article. Search diverse sources and focus on location if relevant. \nThe links should be in html <a> tags with concise titles. Do not use markdown.",
             "title": "You write engaging viral titles. You are knowledgeable about the food system. Do not write clickbait. You can use emojis. Write a short title for this article. Return only the title in 5-10 words.\n\nDO NOT SEARCH ONLINE.\nDO NOT RETURN LINKS\nDO NOT USE COMMAS AND RETURN THE TITLE AS IS",
             "visuals": "You only reply with text descriptions of images using minimal words and elements. Generate a DALLE text-to-image detailed prompt related to visualize the {issue} in the article above. Only return the image generation prompt and nothing else"
-            
         }
     }
 }
