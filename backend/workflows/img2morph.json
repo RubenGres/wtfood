@@ -1,9 +1,9 @@
 {
   "255": {
     "inputs": {
-      "seed": 543268239372046,
+      "seed": 105972192375290,
       "steps": 20,
-      "cfg": 6,
+      "cfg": 5,
       "sampler_name": "dpmpp_2m",
       "scheduler": "karras",
       "denoise": 0.65,
@@ -111,12 +111,12 @@
   },
   "268": {
     "inputs": {
-      "seed": 140159332152644,
+      "seed": 1034519445768145,
       "steps": 20,
-      "cfg": 6,
+      "cfg": 5,
       "sampler_name": "dpmpp_2m",
       "scheduler": "karras",
-      "denoise": 0.7000000000000001,
+      "denoise": 0.65,
       "model": [
         "264",
         0
@@ -157,7 +157,7 @@
   },
   "271": {
     "inputs": {
-      "strength": 0.65,
+      "strength": 0.4,
       "conditioning": [
         "411",
         0
@@ -178,12 +178,12 @@
   },
   "273": {
     "inputs": {
-      "seed": 879884111681753,
+      "seed": 213736666686418,
       "steps": 20,
-      "cfg": 6,
+      "cfg": 5,
       "sampler_name": "dpmpp_2m",
       "scheduler": "karras",
-      "denoise": 0.75,
+      "denoise": 0.8,
       "model": [
         "264",
         0
@@ -224,7 +224,7 @@
   },
   "276": {
     "inputs": {
-      "strength": 0.5,
+      "strength": 0.35000000000000003,
       "conditioning": [
         "411",
         0
@@ -245,9 +245,9 @@
   },
   "278": {
     "inputs": {
-      "seed": 868284043966174,
+      "seed": 964279349686372,
       "steps": 20,
-      "cfg": 6,
+      "cfg": 5,
       "sampler_name": "dpmpp_2m",
       "scheduler": "karras",
       "denoise": 0.8,
@@ -291,7 +291,7 @@
   },
   "281": {
     "inputs": {
-      "strength": 0.5,
+      "strength": 0.4,
       "conditioning": [
         "411",
         0
@@ -422,7 +422,7 @@
         0
       ],
       "image3": [
-        "279",
+        "413",
         0
       ]
     },
@@ -583,7 +583,7 @@
   },
   "411": {
     "inputs": {
-      "text": "Solar punk city, moebius style",
+      "text": "A vibrant permaculture garden in Barcelona with raspberry bushes in the foreground, small local farmers working together in the background, and a large corporate agriculture facility looming over them on the horizon",
       "clip": [
         "264",
         1
@@ -607,6 +607,21 @@
     "class_type": "HintImageEnchance",
     "_meta": {
       "title": "Enchance And Resize Hint Images"
+    }
+  },
+  "413": {
+    "inputs": {
+      "repeats": 10,
+      "output": "single",
+      "node_mode": "reuse",
+      "source": [
+        "279",
+        0
+      ]
+    },
+    "class_type": "Repeater|pysssss",
+    "_meta": {
+      "title": "Repeater 🐍"
     }
   }
 }

@@ -8,19 +8,19 @@
     ],
 
     "issues": [
-        "Power consolidation within the industry",
-        "Workers' rights and conditions in the labor force",
+        "Power consolidation",
+        "Workers' rights and conditions",
         "Food distribution and accessibility",
         "Economic reliance and dependence",
-        "Diminishing local and cultural food variations"
+        "Local and cultural food variations"
     ],
 
     "prompts": {
         "system" : "Your goal is to anwser the user with or without searching the internet. When asked, you must use the provided Tavily search API function to find relevant online information.\nIf so, you should never use your own knowledge to answer questions, answer the question based only on the context provided.\nIf search is used, return as many paragraphs as there are urls in the context, please include relevant url sources in the end of your answers",
         "user": {
-            "article": "You understand the socioeconomical impact of the food system.\nYou are not alarmist and do not shame individuals for their actions.  Reflect on {food} and {issue} for {stakeholder}.\nIn 20-50 words. DO NOT REPEAT issue:{issue} or stakeholder:{stakeholder} within the reply. Begin the article by inserting up to three links as reference. Never return more that three links. Develop according to thoses links the article.\n\nFor the links here are the instructions:\nSearch the internet using Tavily API to Find links, events, associations, policies and actions in this location: {place}. Search diverse sources and focus on location. \nThe links should be in html <a> tags with concise titles. Do not use markdown.",
-            "title": "You write engaging viral titles. You are knowledgeable about the food system. Do not write clickbait. You can Use emojis. Write a short title for this article. Return only the title in 5-10 words.\n\nDO NOT SEARCH ONLINE.\nDO NOT RETURN LINKS\nDO NOT USE COMMAS AND RETURN THE TITLE AS IS",
-            "visuals": "You only reply with text descriptions of images using minimal words and elements. an object or scene related to the article above. The description should include {food} in one way or another. Generate a DALLE text-to-image prompt to illustrate the article, do not hesitate to use specific styles. Only return the image generation prompt and nothing else"
+            "article": "Article: Critically reflect on negative impact of {issue} in the food system for {stakeholder}, and if relevant do it in the context of {food}.\nIn 20-50 words. DO NOT REPEAT issue:{issue} or stakeholder:{stakeholder} within the reply.\n\nBegin the article by inserting up to three links as reference like so:\n\n-link\n-link\n-link\n\nrest of the article. \n\n Skip lines between links! Never return more that three links. \n\nLinks instructions:\n Search the internet using Tavily API to provide people in {place} with links in the form of 'join this, do that, read that...' to associations, events, communities, resources or policies to do something about the Article. Search diverse sources and focus on location if relevant. \nThe links should be in html <a> tags with concise titles. Do not use markdown.",
+            "title": "You write engaging viral titles. You are knowledgeable about the food system. Do not write clickbait. You can use emojis. Write a short title for this article. Return only the title in 5-10 words.\n\nDO NOT SEARCH ONLINE.\nDO NOT RETURN LINKS\nDO NOT USE COMMAS AND RETURN THE TITLE AS IS",
+            "visuals": "You only reply with text descriptions of images using minimal words and elements. Generate a DALLE text-to-image detailed prompt related to visualize the {issue} in the article above. Only return the image generation prompt and nothing else"
             
         }
     }
