@@ -218,8 +218,8 @@ async function focus_random_empty() {
 
     const random_position = await response.json();
 
-    cam_x += random_position['x'] * (width + margin)
-    cam_y += random_position['y'] * (height + margin)
+    cam_x += random_position['x'] * (cell_w + cell_margin)
+    cam_y += random_position['y'] * (cell_h + cell_margin)
 } 
 
 
