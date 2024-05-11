@@ -15,7 +15,6 @@ function pickRandomCards(count) {
 async function loopFireflyAnimation() {
     while (true) {
         const selectedElements = pickRandomCards(FIREFLY_AMOUNT);
-        console.log(selectedElements);
         selectedElements.forEach((card) => play_video(card["elem"]));
         await new Promise(resolve => setTimeout(resolve, FIREFLY_ANIMATION_TIME_MS));
         selectedElements.forEach((card) => pause_other_videos(card["elem"]));
