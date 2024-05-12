@@ -27,6 +27,27 @@ function pause_video(card_elem) {
     if (video_element) video_element.pause();
 }
 
+async function focus_on_random_empty(){
+    const response = await fetch(FD_API_URL + "position/free", {
+        method: 'GET'
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const empties = await response.json();
+
+    empty = empties[Math.floor(Math.random() * empties.length)];
+
+    console.log(empty);
+
+    cam_x = (empty['x'] + 1) * (cell_w + cell_margin);
+    cam_y = (empty['y'] + 1) * (cell_w + cell_margin);
+
+    updateDivPositions();
+    
+}
 
 function focus_on_card(cell_id) {
     const cell = cells[cell_id];
