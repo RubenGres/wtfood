@@ -1,7 +1,5 @@
 import src.database as database
 
-print("Which cell to remove?")
-x = input("X: ")
-y = input("Y: ")
+id = input("What is the id of the cell you want to remove? ")
 
-database.remove_cell(x, y)
+database.remove_cell_by_id(id)
