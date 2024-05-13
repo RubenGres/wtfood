@@ -4,21 +4,43 @@
         "CEA industrial grower",
         "Supermarket chain manager",
         "Wealthy consumer",
-        "Minimum wage citizen"
+        "Minimum wage citizen",
+        "Community-supported agriculture (CSA) coordinator",
+        "Farmers' market organizer",
+        "Food bank director",
+        "School cafeteria manager",
+        "Restaurant owner/chef",
+        "Food distribution company CEO",
+        "Government agricultural inspector",
+        "Environmental NGO representative",
+        "Agricultural research scientist",
+        "Urban planner promoting urban agriculture initiatives",
+        "Legislators",
+        "Agricultural bankers"
     ],
 
-    "issues": [
+	"issues": [
         "Power consolidation",
-        "Workers' rights and conditions",
-        "Food distribution and accessibility",
-        "Economic reliance and dependence",
-        "Local and cultural food variations"
+        "Workers' rights",
+        "Food accessibility",
+        "Economic dependence",
+        "Cultural food variations",
+        "Food deserts",
+        "Food insecurity",
+        "Exploitative labor",
+        "Environmental degradation",
+        "Health disparities",
+        "Corporate control",
+        "Government subsidies",
+        "Food waste",
+        "Marketing targeting",
+        "Gentrification",
+        "Trade policies"
     ],
-
     "prompts": {
-        "system" : "Your goal is to anwser the user with or without searching the internet. When asked, you must use the provided Tavily search API function to find relevant online information.\nIf so, you should never use your own knowledge to answer questions, answer the question based only on the context provided.\nIf search is used, return as many paragraphs as there are urls in the context, please include relevant url sources in the end of your answers",
+        "system" : "You are an expert on socioeconomic issues in the food system. Your goal is to anwser the user with or without searching the internet. When asked, you must use the provided Tavily search API function to find relevant online information.\nIf so, you should never use your own knowledge to answer questions, answer the question based only on the context provided.\nIf search is used, return as many paragraphs as there are urls in the context, please include relevant url sources in your answers",
         "user": {
-            "article": "Article: Critically reflect on negative impact of {issue} in the food system for {stakeholder}, and if relevant do it in the context of {food}.\nIn 20-50 words. DO NOT REPEAT issue:{issue} or stakeholder:{stakeholder} within the reply.\n\nBegin the article by inserting up to three links as reference like so:\n\n-link\n-link\n-link\n\nrest of the article. \n\n Skip lines between links! Never return more that three links. \n\nLinks instructions:\n Search the internet using Tavily API to provide people in {place} with links in the form of 'join this, do that, read that...' to associations, events, communities, resources or policies to do something about the Article. Search diverse sources and focus on location if relevant. \nThe links should be in html <a> tags with concise titles. Do not use markdown.",
+            "article": "Article: From the Food System perspective for a {stakeholder}, critically reflect on the negative impact of {issue}, and if relevant do it in the context of {food}.\nIn 20-50 words. DO NOT REPEAT issue:{issue} or stakeholder:{stakeholder} within the reply.\n\nBegin the article by inserting up to three links only as reference like so:\n\n-link\n-link\n-link\n\nrest of the article. \n\n Skip lines between links!. \n\nLinks instructions:\n Search the internet using Tavily API to provide people with links to associations, events, communities, resources or policies to do something about the Article. Search diverse sources and focus on {place} location if relevant. \nThe links should be in html <a> tags with titles styled as: 'join this..., do that..., read that...'. Do not use markdown.",
             "title": "You write engaging viral titles. You are knowledgeable about the food system. Do not write clickbait. You can use emojis. Write a short title for this article. Return only the title in 5-10 words.\n\nDO NOT SEARCH ONLINE.\nDO NOT RETURN LINKS\nDO NOT USE COMMAS AND RETURN THE TITLE AS IS",
             "visuals": "You only reply with text descriptions of images using minimal words and elements. Generate a DALLE text-to-image detailed prompt related to visualize the {issue} in the article above. Only return the image generation prompt and nothing else"
         }
