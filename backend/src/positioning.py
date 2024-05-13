@@ -19,11 +19,6 @@ def _init_from_db():
             remove_coord((cell['x'], cell['y']))
 
 
-def pick_position():
-    coordinates =  random.sample(possible_positions, k=1)
-    return coordinates[0]
-
-
 def get_possible_positions():
     return possible_positions
 

@@ -210,19 +210,6 @@ function mobile_zoom(distance_delta) {
 }
 
 
-async function focus_random_empty() {
-    const response = await fetch(FD_API_URL + "position/pick", {method: 'GET'});
-    
-    if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
-
-    const random_position = await response.json();
-
-    cam_x += random_position['x'] * (cell_w + cell_margin)
-    cam_y += random_position['y'] * (cell_h + cell_margin)
-} 
-
-
 function updateDivPositions() {
     width = cell_w * zoom;
     height = cell_h * zoom;
@@ -248,8 +235,6 @@ function updateDivPositions() {
 }
 
 if(isMobile) {
-    focus_random_empty();
-
     const swipeDetect = (el) => {
         let surface = el;
         let startDistance = 0; // Initial distance between two touches for pinch zoom

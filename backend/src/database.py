@@ -67,6 +67,13 @@ def remove_cell(x, y):
         conn.commit()
 
 
+def remove_cell_by_id(id):
+    with get_db_connection(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM cells WHERE id = ?", (id,))
+        conn.commit()
+
+
 def get_cards():
     with get_db_connection(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row

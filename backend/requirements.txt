@@ -2,6 +2,7 @@ numpy
 pillow
 flask
 flask-cors
+flask-socketio
 python-dotenv
 requests_toolbelt
 imageio-ffmpeg

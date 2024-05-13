@@ -7,6 +7,7 @@ import json
 import argparse
 import requests
 from flask import Flask, request, jsonify, send_from_directory, abort
+from flask_socketio import SocketIO, send, emit
 from flask_cors import CORS
 from io import BytesIO
 import base64
@@ -64,6 +65,8 @@ app = Flask(__name__)
 
 CORS(app)
 
+socketio = SocketIO(app, cors_allowed_origins='*')
+
 @app.route('/')
 def home():
     return """
@@ -71,8 +74,6 @@ def home():
 
     Routes:
     <ul>
-        <li> /position/pick </li>
-        <li> /position/free </li>
         <li> /cards </li>
         <li> /media/<filename> </li>
         <li> /thumbnail/<filename> </li>
@@ -95,6 +96,7 @@ def transform():
     coord = data['coords']
     caller_ip = data['user_ip']
     
+    # get base64 image from user input
     b64_image = list(input_images.values())[0]
 
     image = load_b64(b64_image)
@@ -103,38 +105,34 @@ def transform():
     stakeholder = random.choice(llmconfig['stakeholders'])
     issue = random.choice(llmconfig['issues'])
 
+    location = locate_ip(caller_ip)
+    
     if not args.mock:
         food = classify(image)
 
         if food is None:
             return jsonify({'error': 'No fruit or vegetable found in image'}), 404
-        
-        location = locate_ip(caller_ip)
-    
-        llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
-        response_data = sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response, location, food, stakeholder, issue)
     else:
         food = random.choice(labels)
-        location = locate_ip(caller_ip)
-        print(caller_ip, location)
-        llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
+
+    # if you got this far your input was validated!
+
+    # send broadcast message to all active sessions
+    emit('generating_card', { "coord": coord }, namespace='/', broadcast=True)
+    
+    llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
+    
+    if not args.mock:
+        response_data = sd_generation.create_video(input_images, workflow, params, client_id, coord, llm_response, location, food, stakeholder, issue)
+    else:
         response_data = sd_generation.create_mock(input_images, coord, llm_response, location, food, stakeholder, issue)
     
     image_name = ".".join(response_data["media_src"].split(".")[:-1])
     image.save(os.path.join(thumbnail_folder, f"{image_name}.jpg"));
 
-    return response_data
-
-@app.route('/position/pick', methods=['GET'])
-def pick_position():
-    coords = positioning.pick_position()
+    emit('new_card', { "thumbnail_path": image_name, "coord": coord }, namespace='/', broadcast=True)
     
-    coord_dict = {
-        "x": coords[0],
-        "y": coords[1]
-    }
-
-    return coord_dict
+    return response_data
 
 
 @app.route('/position/free', methods=['GET'])
@@ -212,4 +210,4 @@ if __name__ == '__main__':
         clip_model, clip_processor, clip_tokenizer = clipclassifier.get_clip("openai/clip-vit-base-patch32")
         labels_embeddings = clipclassifier.get_labels_embeddings(clip_model, clip_tokenizer, labels)
 
-    app.run(host='0.0.0.0', port=5000)
+    socketio.run(app=app, host='0.0.0.0', port=5000)
