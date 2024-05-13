@@ -78,7 +78,7 @@ def send_message_llm(user_input, client, thread, assistant_id):
   return get_messages_from_thread(client, thread.id)
 
 
-def generate_text(prompts, stakeholder, issue, food, place, model="gpt-4-0125-preview"):    
+def generate_text(prompts, stakeholder, issue, food, place, model="gpt-4-turbo-2024-04-09"):    
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
     assistant = client.beta.assistants.create(
