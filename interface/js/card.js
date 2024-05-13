@@ -2,10 +2,12 @@ let focused_card_id = undefined;
 
 function play_video(card_elem) {
     let video_element = card_elem.querySelector('video');
-    if(!video_element) return;
+    if(!video_element)
+        return;
 
     video_element.style.display = "block";
-    if (video_element) video_element.play();
+    if (video_element)
+        video_element.play();
 }
 
 
@@ -40,8 +42,6 @@ async function focus_on_random_empty(){
 
     empty = empties[Math.floor(Math.random() * empties.length)];
 
-    console.log(empty);
-
     cam_x = (empty['x'] + 1) * (cell_w + cell_margin);
     cam_y = (empty['y'] + 1) * (cell_w + cell_margin);
 
@@ -52,7 +52,7 @@ async function focus_on_random_empty(){
 function focus_on_card(cell_id) {
     const cell = cells[cell_id];
     if (!cell) {
-        console.error("No cell found at index: " + cell_id);
+        console.error("No cell found for id: " + cell_id);
         return;
     }
 
@@ -65,16 +65,12 @@ function focus_on_card(cell_id) {
     focused_card_id = cell_id;
     saveCameraPosition();
 
-    
-    if(!isMobile) {
+    zoom_to_card(cell_id, card_focus_zoom_level);
+    play_video(card_elem);
+    card_elem.style.zIndex = 20;
+
+    if (!isMobile) {
         show_movelock();
-        zoom_to_card(cell_id, card_focus_zoom_level);
-        card_elem.style.zIndex = 20;
-        play_video(card_elem);
-    } else if(zoom != card_focus_zoom_level) {
-        card_elem.style.zIndex = 20;
-        zoom_to_card(cell_id, card_focus_zoom_level);
-        play_video(card_elem);
     }
 }
 
@@ -130,8 +126,9 @@ function create_card_content(media_filename, cardtitle, cardtext, cell_id) {
         const video = document.createElement('video');
         video.setAttribute('preload', 'none');
         video.setAttribute('class', 'generated-media video');
-        video.setAttribute('loop', '');
-        video.setAttribute('muted', ''); // Muted attribute to allow autoplay in most browsers
+        video.setAttribute('loop', 'true');
+        video.setAttribute('autoplay', 'true');
+        video.setAttribute('muted', true); // Muted attribute to allow autoplay in most browsers
 
         const source = document.createElement('source');
         source.src = media_src;
@@ -199,6 +196,8 @@ function create_card_content(media_filename, cardtitle, cardtext, cell_id) {
     // Add click event listener to the image
     generated_card.addEventListener('click', async function() {
         if(!state.isMoving) {
+            play_video(this);
+
             if(!isMobile) {
                 if(focused_card_id == undefined) {
                     focus_on_card(cell_id);
