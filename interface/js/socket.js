@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
     socket.on('connect', function() {
     });
 
-    socket.on('new_card', function(msg) {
-        add_cards();
+    socket.on('new_card', async function(msg) {
+        await add_cards();
         add_empties();
+        updateDivPositions();
     });
 
     socket.on('generating_card', function(msg) {
-        console.log(msg);
         play_loading_animation(msg.coord);
     });
 
