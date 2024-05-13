@@ -51,6 +51,11 @@ async function add_cards() {
 
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
+        
+        // ignore if card already exist for this id
+        if(cells[card['id']] != undefined)
+            continue
+
         let element = create_card(card['media_path'], card['title'], card['text'], card['id'])
 
         cells[card['id']] = {

@@ -12,6 +12,11 @@ function basic_cell() {
     return div    
 }
 
+function get_cell(coord) {
+    const targetCell = Object.values(cells).find(cell => cell.x === coord[0] && cell.y === coord[1]);
+    return targetCell
+}
+
 
 function create_empty(coords) {
     let div = basic_cell();
@@ -65,13 +70,7 @@ function create_empty(coords) {
                         console.error("Error taking picture:", error);
                     }
                     
-                    // While loading, show loading gizmo, then generate and display image
-                    loading_gizmo.className = 'loading_gizmo display';
-                    
-                    // Loading bar animation
-                    loading_bar.style.transition = `width ${LOADING_BAR_DURATION_S}s`;
-                    loading_bar.style.width = "100%";
-                    loading_bar_container.className = 'loading_bar_container display'
+                    play_loading_animation(coords);
                     
                     let generated_card = await generateCard(camera_picture, coords);
 
@@ -118,4 +117,28 @@ function create_card(image, title, text, id) {
     div.setAttribute("state","card");
 
     return div;
+}
+
+
+function play_loading_animation(coords) {
+    empty = get_cell(coords);
+
+    // return of there is no card at thoses coordinates
+    if (!empty)
+        return;
+
+
+    empty_elem = empty["elem"];
+
+    loading_gizmo = empty_elem.getElementsByClassName("loading_gizmo")[0];
+    loading_bar_container = empty_elem.getElementsByClassName("loading_bar_container")[0];
+    loading_bar = loading_bar_container.getElementsByClassName("loading_bar")[0];
+
+    // While loading, show loading gizmo, then generate and display image
+    loading_gizmo.className = 'loading_gizmo display';
+                        
+    // Loading bar animation
+    loading_bar.style.transition = `width ${LOADING_BAR_DURATION_S}s`;
+    loading_bar.style.width = "100%";
+    loading_bar_container.className = 'loading_bar_container display'
 }
