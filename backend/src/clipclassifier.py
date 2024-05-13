@@ -15,7 +15,7 @@ def cosine_similarity(A, B):
 
 def get_labels_embeddings(clip_model, clip_tokenizer, labels):    
     embeddings = {
-        k: get_single_text_embedding(clip_model, clip_tokenizer, f"a photo of a {k}")
+        k: get_single_text_embedding(clip_model, clip_tokenizer, f"a photo containing a {k}")
         for k in labels
     }
 
@@ -62,7 +62,7 @@ def classify(image, clip_model, clip_processor, labels_embeddings):
     cosims =  _image_class_cosim(image, labels_embeddings, clip_model, clip_processor)
 
     # check if this is a fruit or a vegetable
-    if cosims["fruit"] < 0.22 or cosims["vegetable"] < 0.22:
+    if cosims["fruit"] < 0.20 or cosims["vegetable"] < 0.20:
         return None
 
     return max(cosims, key=cosims.get)
