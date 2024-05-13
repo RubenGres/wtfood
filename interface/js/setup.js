@@ -35,8 +35,14 @@ async function setup() {
     add_empties();
     add_cards();
     
-    if(isMobile)
-        focus_on_random_empty();
+    const cardId = new URLSearchParams(window.location.search).get('card');
+    if(cardId) {
+        focus_on_card(cardId);
+    } else {
+        if(isMobile)
+            focus_on_random_empty();
+        updateDivPositions();
+    }
     
     loopFireflyAnimation();
 }
