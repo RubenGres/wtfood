@@ -187,6 +187,7 @@ function snap_to_nearest_cell() {
     cam_x = (cell.x + 1) * (margin + width);
     cam_y = (cell.y + 1) * (margin + height);
     zoom = 1;
+    play_video(cell.elem);
     updateDivPositions();
 }
 
