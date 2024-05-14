@@ -126,6 +126,28 @@ def get_sorting(label):
         return sorting
 
 
+def remove_sorting_columns():
+    with get_db_connection(DB_PATH) as conn:
+        cursor = conn.cursor()
+        
+        # Get the existing schema of the table
+        cursor.execute(f"PRAGMA table_info(cells)")
+        columns_info = cursor.fetchall()
+    
+        # Filter out columns starting with "sorting_"
+        columns_to_keep = [col[1] for col in columns_info if not col[1].startswith("sorting_")]
+    
+        # Create a new table without the columns to be removed
+        columns_to_keep_str = ", ".join(columns_to_keep)
+        cursor.execute(f"CREATE TABLE cells_new AS SELECT {columns_to_keep_str} FROM cells")
+        
+        # Drop the old table
+        cursor.execute(f"DROP TABLE cells")
+    
+        # Rename the new table to the old table's name
+        cursor.execute(f"ALTER TABLE cells_new RENAME TO cells")
+
+
 def add_sorting(label, sorting):
     """
     Adds sorting values to the database.
