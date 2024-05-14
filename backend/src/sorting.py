@@ -15,7 +15,7 @@ def get_or_create_card_embedding(card, clip_model, clip_tokenizer, clip_processo
     if card["id"] in card_embeddings:
         return card_embeddings["id"]
     
-    card_image = Image.open(database.get_thumb_path(card['filename']))
+    card_image = Image.open(database.get_thumb_path(card['media_path']))
     card_emb = clipclassifier.get_card_embedding(clip_model, clip_processor, clip_tokenizer, card_image, card['title'])
     
     card_embeddings["id"] = card_emb
@@ -30,7 +30,7 @@ def sort_cards(cards, label, clip_model, clip_tokenizer, clip_processor):
 
     for card in cards:
         card_emb = get_or_create_card_embedding(card, clip_model, clip_tokenizer, clip_processor)
-        cosim = clipclassifier.cosine_similarity(label_emb.cpu().detach().numpy(), card_emb.cpu().detach().numpy())
+        cosim = clipclassifier.cosine_similarity(label_emb.cpu().detach().numpy(), card_emb)
         sorting[card["id"]] = float(cosim)
     
     scores = np.array(list(sorting.values()))

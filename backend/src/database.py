@@ -57,7 +57,8 @@ def load_thumb(filename):
 
 
 def get_thumb_path(filename):
-    return os.path.join(media_folder, "thumbnails", filename)
+    thumbnail_filename = ".".join(filename.split(".")[:-1]) + ".jpg"
+    return os.path.join(media_folder, "thumbnails", thumbnail_filename)
 
 
 def add_cell(client_id, filename, media_bytes, title, info_text, coord, country, food, stakeholder, issue, image_prompt):

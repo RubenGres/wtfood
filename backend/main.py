@@ -48,7 +48,7 @@ def get_or_create_sorting(label, cards):
 
         # sort using mock or clip sorting depending on the passed argument
         if not args.mock:
-            sort_order = sorting.sort_cards(cards, label, clip_model, clip_tokenizer)
+            sort_order = sorting.sort_cards(cards, label, clip_model, clip_tokenizer, clip_processor)
         else:
             sort_order = sorting.mock_sort_cards(cards, label)
 
