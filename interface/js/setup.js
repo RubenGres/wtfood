@@ -32,12 +32,17 @@ const container = document.getElementById('foodmap');
 const camerainput = document.getElementById('camerainput');
 
 async function setup() {
-    add_empties();
-    add_cards();
+    await add_empties();
+    await add_cards();
     
-    if(isMobile)
+    const cardId = new URLSearchParams(window.location.search).get('card');
+    if(cardId) {
+        focus_on_card(cardId);
+    } else if(isMobile) {
         focus_on_random_empty();
-    
+    }
+
+    updateDivPositions();
     loopFireflyAnimation();
 }
 

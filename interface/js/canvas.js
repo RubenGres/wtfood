@@ -69,14 +69,6 @@ async function add_cards() {
 
         container.appendChild(element);
     }
-
-    //TODO move ?
-    const cardId = new URLSearchParams(window.location.search).get('card');
-    if(cardId) {
-        focus_on_card(cardId);
-    } else {
-        updateDivPositions();
-    }
 }
 
 
