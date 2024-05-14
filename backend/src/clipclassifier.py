@@ -62,7 +62,7 @@ def classify(image, clip_model, clip_processor, labels_embeddings):
     cosims =  _image_class_cosim(image, labels_embeddings, clip_model, clip_processor)
 
     # check if this is a fruit or a vegetable
-    if cosims["fruit"] < 0.20 or cosims["vegetable"] < 0.20:
+    if cosims["fruit"] < 0.21 or cosims["vegetable"] < 0.21:
         return None
 
     return max(cosims, key=cosims.get)
