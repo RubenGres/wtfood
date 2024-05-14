@@ -11,11 +11,25 @@ media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
 DB_PATH = os.environ.get("FD_DATABASE", "example.db")
 
 CREATE_QUERY = '''CREATE TABLE IF NOT EXISTS cells
-               (id INTEGER PRIMARY KEY, username TEXT, country TEXT, food TEXT, stakeholder TEXT, issue TEXT, image_prompt TEXT, x FLOAT, y FLOAT, media_path TEXT, title TEXT, text TEXT, datetime DATETIME)'''
+    (id INTEGER PRIMARY KEY,
+    username TEXT,
+    country TEXT,
+    food TEXT,
+    stakeholder TEXT,
+    issue TEXT,
+    image_prompt TEXT,
+    x FLOAT,
+    y FLOAT,
+    media_path TEXT,
+    title TEXT,
+    text TEXT,
+    datetime DATETIME)
+'''
 
 
 def sql_safify(s):
     return s.encode().hex()
+
 
 def get_db_connection(db_path):
     return sqlite3.connect(db_path)
@@ -41,6 +55,9 @@ def load_media(filename):
 def load_thumb(filename):
     return send_from_directory(directory=os.path.join(media_folder, "thumbnails"), path=filename)
 
+
+def get_thumb_path(filename):
+    return os.path.join(media_folder, "thumbnails", filename)
 
 
 def add_cell(client_id, filename, media_bytes, title, info_text, coord, country, food, stakeholder, issue, image_prompt):
