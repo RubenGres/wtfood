@@ -7,9 +7,12 @@ from openai import OpenAI
 from tavily import TavilyClient
 
 def tavily_search(query):
+    print(f"searching online for {query}")
     tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
-    search_result = tavily_client.get_search_context(query, search_depth="advanced", max_tokens=8000)
+    search_result = tavily_client.get_search_context(query, search_depth="basic", max_tokens=4000)
+    print("result done!")
     return search_result
+
 
 # Function to wait for a run to complete
 def wait_for_run_completion(client, thread_id, run_id):
@@ -18,6 +21,7 @@ def wait_for_run_completion(client, thread_id, run_id):
         run = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
         if run.status in ['completed', 'failed', 'requires_action']:
             return run
+
 
 # Function to handle tool output submission
 def submit_tool_outputs(client, thread_id, run_id, tools_to_call):
@@ -40,15 +44,18 @@ def submit_tool_outputs(client, thread_id, run_id, tools_to_call):
         tool_outputs=tool_output_array
     )
 
+
 # Function to print messages from a thread
 def print_messages_from_thread(client, thread_id):
     messages = client.beta.threads.messages.list(thread_id=thread_id)
     for msg in messages:
         print(f"{msg.role}: {msg.content[0].text.value}")
 
+
 def get_messages_from_thread(client, thread_id):
     messages = client.beta.threads.messages.list(thread_id=thread_id)
     return messages
+
 
 def send_message_llm(user_input, client, thread, assistant_id):
   # Create a message
@@ -106,6 +113,7 @@ def generate_text(prompts, stakeholder, issue, food, place, model="gpt-4-turbo-2
     llm_response = {}
 
     for key, prompt in prompts["user"].items():
+        print(f"calling llm, step {key}")
         user_message = prompt.format(stakeholder=stakeholder, issue=issue, food=food, place=place)
         llm_anwser = send_message_llm(user_message, client, thread, assistant_id)
         llm_response[key] = list(llm_anwser)[0].content[0].text.value

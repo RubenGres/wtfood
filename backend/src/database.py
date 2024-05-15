@@ -67,11 +67,21 @@ def add_cell(client_id, filename, media_bytes, title, info_text, coord, country,
     
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
-        # Using parameterized queries to avoid SQL injection
-        cursor.execute("INSERT INTO cells (username, country, food, stakeholder, issue, image_prompt, x, y, media_path, title, text, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       (client_id, country, food, stakeholder, issue, image_prompt, coord[0], coord[1], filename, title, info_text, time.time()))
         
-        new_id = cursor.lastrowid
+        # Get the last ID
+        cursor.execute("SELECT id FROM cells ORDER BY id DESC LIMIT 1")
+        last_row = cursor.fetchone()
+        
+        if last_row:
+            new_id = last_row[0] + 1
+        else:
+            new_id = 1  # Handle case where table might be empty
+        
+        
+        # Using parameterized queries to avoid SQL injection
+        cursor.execute("INSERT INTO cells (id, username, country, food, stakeholder, issue, image_prompt, x, y, media_path, title, text, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       (new_id, client_id, country, food, stakeholder, issue, image_prompt, coord[0], coord[1], filename, title, info_text, time.time()))
+        
         
         conn.commit()
 
