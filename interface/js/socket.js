@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     socket.on('generating_card', function(msg) {
+        add_image(msg.coord, msg.b64);
         play_loading_animation(msg.coord);
     });
 

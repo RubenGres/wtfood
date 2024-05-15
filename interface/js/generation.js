@@ -14,7 +14,7 @@ async function generateCard(camera_picture, coords) {
         user_ip = data.ip;
     })
 
-    const base64ImageData = camera_picture.src.split(',')[1];
+    const base64ImageData = camera_picture.split(',')[1];
     
     // resize to desired size
     const img = new Image();

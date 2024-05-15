@@ -15,8 +15,9 @@ const SWIPE_MAX_DURATION_MS = 300;
 const MIN_SWIPE_DIST = 30;
 const LOADING_BAR_DURATION_S = 80;
 
-const FIREFLY_ANIMATION_TIME_MS = 30000;
-const FIREFLY_AMOUNT = 5;
+ //disable fireflies basically
+const FIREFLY_ANIMATION_TIME_MS = 99999999999;
+const FIREFLY_AMOUNT = 0;
 
 const predifined_labels = [
     "working conditions",

@@ -53,8 +53,10 @@ async function add_cards() {
         let card = cards[i]
         
         // ignore if card already exist for this id
-        if(cells[card['id']] != undefined)
+        if(cells[card['id']] != undefined) {
+            console.log("card" + card['id'] + "already exist")
             continue
+        }
 
         let element = create_card(card['media_path'], card['title'], card['text'], card['id'])
 

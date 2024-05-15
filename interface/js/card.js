@@ -128,7 +128,7 @@ function create_card_content(media_filename, cardtitle, cardtext, cell_id) {
         video.setAttribute('class', 'generated-media video');
         video.setAttribute('loop', 'true');
         video.setAttribute('autoplay', 'true');
-        video.setAttribute('muted', true); // Muted attribute to allow autoplay in most browsers
+        video.setAttribute('muted', 'muted'); // Muted attribute to allow autoplay in most browsers
 
         const source = document.createElement('source');
         source.src = media_src;
