@@ -63,9 +63,7 @@ function create_empty(coords) {
                     // On first click, try taking a picture and update state
                     try {
                         camera_picture = await takePicture(div);
-                        div.appendChild(camera_picture);
-                        div.removeChild(camera_icon);
-
+                        add_image(coords, camera_picture);
                     } catch (error) {
                         console.error("Error taking picture:", error);
                     }
@@ -82,7 +80,6 @@ function create_empty(coords) {
                         div.setAttribute("id", generated_card.id)
                         div.setAttribute("state", "media_ready");
                         add_empties();
-    
                     } else {
                         div.appendChild(camera_icon);
                         div.setAttribute("state", "empty");
@@ -119,6 +116,22 @@ function create_card(image, title, text, id) {
     return div;
 }
 
+function add_image(coords, image_src) {
+    empty = get_cell(coords);
+    if (!empty) return;
+    empty_elem = empty["elem"];
+
+    // return if there is already one image in the empty
+    if(empty_elem.getElementsByClassName("snapshot").length > 0) return
+
+    let snapshot = document.createElement('img');
+    snapshot.src = image_src;
+    snapshot.className = "snapshot"
+    empty_elem.appendChild(snapshot)
+
+    cam_icon_elem = empty_elem.getElementsByClassName("camera_icon")[0]
+    empty_elem.removeChild(cam_icon_elem)
+}
 
 function play_loading_animation(coords) {
     empty = get_cell(coords);
@@ -126,7 +139,6 @@ function play_loading_animation(coords) {
     // return of there is no card at thoses coordinates
     if (!empty)
         return;
-
 
     empty_elem = empty["elem"];
 
