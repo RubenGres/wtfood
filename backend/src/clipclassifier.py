@@ -1,6 +1,6 @@
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer
 import numpy as np
-import json
+import torch
 from PIL import Image
 
 
@@ -20,6 +20,16 @@ def get_labels_embeddings(clip_model, clip_tokenizer, labels):
     }
 
     return embeddings
+
+
+def get_card_embedding(clip_model, clip_processor, clip_tokenizer, card_image, card_title):
+    with torch.no_grad():
+        image_features = _get_single_image_embedding(clip_model, clip_processor, card_image)
+        text_features = get_single_text_embedding(clip_model, clip_tokenizer, card_title)
+    
+    combined_features = (image_features + text_features) / 2
+    
+    return combined_features.cpu().numpy()
 
 
 def get_clip(model_ID):
@@ -62,7 +72,7 @@ def classify(image, clip_model, clip_processor, labels_embeddings):
     cosims =  _image_class_cosim(image, labels_embeddings, clip_model, clip_processor)
 
     # check if this is a fruit or a vegetable
-    if cosims["fruit"] < 0.20 or cosims["vegetable"] < 0.20:
+    if cosims["fruit"] < 0.21 or cosims["vegetable"] < 0.21:
         return None
 
     return max(cosims, key=cosims.get)

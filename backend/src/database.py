@@ -11,11 +11,25 @@ media_folder = os.environ.get("FD_MEDIA_FOLDER", "./")
 DB_PATH = os.environ.get("FD_DATABASE", "example.db")
 
 CREATE_QUERY = '''CREATE TABLE IF NOT EXISTS cells
-               (id INTEGER PRIMARY KEY, username TEXT, country TEXT, food TEXT, stakeholder TEXT, issue TEXT, image_prompt TEXT, x FLOAT, y FLOAT, media_path TEXT, title TEXT, text TEXT, datetime DATETIME)'''
+    (id INTEGER PRIMARY KEY,
+    username TEXT,
+    country TEXT,
+    food TEXT,
+    stakeholder TEXT,
+    issue TEXT,
+    image_prompt TEXT,
+    x FLOAT,
+    y FLOAT,
+    media_path TEXT,
+    title TEXT,
+    text TEXT,
+    datetime DATETIME)
+'''
 
 
 def sql_safify(s):
     return s.encode().hex()
+
 
 def get_db_connection(db_path):
     return sqlite3.connect(db_path)
@@ -42,6 +56,10 @@ def load_thumb(filename):
     return send_from_directory(directory=os.path.join(media_folder, "thumbnails"), path=filename)
 
 
+def get_thumb_path(filename):
+    thumbnail_filename = ".".join(filename.split(".")[:-1]) + ".jpg"
+    return os.path.join(media_folder, "thumbnails", thumbnail_filename)
+
 
 def add_cell(client_id, filename, media_bytes, title, info_text, coord, country, food, stakeholder, issue, image_prompt):
     with open(os.path.join(media_folder, filename), "wb") as media_file:
@@ -49,11 +67,21 @@ def add_cell(client_id, filename, media_bytes, title, info_text, coord, country,
     
     with get_db_connection(DB_PATH) as conn:
         cursor = conn.cursor()
-        # Using parameterized queries to avoid SQL injection
-        cursor.execute("INSERT INTO cells (username, country, food, stakeholder, issue, image_prompt, x, y, media_path, title, text, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       (client_id, country, food, stakeholder, issue, image_prompt, coord[0], coord[1], filename, title, info_text, time.time()))
         
-        new_id = cursor.lastrowid
+        # Get the last ID
+        cursor.execute("SELECT id FROM cells ORDER BY id DESC LIMIT 1")
+        last_row = cursor.fetchone()
+        
+        if last_row:
+            new_id = last_row[0] + 1
+        else:
+            new_id = 1  # Handle case where table might be empty
+        
+        
+        # Using parameterized queries to avoid SQL injection
+        cursor.execute("INSERT INTO cells (id, username, country, food, stakeholder, issue, image_prompt, x, y, media_path, title, text, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       (new_id, client_id, country, food, stakeholder, issue, image_prompt, coord[0], coord[1], filename, title, info_text, time.time()))
+        
         
         conn.commit()
 
@@ -106,6 +134,28 @@ def get_sorting(label):
             sorting[row_dict['id']] = row_dict[column_name]
         
         return sorting
+
+
+def remove_sorting_columns():
+    with get_db_connection(DB_PATH) as conn:
+        cursor = conn.cursor()
+        
+        # Get the existing schema of the table
+        cursor.execute(f"PRAGMA table_info(cells)")
+        columns_info = cursor.fetchall()
+    
+        # Filter out columns starting with "sorting_"
+        columns_to_keep = [col[1] for col in columns_info if not col[1].startswith("sorting_")]
+    
+        # Create a new table without the columns to be removed
+        columns_to_keep_str = ", ".join(columns_to_keep)
+        cursor.execute(f"CREATE TABLE cells_new AS SELECT {columns_to_keep_str} FROM cells")
+        
+        # Drop the old table
+        cursor.execute(f"DROP TABLE cells")
+    
+        # Rename the new table to the old table's name
+        cursor.execute(f"ALTER TABLE cells_new RENAME TO cells")
 
 
 def add_sorting(label, sorting):

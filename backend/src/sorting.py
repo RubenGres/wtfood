@@ -1,6 +1,8 @@
 import random
 from . import clipclassifier
+from . import database
 import numpy as np
+from PIL import Image
 
 
 def mock_sort_cards(cards, label):
@@ -9,17 +11,27 @@ def mock_sort_cards(cards, label):
     }
 
 
-def sort_cards(cards, label, clip_model, clip_tokenizer):
+def get_or_create_card_embedding(card, clip_model, clip_tokenizer, clip_processor):
+    if card["id"] in card_embeddings:
+        return card_embeddings["id"]
+    
+    card_image = Image.open(database.get_thumb_path(card['media_path']))
+    card_emb = clipclassifier.get_card_embedding(clip_model, clip_processor, clip_tokenizer, card_image, card['title'])
+    
+    card_embeddings["id"] = card_emb
+    
+    return card_emb
+
+
+def sort_cards(cards, label, clip_model, clip_tokenizer, clip_processor):
     sorting = {}
 
-    #TODO include more than text
-    cards_text = {card["id"]: card["title"] for card in cards}
     label_emb = clipclassifier.get_single_text_embedding(clip_model, clip_tokenizer, label)
-    
-    for id, text in cards_text.items():
-        text_emb = clipclassifier.get_single_text_embedding(clip_model, clip_tokenizer, text)
-        cosim = clipclassifier.cosine_similarity(label_emb.cpu().detach().numpy(), text_emb.cpu().detach().numpy())
-        sorting[id] = float(cosim)
+
+    for card in cards:
+        card_emb = get_or_create_card_embedding(card, clip_model, clip_tokenizer, clip_processor)
+        cosim = clipclassifier.cosine_similarity(label_emb.cpu().detach().numpy(), card_emb)
+        sorting[card["id"]] = float(cosim)
     
     scores = np.array(list(sorting.values()))
     normalized_scores = norm(scores, -1, 1)
@@ -32,3 +44,4 @@ def sort_cards(cards, label, clip_model, clip_tokenizer):
 def norm(array, a, b):
     return (b-a) * ((array - array.min()) / (array.max() - array.min())) + a
 
+card_embeddings = {}
