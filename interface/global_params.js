@@ -15,8 +15,9 @@ const SWIPE_MAX_DURATION_MS = 300;
 const MIN_SWIPE_DIST = 30;
 const LOADING_BAR_DURATION_S = 80;
 
-const FIREFLY_ANIMATION_TIME_MS = 30000;
-const FIREFLY_AMOUNT = 5;
+ //disable fireflies basically
+const FIREFLY_ANIMATION_TIME_MS = 99999999999;
+const FIREFLY_AMOUNT = 0;
 
 const predifined_labels = [
     "working conditions",
@@ -26,5 +27,55 @@ const predifined_labels = [
     "global emissions",
     "france",
     "spain",
-    "portugal"
+    "portugal",
+    "Working Conditions",
+    "Fair Trade",
+    "Consumer Rights",
+    "Water Usage",
+    "Emissions Reduction",
+    "French Cuisine",
+    "Spanish Gastronomy",
+    "Portuguese Dishes",
+    "Agricultural Subsidies",
+    "Food Waste",
+    "GMOs",
+    "Organic Farming",
+    "Labeling Regulations",
+    "Food Safety",
+    "Nutrition Education",
+    "Food Insecurity",
+    "Urban Agriculture",
+    "Indigenous Sovereignty",
+    "Agroforestry",
+    "Sustainable Aquaculture",
+    "Packaging Impact",
+    "Farm-to-Table",
+    "Livestock Welfare",
+    "Plant-Based Diets",
+    "Food Additives",
+    "Allergies",
+    "School Lunches",
+    "Industry Consolidation",
+    "Foodborne Illnesses",
+    "Agricultural Technology",
+    "Food Sovereignty",
+    "Food Deserts",
+    "Land Grabbing",
+    "Sustainable Fishing",
+    "Food Tourism",
+    "Cultural Appropriation",
+    "Community-Supported",
+    "Food Transportation",
+    "Climate Adaptation",
+    "Indigenous Rights",
+    "Culinary Education",
+    "Lobbying Influence",
+    "Biodiversity Preservation",
+    "Food Cooperatives",
+    "Food Justice",
+    "Urban Policy",
+    "Cultural Heritage",
+    "Knowledge Transfer",
+    "Traceability Systems",
+    "Future Innovations"
 ]

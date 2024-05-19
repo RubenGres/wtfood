@@ -118,7 +118,7 @@ def transform():
     # if you got this far your input was validated!
 
     # send broadcast message to all active sessions
-    emit('generating_card', { "coord": coord }, namespace='/', broadcast=True)
+    emit('generating_card', { "coord": coord, "b64": b64_image}, namespace='/', broadcast=True)
     
     llm_response = llmcaller.generate_text(prompts, stakeholder, issue, food, location)
     
