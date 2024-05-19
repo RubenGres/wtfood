@@ -9,11 +9,12 @@ function hideAxis() {
 }
 
 function customSort(xLabel, yLabel) {
-    const apiUrl = `${FD_API_URL}sort?x=${encodeURIComponent(xLabel)}&y=${encodeURIComponent(yLabel)}`;
+    // TODO sorting offline
+    const sorting_path = "sorting/sortings.json";
     
     displayAxis(xLabel, yLabel);
 
-    fetch(apiUrl)
+    fetch(sorting_path)
         .then(response => response.json())
         .then(data => {
             const scale = Math.ceil(Math.sqrt(Object.values(cells).length));
@@ -21,13 +22,17 @@ function customSort(xLabel, yLabel) {
             Object.values(cells).forEach(cell => {
                 cell["elem"].classList.add('cell-sorting');
 
-                if(data[cell.id]) {
-                    cell.x = data[cell.id].x * scale;
-                    cell.y = data[cell.id].y * scale;
+
+                if(data[xLabel][cell.id]) {
+                    cell.x = data[xLabel][cell.id] * scale;
                 }
 
+                if(data[yLabel][cell.id]) {
+                    cell.y = data[yLabel][cell.id] * scale;
+                }
+                
                 setTimeout(() => {
-                cell.elem.classList.remove('cell-sorting');
+                    cell.elem.classList.remove('cell-sorting');
                 }, 1000);
             });
 

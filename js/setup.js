@@ -11,20 +11,6 @@ if(isMobile) {
     card_focus_zoom_level = CARD_ZOOM_LEVEL * Math.min(window.innerWidth, window.innerHeight) / (cell_w + cell_margin);
 }
 
-
-
-async function checkApiAvailability() {
-    const response = await fetch(FD_API_URL, {
-        method: 'GET'
-    });
-
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return response;
-}
-
 // global cell dict that will contain all the cards
 let cells = {};
 
@@ -32,7 +18,6 @@ const container = document.getElementById('foodmap');
 const camerainput = document.getElementById('camerainput');
 
 async function setup() {
-    await add_empties();
     await add_cards();
     
     const cardId = new URLSearchParams(window.location.search).get('card');
@@ -47,30 +32,5 @@ async function setup() {
 }
 
 window.onload = function() {
-    function attemptApiCheck(apiUrl) {
-        checkApiAvailability(apiUrl).then(response => {
-            setup();
-        })
-        .catch(error => {
-            container.innerHTML = `Error: API at <b>"${apiUrl}"</b> is not responding, make sure it is running. <br> <br>`;
-            
-            const inputField = document.createElement('input');
-            inputField.type = 'text';
-            inputField.id = 'apiUrlInput';
-            inputField.placeholder = 'Enter new API URL';
-            container.appendChild(inputField);
-
-            const submitButton = document.createElement('button');
-            submitButton.innerText = 'Retry';
-            container.appendChild(submitButton);
-
-            submitButton.onclick = function() {
-                FD_API_URL = document.getElementById('apiUrlInput').value;
-                container.innerHTML = '';
-                attemptApiCheck(FD_API_URL);
-            }
-        });
-    }
-
-    attemptApiCheck(FD_API_URL);
+    setup();
 };

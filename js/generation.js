@@ -14,7 +14,7 @@ async function generateCard(camera_picture, coords) {
         user_ip = data.ip;
     })
 
-    const base64ImageData = camera_picture.split(',')[1];
+    const base64ImageData = camera_picture.src.split(',')[1];
     
     // resize to desired size
     const img = new Image();
@@ -45,7 +45,7 @@ async function generateCard(camera_picture, coords) {
         user_ip: user_ip
     }
 
-    const response = await fetch(FD_API_URL + "transform", {
+    const response = await fetch("transform", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

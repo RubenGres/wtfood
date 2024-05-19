@@ -1,23 +1,39 @@
-function clear_labels() {
-    var xLabelInput = document.getElementById('xLabelInput');
-    var yLabelInput = document.getElementById('yLabelInput');
-    xLabelInput.value = ""
-    yLabelInput.value = ""
+function populateDropdown() {
+    const dropdown_x = document.getElementById('xLabelInput');
+    const dropdown_y = document.getElementById('yLabelInput');
+    
+    // Iterate through the list and create option elements
+    predifined_labels.forEach(item => {
+        const option_x = document.createElement('option');
+        option_x.value = item;
+        option_x.textContent = item;
+        dropdown_x.appendChild(option_x);
+        
+        const option_y = document.createElement('option');
+        option_y.value = item;
+        option_y.textContent = item;
+        dropdown_y.appendChild(option_y);
+    });
 }
 
-function sort_from_labels() {
-    var xLabelInput = document.getElementById('xLabelInput');
-    var yLabelInput = document.getElementById('yLabelInput');
+// Call the function to populate the dropdown when the page loads
+document.addEventListener('DOMContentLoaded', populateDropdown);
 
-    if(!xLabelInput.value) {
-        xLabelInput.value = predifined_labels[Math.floor(Math.random() * predifined_labels.length)];
+function sort_from_labels() {
+    var xLabelInput = document.getElementById('xLabelInput').value;
+    var yLabelInput = document.getElementById('yLabelInput').value;
+
+    if(!xLabelInput) {
+        xLabelInput = predifined_labels[Math.floor(Math.random() * predifined_labels.length)];
     }
     
-    if (!yLabelInput.value) {
-        yLabelInput.value = predifined_labels[Math.floor(Math.random() * predifined_labels.length)];
+    if (!yLabelInput) {
+        yLabelInput = predifined_labels[Math.floor(Math.random() * predifined_labels.length)];
     }
 
-    customSort(xLabelInput.value, yLabelInput.value)
+    console.log(xLabelInput);
+
+    customSort(xLabelInput, yLabelInput)
 }
 
 
@@ -32,32 +48,31 @@ document.querySelectorAll('input[name="sortOption"]').forEach((elem) => {
     });
 });
 
-// Event listeners for the input fields to select all text on focus
-const inputs = document.querySelectorAll('#xLabelInput, #yLabelInput');
-inputs.forEach((input) => {
-    input.addEventListener('focus', function() {
-        this.select();
-    });
-
-    input.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            document.getElementById('customButton').click();
-        }
-    });
-});
 
 document.addEventListener('DOMContentLoaded', function() {
     var gridButton = document.getElementById('gridButton');
     gridButton.onclick = function() {
-        clear_labels();
         hideAxis();
-        show_empties();
         reposition_on_grid();
     }
     
     var customButton = document.getElementById('customButton');
     customButton.onclick = function() {
-        hide_empties();
+        const dropdown_x = document.getElementById('xLabelInput');
+        const randomIndex_x = Math.floor(Math.random() * dropdown_x.options.length);
+        dropdown_x.selectedIndex = randomIndex_x;
+        
+        const dropdown_y = document.getElementById('yLabelInput');
+        const randomIndex_y = Math.floor(Math.random() * dropdown_y.options.length);
+        dropdown_y.selectedIndex = randomIndex_y;
+        
         sort_from_labels();
     }
+
+    const dropwdowns = document.querySelectorAll('#xLabelInput, #yLabelInput');
+    dropwdowns.forEach((input) => {
+    input.addEventListener('change', function(event) {
+        sort_from_labels();
+    });
+});
 });

@@ -1,36 +1,3 @@
-async function add_empties() {
-    const response = await fetch(FD_API_URL + "position/free", {
-        method: 'GET'
-    });
-
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const empties = await response.json();
-
-    for (let i = 0; i < empties.length; i++) {
-        let empty = empties[i];
-        let coordKey = `e${empty['x']},${empty['y']}`;
-
-        // Check if the coordinate already exists
-        if(!(coordKey in cells)) {
-            let element = create_empty([empty['x'], empty['y']]);
-            
-            cells[coordKey] = {
-                "elem": element,
-                "x": empty['x'],
-                "y": empty['y'],
-                "id": coordKey
-            };
-            container.appendChild(element);
-        }
-
-    }
-
-    updateDivPositions();
-}
-
 function show_empties() {
     const emptyGridCells = document.querySelectorAll('.gridcell[state="empty"]');
     emptyGridCells.forEach(cell => cell.style.display = "flex");
@@ -38,7 +5,7 @@ function show_empties() {
 
 
 async function add_cards() {
-    const response = await fetch(FD_API_URL + "cards", {
+    const response = await fetch("json/cards.json", {
         method: 'GET'
     });
 
@@ -53,10 +20,8 @@ async function add_cards() {
         let card = cards[i]
         
         // ignore if card already exist for this id
-        if(cells[card['id']] != undefined) {
-            console.log("card" + card['id'] + "already exist")
+        if(cells[card['id']] != undefined)
             continue
-        }
 
         let element = create_card(card['media_path'], card['title'], card['text'], card['id'])
 
