@@ -45,7 +45,7 @@ async function generateCard(camera_picture, coords) {
         user_ip: user_ip
     }
 
-    const response = await fetch(FD_API_URL + "transform", {
+    const response = await fetch("transform", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

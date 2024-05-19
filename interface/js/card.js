@@ -30,7 +30,7 @@ function pause_video(card_elem) {
 }
 
 async function focus_on_random_empty(){
-    const response = await fetch(FD_API_URL + "position/free", {
+    const response = await fetch("position/free", {
         method: 'GET'
     });
 
@@ -108,7 +108,7 @@ function pause_current_card() {
 
 
 function create_card_content(media_filename, cardtitle, cardtext, cell_id) {
-    let media_src = FD_API_URL + "media/" + media_filename
+    let media_src = "media/" + media_filename
 
     // Create image element
     const generated_card = document.createElement('div');
@@ -139,7 +139,7 @@ function create_card_content(media_filename, cardtitle, cardtext, cell_id) {
         const thumbnail = document.createElement('img');
         thumbnail.setAttribute('class', 'thumbnail');
         const media_id = media_filename.split('.').slice(0, -1).join('.') || media_filename
-        let thumb_src = FD_API_URL + "thumbnail/" + media_id + ".jpg"
+        let thumb_src = "media/thumbnail/" + media_id + ".jpg"
         thumbnail.src = thumb_src;
         generated_card.appendChild(thumbnail);
 

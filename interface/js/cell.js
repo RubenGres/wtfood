@@ -81,8 +81,6 @@ function create_empty(coords) {
                         div.appendChild(generated_card);
                         div.setAttribute("id", generated_card.id)
                         div.setAttribute("state", "media_ready");
-                        add_empties();
-    
                     } else {
                         div.appendChild(camera_icon);
                         div.setAttribute("state", "empty");
