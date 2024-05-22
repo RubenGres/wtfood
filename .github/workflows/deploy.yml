@@ -5,7 +5,7 @@ permissions:
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "archive"]
   # Allows manually running from Actions tab
   workflow_dispatch:
 
