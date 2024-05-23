@@ -54,9 +54,5 @@ async function takePicture() {
 
     data_url = await crop_image(image);
 
-    let snapshot = document.createElement('img');
-    snapshot.src = data_url;
-    snapshot.className = "snapshot"
-
-    return snapshot;
+    return data_url;
 }

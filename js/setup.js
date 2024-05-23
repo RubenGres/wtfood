@@ -18,7 +18,20 @@ const container = document.getElementById('foodmap');
 const camerainput = document.getElementById('camerainput');
 
 async function setup() {
+    const socket_is_connected = await connect_to_socket();
+    
+    if(socket_is_connected) {
+        await add_empties();
+        document.getElementById("archive_label").innerHTML = `SYSTEM STATUS: <span class="green">LIVE</span>`
+    } else {
+        WTFOOD_STATUS = "ARCHIVE";
+        FD_API_URL = "";
+        document.getElementById("archive_label").innerHTML = `SYSTEM STATUS: <span class="red">ARCHIVE</span>`
+    }
+
     await add_cards();
+    
+    setup_control_panel();
     
     const cardId = new URLSearchParams(window.location.search).get('card');
     if(cardId) {

@@ -42,9 +42,7 @@
             </div>
         </header>
 
-        <div class="archived">
-            SYSTEM STATUS: <span class="red">ARCHIVE</span>
-        </div>
+        <div id="archive_label"></div>
 
         <div id="foodmap">
             <div id="toast">Message</div>
@@ -70,12 +68,10 @@
                   
                 <!-- Input Fields for Labels -->
                 <div id="customOptions" style="display:none;">
-                    <div>
-                        <select id="xLabelInput"> </select>
+                    <div id="xlabel">
                         <label for="xLabelInput">X</label>
                     </div>
-                    <div>
-                        <select id="yLabelInput"> </select>
+                    <div id="ylabel">
                         <label for="yLabelInput">Y</label>
                     </div>
                 </div>
@@ -101,5 +97,6 @@
         <script src="js/loadingbar.js"></script>
         <script src="js/controlpanel.js"></script>
         <script src="js/fireflycardanim.js"></script>
+        <script src="js/socket.js"></script>        
     </body>
 </html>

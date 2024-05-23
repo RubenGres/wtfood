@@ -1,4 +1,6 @@
-var FD_API_URL = "https://6z8wzg7gc62klm-5000.proxy.runpod.net/";
+let FD_API_URL = "http://pcknot6.fit.vutbr.cz:5000/";
+
+let WTFOOD_STATUS = "RUNNING";
 
 let zoom = 1;
 

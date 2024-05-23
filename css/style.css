@@ -13,12 +13,7 @@ html, body {
     font-family: Arial, sans-serif;
 }
 
-img {
-    pointer-events: none;
-}
-
-
-.archived {
+#archive_label {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -27,8 +22,17 @@ img {
     z-index: 999;
 }
 
-.archived .red {
+#archive_label .red {
     color: red;
+}
+
+#archive_label .green {
+    color: green;
+}
+
+
+img {
+    pointer-events: none;
 }
 
 #movelock {
