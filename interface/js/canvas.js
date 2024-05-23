@@ -38,10 +38,11 @@ function show_empties() {
 
 
 async function add_cards() {
-    const response = await fetch(FD_API_URL + "cards", {
+    var json_path = WTFOOD_STATUS == "RUNNING" ? FD_API_URL + "cards" : "json/cards.json";
+    
+    const response = await fetch(json_path, {
         method: 'GET'
     });
-
 
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

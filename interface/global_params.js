@@ -1,4 +1,6 @@
-var FD_API_URL = "https://6z8wzg7gc62klm-5000.proxy.runpod.net/";
+let FD_API_URL = "https://obscure-journey-vpp4495vxxwfp4qj-5000.app.github.dev/";
+
+let WTFOOD_STATUS = "RUNNING";
 
 let zoom = 1;
 
