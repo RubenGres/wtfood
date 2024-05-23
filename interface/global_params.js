@@ -1,4 +1,4 @@
-let FD_API_URL = "https://obscure-journey-vpp4495vxxwfp4qj-5000.app.github.dev/";
+let FD_API_URL = "http://pcknot6.fit.vutbr.cz:5000/";
 
 let WTFOOD_STATUS = "RUNNING";
 
