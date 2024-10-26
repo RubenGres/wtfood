@@ -26,7 +26,6 @@ The backend handles the call to the different AI components and stores the map i
 **ComfyUI:**  
 This app uses the [ComfyUI](https://github.com/comfyanonymous/ComfyUI) API to simplify workflows for generating the videos. The simplest way to set it up is to use the docker: `docker run wtfood-comfyui`. You can also set up ComfyUI manually and use the `install_comfyui_deps.sh` script in the backend folder.
 
-
 # Team
 
 Artist: [Bernat Cuní](https://www.cunicode.com/bernat-cuni)  

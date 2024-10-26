@@ -44,12 +44,6 @@ RUN git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts custom_nod
 RUN git clone https://github.com/Fannovel16/comfyui_controlnet_aux custom_nodes
 RUN git clone https://github.com/Fannovel16/ComfyUI-Frame-Interpolation custom_nodes
 
-# Go back to the root
-WORKDIR /
+RUN export LD_PRELOAD="$(ldconfig -p | grep -Po 'libtcmalloc.so.\d' | head -n 1)"
 
-# Add the start.sh file
-ADD start.sh ./
-RUN chmod +x /start.sh
-
-# Start the container
-CMD /start.sh
+CMD python3 /main.py --disable-auto-launch --disable-metadata --listen 0.0.0.0 &
