@@ -1,6 +1,6 @@
 let FD_API_URL = "http://pcknot6.fit.vutbr.cz:5000/";
 
-let WTFOOD_STATUS = "RUNNING";
+let WTFOOD_STATUS = "RUNNING"; // RUNNING or ARCHIVE
 
 let zoom = 1;
 
