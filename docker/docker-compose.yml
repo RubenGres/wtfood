@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  wtfood-comfy:
+    build:
+      context: ./wtfood_comfyui
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    ports:
+      - "8188:8188"
+      - "8000:8000"
+    restart: unless-stopped
+
+  wtfood-clip:
+    build:
+      context: ./clip_encoder
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
